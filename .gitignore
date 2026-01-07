@@ -1,0 +1,4 @@
+nbc_cache/*
+nebos/*
+__pycache__/*
+.DS_Store
