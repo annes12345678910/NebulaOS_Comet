@@ -89,7 +89,7 @@ def test():
     
     style.changeblack(True)
     kernel.initicons()
-    print(kernel.icons)
+    #print(kernel.icons)
     rl.set_target_fps(60)
     while not rl.window_should_close():
         rl.begin_drawing()
