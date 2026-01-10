@@ -8,6 +8,7 @@ import load
 from savesys import *
 
 icons:dict[str, rl.Texture2D] = {}
+
 def initicons():
     global icons, sounds
     icons = {}
