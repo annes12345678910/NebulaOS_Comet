@@ -73,9 +73,6 @@ class File:
     def getvisual(self, trace):
         folder_visual = self.parent.getvisual(trace)
 
-        # Add file name onto folder visual
-        #if folder_visual.startswith("./"):
-        #    return folder_visual + f"/{self.name}.{self.ext}"
         if self.parent is trace:
             return f"./{self.name}.{self.ext}"
         return folder_visual + f"/{self.name}.{self.ext}"
@@ -102,6 +99,7 @@ def getfolderbyname(name, parent: Folder):
             return folder
     return None
 
+# example program
 """
 {
     "data": {
@@ -137,6 +135,13 @@ class Program:
             "edx":0,
             "eex":0,
             "efx":0,
+
+            "arg1":0,
+            "arg2":0,
+            "arg3":0,
+            "arg4":0,
+            "arg5":0,
+
             "_NEBVERSION": "0.1.0",
             "_NEBWIN": False,
             "_WINTITLE": "Program",
@@ -276,6 +281,10 @@ class Program:
             self.addresses['eax'] = icons[args[0]] if icons.__contains__(args[0]) else icons['null']
 
         elif self.funcs.__contains__(func):
+            for i in range(len(args)):
+                print(f"Computing Arg {i} Into {args[i]}")
+                self.addresses[f'arg{i}'] = args[i]
+
             for line in self.text[func]:
                 self.computeline(line)
         else:
@@ -435,7 +444,7 @@ def test():
     while not rl.window_should_close():
         for opo in programs:
             if opo.loops["_DRAWLOOP"]:
-               opo.call(opo.loops["_DRAWLOOP"], [])
+               opo.call(opo.loops["_DRAWLOOP"], ["e"])
             
         rl.begin_drawing()
         rl.clear_background(rl.RAYWHITE)
