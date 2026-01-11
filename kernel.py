@@ -35,6 +35,10 @@ class Folder:
     def __init__(self, parent, name):
         self.parent = parent
         self.name = name
+
+        self.protected = False # enter the protector's password to modify
+        self.protector = ""
+        
         folders.append(self)
 
     def getvisual(self, trace):
@@ -60,6 +64,10 @@ class File:
         self.ext = ext
         self.parent = parent
         self.contents = b""
+
+        self.protected = False # enter the protector's password to modify
+        self.protector = ""
+
         files.append(self)
 
     def getvisual(self, trace):

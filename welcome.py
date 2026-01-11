@@ -2,36 +2,21 @@
 import kernel
 import ultimateraylib as rl
 import style
-import lang
+import lang,util
 
 scene = 0
 '''
 0 = welcome!
+
 1 = language
 2 = theme
-3 = ready?
+
+3 = root password
+
+4 = user creation (user, icon, password)
+
+5 = ready?
 '''
-
-def icon_button(icon: str, pos_x: int, pos_y: int):
-    e = kernel.icons[icon]
-    #rl.draw_rectangle(pos_x, pos_y, e.width + 20, e.height + 20, style.BRIGHT)
-    opo: rl.Rectangle = rl.make_rect(pos_x, pos_y, e.width + 20, e.height + 20)
-
-    clr = style.BRIGHT
-    if rl.check_collision_point_rec(rl.get_mouse_position(), opo):
-        if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT):
-            clr = style.BRIGHTEST
-            rl.draw_rectangle_rounded(opo, 0.4, 2, clr)
-
-            rl.draw_texture(e, pos_x + 10, pos_y + 10, rl.WHITE)
-            return True
-        else:
-            clr = style.BRIGHTBRIGHT
-    
-    rl.draw_rectangle_rounded(opo, 0.4, 2, clr)
-
-    rl.draw_texture(e, pos_x + 10, pos_y + 10, rl.WHITE)
-    return False
 
 opo = 0
 def draw_welcome():
