@@ -4,7 +4,16 @@ cd capi
 ./bob $@
 cd ..
 
-rm -r dist
+rm -rf dist
 mkdir -p dist
 cp *.py dist
 cp -r nebfiles dist/nebfiles
+cp -r assets dist/assets
+
+cp capi/nebcapi.dylib dist/nebcapi.dylib
+
+if [ $# -ge 1 ]; then #len(args) >= 1
+    if [ $1 == "testneb" ]; then
+        python dist/desktop_main.py
+    fi
+fi

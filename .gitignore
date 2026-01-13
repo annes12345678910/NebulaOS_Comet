@@ -6,3 +6,6 @@ __pycache__/*
 capi/test
 
 dist/*
+*.dylib
+*.so
+*.dll
