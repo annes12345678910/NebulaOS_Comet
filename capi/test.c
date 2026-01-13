@@ -47,7 +47,7 @@ int main(int argc, char const *argv[])
     */
 
     printf("Wow %p\n", dict_GetValueByKeyName(&mydict, "booger"));
-    for (unsigned int i = 0; i < mydict.size - 1; i++)
+    for (unsigned int i = 0; i < mydict.size; i++)
     {
         DictKey* key = &mydict.keys[i];
         printf("Key %s has value %p\n", key->name, key->value);
