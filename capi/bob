@@ -1,6 +1,8 @@
 #!/bin/bash
 
-if [ $1 == "test" ]; then
-    clang test.c -o test
-    ./test
+if [ $# -eq 1 ]; then
+    if [ $1 == "test" ]; then
+        clang test.c dict.c -o test
+        ./test
+    fi
 fi

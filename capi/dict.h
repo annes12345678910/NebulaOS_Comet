@@ -1,4 +1,5 @@
 typedef enum {
+
     TYPE_LONGLONG,
     TYPE_LONG,
     TYPE_INT,
@@ -25,3 +26,5 @@ typedef struct
     DictKey* keys;
     unsigned int size;
 } Dictionary;
+
+void* dict_GetValueByKeyName(Dictionary *dict, const char* keyName);

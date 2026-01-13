@@ -31,6 +31,7 @@ int main(int argc, char const *argv[])
 
     DictKey *k = &mydict.keys[INDEXTOGET];
 
+    /*
     printf("The value of %s is ", k->name);
     switch (k->type) {
         case TYPE_INT:
@@ -43,7 +44,15 @@ int main(int argc, char const *argv[])
             printf("%u\n", *(unsigned int *)k->value);
             break;
     }
+    */
 
+    printf("Wow %p\n", dict_GetValueByKeyName(&mydict, "booger"));
+    for (unsigned int i = 0; i < mydict.size - 1; i++)
+    {
+        DictKey* key = &mydict.keys[i];
+        printf("Key %s has value %p\n", key->name, key->value);
+    }
+    
 
     return 0;
 }

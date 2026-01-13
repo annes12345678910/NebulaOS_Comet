@@ -3,3 +3,8 @@
 cd capi
 ./bob $@
 cd ..
+
+rm -r dist
+mkdir -p dist
+cp *.py dist
+cp -r nebfiles dist/nebfiles
