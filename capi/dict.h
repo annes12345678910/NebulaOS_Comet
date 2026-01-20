@@ -28,3 +28,4 @@ typedef struct
 } Dictionary;
 
 void* dict_GetValueByKeyName(Dictionary *dict, const char* keyName);
+void* dict_GetValueByIndex(Dictionary *dict, unsigned int index);

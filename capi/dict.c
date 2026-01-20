@@ -18,3 +18,8 @@ void* dict_GetValueByKeyName(Dictionary *dict, const char* keyName) {
     }
     return NULL;
 }
+
+void* dict_GetValueByIndex(Dictionary *dict, unsigned int index) {
+    //DictKey* key = &dict->keys[index];
+    return dict->keys[index].value;
+}
