@@ -73,7 +73,7 @@ def draw_rectangle(x: int, y: int, width: int, height: int, r: int, g: int, b: i
         e = pygame.Rect(x, y, width, height)
         pygame.draw.rect(pygame_screen, (r, g, b, a), e)
     if config.backend == 2: # pyglet
-        o = pyglet.shapes.Rectangle(x, y, width, height, (r, g, b, a))
+        o = pyglet.shapes.Rectangle(x, pyglet_window.height - y, width, -height, (r, g, b, a))
         o.draw()
 
 def begin_drawing():
