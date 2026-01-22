@@ -29,3 +29,7 @@ typedef struct
 
 void* dict_GetValueByKeyName(Dictionary *dict, const char* keyName);
 void* dict_GetValueByIndex(Dictionary *dict, unsigned int index);
+
+Dictionary dict_CreateDict(Dictionary *dict, unsigned int initialSize);
+
+void dict_AddKey(Dictionary *dict, const char* keyName, void* value);

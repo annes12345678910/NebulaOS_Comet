@@ -1,7 +1,7 @@
 import pickle
 import os
 
-users: dict = {}
+users: list = []
 folders = []
 files = []
 
@@ -21,8 +21,8 @@ def loadsys():
     global users, folders, files
     try:
         with open("nebos/save.pkl", "rb") as f:
-            data = pickle.load(f)
-        users = data.get("users", {})
+            data:dict = pickle.load(f)
+        users = data.get("users", [])
         folders = data.get("folders", [])
         files = data.get("files", [])
         print("Data loaded!")

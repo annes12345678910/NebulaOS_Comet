@@ -368,6 +368,26 @@ class Program:
                 break
         self.errored = False
 
+class User:
+    def __init__(self, icon, codename="name", name="Name", password='neb') -> None:
+        self.icon = icon
+        self.codename = codename
+        self.name = name
+        self.censorpassword = True
+        self.password = password
+    
+    def tojson(self) -> dict:
+        return {
+            "codename": self.codename,
+            "name": self.name,
+            "censorpassword": self.censorpassword
+        }
+    
+curpass = ''
+def draw_usr_password_box(pos: rl.Vector2, user: User):
+    global curpass
+    curpass = rl.gui_text_box(rl.make_rect(pos.x, pos.y + 60, 120, 60), curpass, 64, True)
+
 def draw_window(prog: Program):
     pos = rl.Vector2(
         prog.addresses["_WINX"],
