@@ -66,6 +66,7 @@ def fill_bg_color(r: int, g: int, b: int, a: int = 255):
         gl.glClearColor(r / 255, g / 255, b / 255, a / 255)
         pyglet_window.clear()
 
+# draw shapes
 def draw_rectangle(x: int, y: int, width: int, height: int, r: int, g: int, b: int, a: int = 255):
     if config.backend == 0: # raylib
         rl.draw_rectangle(x, y, width, height, rl.make_color(r, g, b, a))
@@ -76,6 +77,7 @@ def draw_rectangle(x: int, y: int, width: int, height: int, r: int, g: int, b: i
         o = pyglet.shapes.Rectangle(x, pyglet_window.height - y, width, -height, (r, g, b, a))
         o.draw()
 
+# drawing
 def begin_drawing():
     if config.backend == 0: # raylib
         rl.begin_drawing()
@@ -86,6 +88,7 @@ def end_drawing():
     if config.backend == 1: # pygame
         pygame.display.flip()
 
+# events
 def _dummy(*args):
     pass
 
