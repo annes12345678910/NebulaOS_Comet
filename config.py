@@ -1,6 +1,6 @@
 terminal_mode = False
 
-backend = 2
+backend = 0
 """
 0 = raylib
 

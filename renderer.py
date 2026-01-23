@@ -77,6 +77,39 @@ def draw_rectangle(x: int, y: int, width: int, height: int, r: int, g: int, b: i
         o = pyglet.shapes.Rectangle(x, pyglet_window.height - y, width, -height, (r, g, b, a))
         o.draw()
 
+def draw_circle(x: int, y: int, radius: int, r: int, g: int, b: int, a: int = 255):
+    if config.backend == 0: # raylib
+        rl.draw_circle(x, y, radius, rl.make_color(r, g, b, a))
+    if config.backend == 1: # pygame
+        pygame.draw.circle(pygame_screen, (r, g, b, a), (x, y), radius)
+    if config.backend == 2: # pyglet
+        pyglet.shapes.Circle(x, pyglet_window.height - y, radius, color=(r, g, b, a)).draw()
+
+def draw_text(text: str, x: int, y: int, size: int, r: int, g: int, b: int, a: int = 255):
+    if config.backend == 0: # raylib
+        rl.draw_text(text, x, y, size, rl.make_color(r, g, b, a))
+    if config.backend == 1: # pygame
+        pyfnt = pygame.font.SysFont(None, size)
+        surf = pyfnt.render(text, False, (r, g, b, a))
+        pygame_screen.blit(surf, (x, y))
+    if config.backend == 2: # pyglet
+        pyglet.text.Label(
+            text, x, pyglet_window.height - y, 
+            font_name='Times New Roman',
+            font_size=size,
+            color=(r, g, b, a)
+        ).draw()
+
+# GUI
+
+def gui_button(text: str, x: int, y: int, width: int, height: int, text_size = 20):
+    if config.backend == 0:
+        rl.gui_button(rl.make_rect(x, y, width, height), text)
+    else:
+        draw_rectangle(x, y, width, height, 245, 245, 245)
+        draw_text(text, x, y, text_size, 255, 255, 255)
+
+
 # drawing
 def begin_drawing():
     if config.backend == 0: # raylib
@@ -87,6 +120,14 @@ def end_drawing():
         rl.end_drawing()
     if config.backend == 1: # pygame
         pygame.display.flip()
+
+def get_window_size():
+    if config.backend == 0: # raylib
+        return (rl.get_screen_width(), rl.get_screen_height())
+    if config.backend == 1: # pygame
+        return (pygame_screen.get_width(), pygame_screen.get_height())
+    if config.backend == 2: # pyglet
+        return (pyglet_window.width, pyglet_window.height)
 
 # events
 def _dummy(*args):
