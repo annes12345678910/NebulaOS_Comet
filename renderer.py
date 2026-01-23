@@ -1,6 +1,27 @@
 import sys
 import config
 
+class Point:
+    def __init__(self, x:int, y:int) -> None:
+        self.x = x
+        self.y = y
+
+# collisions (because pyglet dont have collisions)
+class Rect:
+    def __init__(self, x: int, y: int, width: int, height: int) -> None:
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+    
+    def collidepoint(self, point: Point):
+        if (point.x >= self.x and
+            point.x <= self.x + self.width and
+            point.y >= self.y and
+            point.y <= self.y + self.height):
+            return True
+        return False
+
 if config.backend == 0:
     import ultimateraylib as rl
 elif config.backend == 1:
@@ -104,7 +125,7 @@ def draw_text(text: str, x: int, y: int, size: int, r: int, g: int, b: int, a: i
 
 def gui_button(text: str, x: int, y: int, width: int, height: int, text_size = 20):
     if config.backend == 0:
-        rl.gui_button(rl.make_rect(x, y, width, height), text)
+        return rl.gui_button(rl.make_rect(x, y, width, height), text)
     else:
         draw_rectangle(x, y, width, height, 245, 245, 245)
         draw_text(text, x, y, text_size, 255, 255, 255)
