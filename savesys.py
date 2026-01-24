@@ -1,10 +1,11 @@
 import pickle
 import os
+import lang
 
 users: list = []
 folders = []
 files = []
-rootpass = ""
+rootpass = lang.langkey("hover-pls")
 
 os.makedirs("nebos", exist_ok=True)
 

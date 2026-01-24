@@ -19,6 +19,9 @@ langs = {
         "mode-light": "Light Mode",
         "mode-dark": "Dark Mode",
 
+        "enter-rpass":"Enter Root Password",
+        "hover-pls": "Hover the mouse over this",
+
         # file info
         "file-ukn": "Unknown", # No Extension or Unknown Extension
 

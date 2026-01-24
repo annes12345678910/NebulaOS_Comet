@@ -1,8 +1,8 @@
 
 import kernel
 #import ultimateraylib as rl
-import style
-import lang,util
+import style, savesys
+import lang
 import renderer
 
 scene = 0
@@ -21,6 +21,8 @@ scene = 0
 '''
 
 opo = 0
+
+current_text = ""
 def draw_welcome():
     global scene, opo
     #icon_button('toby', 0, 0)
@@ -67,6 +69,12 @@ def draw_welcome():
 
         if renderer.gui_button(lang.langkey("mode-dark"), (winw // 2), winh // 2, 70, 40):
             style.changeblack(True)
+    
+    elif scene == 3: # rootpass
+        renderer.draw_text(lang.langkey("enter-rpass"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+        
+        savesys.rootpass = renderer.gui_textbox(savesys.rootpass, 255, winw // 2, winh // 2, 200, 50)
+        
 
     # previous and next
     if renderer.gui_button("Previous", skiend - 210, skihend - 60, 100, 50) and not scene <= 0:

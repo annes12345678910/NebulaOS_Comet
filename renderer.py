@@ -67,6 +67,7 @@ def init(title="NebulaOS Comet"):
 def run(fps=60):
     global pygame_mouse_scroll, left_pressed
     if config.backend == 0: # raylib
+        rl.set_target_fps(fps)
         while not rl.window_should_close():
             upd_event()
             draw_event()
@@ -186,6 +187,16 @@ def gui_button(text: str, x: int, y: int, width: int, height: int, text_size = 2
         draw_text(text, x, y, text_size, *style.DARK)
         return Rect(x, y, width, height).collidepoint(Point(*get_mouse_pos())) and is_mouse_left_pressed()
 
+def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: int) -> str:
+    if config.backend == 0: # raylib
+        e = rl.make_rect(x, y, width, height)
+        return rl.gui_text_box(e, text, max_length, rl.check_collision_point_rec(rl.get_mouse_position(), e))[1]
+    if config.backend == 1: # pygame
+        pass
+    if config.backend == 2: # pyglet
+        pass
+    
+    return ""
 
 # drawing
 def begin_drawing():
