@@ -10,6 +10,7 @@ scene = 0
 0 = welcome!
 
 1 = language
+
 2 = theme
 
 3 = root password
@@ -56,7 +57,16 @@ def draw_welcome():
         renderer.draw_text(lang.langkey("start-langchoice"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
 
         renderer.draw_text(lang.langkey("lang-desc"), int(winw / skibidi + 10), int(winh / skibidi + 50), 20, *style.DARKEST)
-        
+    
+    elif scene == 2: # theme thingy
+        renderer.draw_text(lang.langkey("start-choosetheme"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+
+        # light button
+        if renderer.gui_button(lang.langkey("mode-light"), (winw // 2) - 140, winh // 2, 70, 40):
+            style.changeblack(False)
+
+        if renderer.gui_button(lang.langkey("mode-dark"), (winw // 2), winh // 2, 70, 40):
+            style.changeblack(True)
 
     # previous and next
     if renderer.gui_button("Previous", skiend - 210, skihend - 60, 100, 50) and not scene <= 0:
