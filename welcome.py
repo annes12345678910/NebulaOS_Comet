@@ -1,6 +1,6 @@
 
 import kernel
-import ultimateraylib as rl
+#import ultimateraylib as rl
 import style
 import lang,util
 import renderer
@@ -23,40 +23,39 @@ opo = 0
 def draw_welcome():
     global scene, opo
     #icon_button('toby', 0, 0)
-    winw = rl.get_screen_width()
-    winh = rl.get_screen_height()
+    winw, winh = renderer.get_window_size()
 
     skibidi = 10
     skimult = 8
 
-    renderer.draw_rectangle(int(winw / skibidi), int(winh / skibidi), int(winw / skibidi) * skimult, int(winh / skibidi) * skimult, *style.BRIGHT)
+    renderer.draw_rectangle(int(winw / skibidi), int(winh / skibidi), int(winw / skibidi) * skimult, int(winh / skibidi) * skimult, *style.BRIGHTBRIGHT)
 
     skiend = int(winw / skibidi) + int(winw / skibidi) * skimult
     skihend = int(winh / skibidi) + int(winh / skibidi) * skimult
 
     # welcome!
     if scene == 0:
-        renderer.draw_text(lang.langkey("start-intro"), int(winw / skibidi) + 10, int(winh / skibidi) + 10, int(winw / skibidi / 3), *style.BRIGHTEST)
+        renderer.draw_text(lang.langkey("start-intro"), int(winw / skibidi) + 10, int(winh / skibidi) + 10, int(winw / skibidi / 3), *style.DARKEST)
 
-        renderer.draw_text(lang.langkey("start-desc"), int(winw / skibidi) + 10, int(winh / skibidi) + 80, int(winw / skibidi / 8), *style.BRIGHTEST)
+        renderer.draw_text(lang.langkey("start-desc"), int(winw / skibidi) + 10, int(winh / skibidi) + 80, int(winw / skibidi / 8), *style.DARKEST)
 
     # languages
     elif scene == 1:
-        renderer.draw_rectangle(int(winw / 3 - 10), 0, int(winw / 3 + 20), winh, *style.BRIGHTBRIGHT)
+        renderer.draw_rectangle(int(winw / 3 - 10), 0, int(winw / 3 + 20), winh, *style.BRIGHTEST) # that strip you see on meat packages
 
-        opo += rl.get_mouse_wheel_move()
+        opo += renderer.get_mouse_scroll()
 
         ere = opo
 
         for i in lang.langs.keys():
             ere += 60
 
-            if rl.gui_button(rl.make_rect(winw / 3, ere, winw / 3, 50), f"{lang.langs[i]['lang-desc']} ({i})"):
+            if renderer.gui_button(f"{lang.langs[i]['lang-desc']} ({i})", int(winw / 3), int(ere), int(winw / 3), 50):
                 lang.lang = i
         
-        renderer.draw_text(lang.langkey("start-langchoice"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.BRIGHTEST)
+        renderer.draw_text(lang.langkey("start-langchoice"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
 
-        renderer.draw_text(lang.langkey("lang-desc"), int(winw / skibidi + 10), int(winh / skibidi + 50), 20, *style.BRIGHTEST)
+        renderer.draw_text(lang.langkey("lang-desc"), int(winw / skibidi + 10), int(winh / skibidi + 50), 20, *style.DARKEST)
         
 
     # previous and next
@@ -66,7 +65,7 @@ def draw_welcome():
     if renderer.gui_button("Next", skiend - 100, skihend - 60, 100, 50) and scene <= 3:
         scene += 1
 
-def draw():
+def test_draw():
     renderer.begin_drawing()
 
     renderer.fill_bg_color(245, 245, 245)
@@ -74,7 +73,7 @@ def draw():
     draw_welcome()
     renderer.end_drawing()
 
-renderer.draw_event = draw
+renderer.draw_event = test_draw
 
 def test():
     renderer.init("Welcome")
