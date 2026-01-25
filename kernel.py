@@ -32,14 +32,12 @@ def exit():
     sys.exit(0)
 
 class Folder:
-    def __init__(self, parent, name):
+    def __init__(self, parent, name:str):
         self.parent = parent
         self.name = name
 
         self.protected = False # enter the protector's password to modify
         self.protector = ""
-        
-        folders.append(self)
 
     def getvisual(self, trace):
         # If this folder's parent *is* the trace folder
@@ -58,6 +56,29 @@ class Folder:
             return f"{self.parent.get_absolute()}/{self.name}"
         return f"/{self.name}"
 
+    def tojson(self) -> dict:
+        return {
+            "parent": self.parent.name,
+            "name": self.name,
+            "protected": self.protected,
+            "protector": self.protector
+        }
+    
+    @staticmethod
+    def fromjson(thejson: dict):
+        #thejson.get("name", "None"),
+        
+        zeparent = None
+        for i in folders:
+            if i.name == thejson.get("parent", None):
+                zeparent = i
+
+        e = Folder(zeparent, thejson.get("name", "None"))
+
+        e.protected = thejson.get("protected", False)
+        e.protector = thejson.get("protector", "")
+        return e
+    
 class File:
     def __init__(self, parent: Folder, name, ext):
         self.name = name
@@ -67,8 +88,6 @@ class File:
 
         self.protected = False # enter the protector's password to modify
         self.protector = ""
-
-        files.append(self)
 
     def getvisual(self, trace):
         folder_visual = self.parent.getvisual(trace)
@@ -373,15 +392,22 @@ class User:
         self.icon = icon
         self.codename = codename
         self.name = name
-        self.censorpassword = True
         self.password = password
     
     def tojson(self) -> dict:
         return {
             "codename": self.codename,
             "name": self.name,
-            "censorpassword": self.censorpassword
+            "password": self.password
         }
+    
+    @staticmethod
+    def fromjson(thejson: dict):
+        return User(None, 
+                        thejson.get("codename", "null"),
+                        thejson.get("name", "None"),
+                        thejson.get("password", "null")
+                    )
     
 curpass = ''
 def draw_usr_password_box(pos: rl.Vector2, user: User):

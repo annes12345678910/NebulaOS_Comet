@@ -4,6 +4,7 @@ import ultimateraylib as rl
 import welcome
 import savesys
 import style
+import menu
 
 scene = 0
 '''
@@ -19,6 +20,12 @@ def draw():
         welcome.draw_welcome()
         if welcome.is_done:
             scene = 1
+            print(type(savesys.users))
+            savesys.users.append(welcome.newuser)
+            savesys.savesys()
+    
+    if scene == 1:
+        menu.draw_menu()
 
     renderer.end_drawing()
 
@@ -28,6 +35,7 @@ def main():
     savesys.loadsys()
 
     renderer.init()
+    kernel.initicons()
     renderer.run()
 
 if __name__ == "__main__":
