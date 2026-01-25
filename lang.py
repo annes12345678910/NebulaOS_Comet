@@ -20,6 +20,8 @@ langs = {
         "mode-dark": "Dark Mode",
 
         "enter-rpass":"Enter Root Password",
+        "enter-userinfo": "Enter User Information",
+        
         "hover-pls": "Hover the mouse over this",
 
         # file info
@@ -143,7 +145,10 @@ langs = {
 
         "start-intro": "The Olympic Committee sent a congratulatory message!",
         "start-desc": """
+The nebula serves as a testing ground for engineers who wish to study meteorites.
 
+NebAssembly is now available using NebulaOS, a simple yet powerful programming language for building games and apps.
+No need to go anywhere, everything can be done here!
 """,
         
         "start-langchoice": "Choose language",

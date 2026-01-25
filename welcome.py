@@ -23,6 +23,8 @@ scene = 0
 opo = 0
 
 current_text = ""
+newuser = kernel.User(None)
+
 def draw_welcome():
     global scene, opo
     #icon_button('toby', 0, 0)
@@ -74,13 +76,19 @@ def draw_welcome():
         renderer.draw_text(lang.langkey("enter-rpass"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
         
         savesys.rootpass = renderer.gui_textbox(savesys.rootpass, 255, winw // 2, winh // 2, 200, 50)
-        
+    
+    elif scene == 4:
+        renderer.draw_text(lang.langkey("enter-userinfo"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+
+        newuser.name = renderer.gui_textbox(newuser.name, 255, int(winw / skibidi + 10), int(winh / skibidi + 40), 300, 50)
+        newuser.codename = renderer.gui_textbox(newuser.codename, 255, int(winw / skibidi + 10), int(winh / skibidi + 100), 300, 50)
+        newuser.password = renderer.gui_textbox(newuser.password, 255, int(winw / skibidi + 10), int(winh / skibidi + 160), 300, 50)
 
     # previous and next
     if renderer.gui_button("Previous", skiend - 210, skihend - 60, 100, 50) and not scene <= 0:
         scene -= 1
 
-    if renderer.gui_button("Next", skiend - 100, skihend - 60, 100, 50) and scene <= 3:
+    if renderer.gui_button("Next", skiend - 100, skihend - 60, 100, 50) and scene <= 4:
         scene += 1
 
 def test_draw():

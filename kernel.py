@@ -369,7 +369,7 @@ class Program:
         self.errored = False
 
 class User:
-    def __init__(self, icon, codename="name", name="Name", password='neb') -> None:
+    def __init__(self, icon, codename="username", name="Name", password='P4ssw0rd') -> None:
         self.icon = icon
         self.codename = codename
         self.name = name
