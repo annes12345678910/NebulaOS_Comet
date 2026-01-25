@@ -11,11 +11,14 @@ scene = 0
 '''
 
 def draw():
+    global scene
     renderer.begin_drawing()
     renderer.fill_bg_color(*style.BRIGHTEST)
 
     if scene == 0:
         welcome.draw_welcome()
+        if welcome.is_done:
+            scene = 1
 
     renderer.end_drawing()
 

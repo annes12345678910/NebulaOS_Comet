@@ -35,6 +35,7 @@ Dictionary dict_CreateDict(Dictionary *dict, unsigned int initialSize) {
     }
     
     eme.size = initialSize;
+    return eme;
 }
 
 void dict_AddKey(Dictionary *dict, const char* keyName, void* value) {

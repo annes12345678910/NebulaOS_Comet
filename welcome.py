@@ -25,8 +25,10 @@ opo = 0
 current_text = ""
 newuser = kernel.User(None)
 
+is_done = False
+
 def draw_welcome():
-    global scene, opo
+    global scene, opo, is_done
     #icon_button('toby', 0, 0)
     winw, winh = renderer.get_window_size()
 
@@ -84,6 +86,10 @@ def draw_welcome():
         newuser.codename = renderer.gui_textbox(newuser.codename, 255, int(winw / skibidi + 10), int(winh / skibidi + 100), 300, 50)
         newuser.password = renderer.gui_textbox(newuser.password, 255, int(winw / skibidi + 10), int(winh / skibidi + 160), 300, 50)
 
+    elif scene == 5:
+        if renderer.gui_button("Finish", winw // 4, (winh // 2) + 50, 100, 50):
+            is_done = True
+
     # previous and next
     if renderer.gui_button("Previous", skiend - 210, skihend - 60, 100, 50) and not scene <= 0:
         scene -= 1
@@ -99,6 +105,9 @@ def test_draw():
     draw_welcome()
     renderer.end_drawing()
 
+    if is_done:
+        sys.exit(0)
+
 renderer.draw_event = test_draw
 
 def test():
@@ -113,4 +122,5 @@ def test():
     renderer.run()
 
 if __name__ == "__main__":
+    import sys
     test()
