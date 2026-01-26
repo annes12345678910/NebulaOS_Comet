@@ -1,6 +1,6 @@
 import kernel
 import renderer
-import ultimateraylib as rl
+#import ultimateraylib as rl
 import welcome
 import savesys
 import style
@@ -36,7 +36,11 @@ def draw():
                 scene = 2
 
     if scene == 2:
-        menu.draw_menu()
+        # dock
+        if menu.showdock:
+            renderer.draw_rectangle(0, winh - 50, winw, 50, *style.DARK)
+            
+        menu.draw_menu(*style.DARKEST)
 
     renderer.end_drawing()
 

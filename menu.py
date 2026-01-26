@@ -7,8 +7,12 @@ menu_pos = rl.Vector2(0, 0)
 is_dragging = False
 drag_offset = rl.Vector2(0, 0)
 draw_options = False
-def draw_menu():
+
+showdock = True
+
+def draw_menu(r: int, g: int, b: int):
     global menu_pos, is_dragging, drag_offset, draw_options
+    global showdock
 
     MENU_RADIUS = 50
     mouse_pos = rl.get_mouse_position()
@@ -34,14 +38,14 @@ def draw_menu():
             rl.play_sound(kernel.sounds['tap'])
     
     # drawing
-    rl.draw_circle_v(menu_pos, MENU_RADIUS, rl.BLACK)
-    rl.draw_texture_ex(kernel.icons['logowhite'], rl.vector2_subtract(menu_pos, rl.Vector2(45,45)), 0, 0.39, rl.WHITE)
+    rl.draw_circle_v(menu_pos, MENU_RADIUS, rl.make_color(r, g, b))
+    rl.draw_texture_ex(kernel.icons['logowhite'], rl.vector2_subtract(menu_pos, rl.Vector2(45,45)), 0, 0.39, rl.make_color(255 - r, 255 - g, 255 - b))
 
     # draw options
     if draw_options:
 
         # exit button draw
-        rl.draw_circle_v(rl.vector2_add(menu_pos, rl.Vector2(MENU_RADIUS + ((MENU_RADIUS / 2) + 10), 0)), MENU_RADIUS / 2, rl.BLACK)
+        rl.draw_circle_v(rl.vector2_add(menu_pos, rl.Vector2(MENU_RADIUS + ((MENU_RADIUS / 2) + 10), 0)), MENU_RADIUS / 2, rl.make_color(r, g, b))
 
         rl.draw_texture_ex(
             kernel.icons['power'], 
@@ -50,7 +54,7 @@ def draw_menu():
         )
 
         # showhide dock button draw
-        rl.draw_circle_v(rl.vector2_add(menu_pos, rl.Vector2(0, (MENU_RADIUS + ((MENU_RADIUS / 2))) * -1 - 10)), MENU_RADIUS / 2, rl.BLACK)
+        rl.draw_circle_v(rl.vector2_add(menu_pos, rl.Vector2(0, (MENU_RADIUS + ((MENU_RADIUS / 2))) * -1 - 10)), MENU_RADIUS / 2, rl.make_color(r, g, b))
 
         # clicky
         if rl.is_mouse_button_pressed(rl.MOUSE_BUTTON_LEFT):
@@ -59,13 +63,17 @@ def draw_menu():
             if rl.check_collision_point_circle(mouse_pos, 
                                                rl.vector2_add(menu_pos, rl.Vector2(MENU_RADIUS + ((MENU_RADIUS / 2) + 10), 0)),
                                                MENU_RADIUS / 2):
-                rl.draw_text(lang.langkey("exit"), 0, 0, 100, rl.BLACK)
+                rl.draw_text(lang.langkey("exit"), 0, 0, 100, rl.make_color(r, g, b))
                 rl.end_drawing()
                 time.sleep(1)
                 kernel.exit()
             
             # showhide dock button event
-
+            if rl.check_collision_point_circle(mouse_pos, 
+                                               rl.vector2_add(menu_pos, rl.Vector2(0, (MENU_RADIUS + ((MENU_RADIUS / 2))) * -1 - 10)),
+                                               MENU_RADIUS / 2):
+                showdock = not showdock
+                
 def test():
     rl.set_config_flags(rl.FLAG_WINDOW_RESIZABLE)
     rl.init_window(title="nbc")
@@ -79,7 +87,7 @@ def test():
         rl.clear_background(rl.RAYWHITE)
         #rl.draw_rectangle(0,0,200,100, rl.RED)
 
-        draw_menu()
+        draw_menu(255, 0, 0)
 
         rl.draw_texture_ex(kernel.icons['cursor'], rl.get_mouse_position(), 0, 0.45 if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT) else 0.5, rl.WHITE)
         
