@@ -414,8 +414,8 @@ class User:
 curpass = ''
 def draw_usr_password_box(pos: tuple[int, int], user: User, r: int, g: int, b: int):
     global curpass
-    curpass = renderer.gui_textbox(curpass, 64, int(pos[0]) - 100, int(pos[0]), 200, 60)
-    renderer.draw_text(f"{user.name} ({user.codename})", int(pos[0]) - 100, int(pos[0]) - 40, 40, r, g, b) 
+    curpass = renderer.gui_textbox(curpass, 64, int(pos[0]) - 100, int(pos[1]), 200, 60)
+    renderer.draw_text(f"{user.name} ({user.codename})", int(pos[0]) - 100, int(pos[1]) - 40, 40, r, g, b, 255) 
 
 def draw_window(prog: Program):
     pos = rl.Vector2(

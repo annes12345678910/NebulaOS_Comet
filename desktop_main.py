@@ -29,7 +29,7 @@ def draw():
             savesys.savesys()
     
     if scene == 1:
-        kernel.draw_usr_password_box((winw // 2, winh // 2), savesys.users[0], *style.BRIGHTEST)
+        kernel.draw_usr_password_box((winw // 2, winh // 2), savesys.users[0], *style.DARKEST)
 
     if scene == 2:
         menu.draw_menu()
