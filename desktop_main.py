@@ -31,6 +31,10 @@ def draw():
     if scene == 1:
         kernel.draw_usr_password_box((winw // 2, winh // 2), savesys.users[0], *style.DARKEST)
 
+        if renderer.gui_button("->", winw - 110, 10, 100, 100):
+            if kernel.curpass == savesys.users[0].password:
+                scene = 2
+
     if scene == 2:
         menu.draw_menu()
 
