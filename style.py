@@ -1,4 +1,3 @@
-import ultimateraylib as rl
 
 black_theme = False
 

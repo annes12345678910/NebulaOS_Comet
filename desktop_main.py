@@ -9,12 +9,16 @@ import menu
 scene = 0
 '''
 0 = Welcome
+1 = password 
+2 = stufs
 '''
 
 def draw():
     global scene
     renderer.begin_drawing()
     renderer.fill_bg_color(*style.BRIGHTEST)
+
+    winw, winh = renderer.get_window_size()
 
     if scene == 0:
         welcome.draw_welcome()
@@ -25,6 +29,9 @@ def draw():
             savesys.savesys()
     
     if scene == 1:
+        kernel.draw_usr_password_box((winw // 2, winh // 2), savesys.users[0], *style.BRIGHTEST)
+
+    if scene == 2:
         menu.draw_menu()
 
     renderer.end_drawing()
@@ -32,7 +39,11 @@ def draw():
 renderer.draw_event = draw
 
 def main():
+    global scene
+
     savesys.loadsys()
+    if len(savesys.users) > 0:
+        scene = 1
 
     renderer.init()
     kernel.initicons()

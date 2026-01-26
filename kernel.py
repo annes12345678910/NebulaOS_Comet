@@ -6,6 +6,8 @@ import json
 from colorama import Fore
 import load
 from savesys import *
+import renderer
+import style
 
 icons:dict[str, rl.Texture2D] = {}
 
@@ -410,9 +412,10 @@ class User:
                     )
     
 curpass = ''
-def draw_usr_password_box(pos: rl.Vector2, user: User):
+def draw_usr_password_box(pos: tuple[int, int], user: User, r: int, g: int, b: int):
     global curpass
-    curpass = rl.gui_text_box(rl.make_rect(pos.x, pos.y + 60, 120, 60), curpass, 64, True)
+    curpass = renderer.gui_textbox(curpass, 64, int(pos[0]) - 100, int(pos[0]), 200, 60)
+    renderer.draw_text(f"{user.name} ({user.codename})", int(pos[0]) - 100, int(pos[0]) - 40, 40, r, g, b) 
 
 def draw_window(prog: Program):
     pos = rl.Vector2(
