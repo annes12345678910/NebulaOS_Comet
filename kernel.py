@@ -80,6 +80,9 @@ class Folder:
         e.protector = thejson.get("protector", "")
         return e
     
+    def __repr__(self) -> str:
+        return f"Folder( Address: {hex(id(self))} Path: {self.get_absolute()} )"
+    
 class File:
     def __init__(self, parent: Folder, name, ext):
         self.name = name

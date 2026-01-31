@@ -23,7 +23,7 @@ programs: list[kernel.Program] = []
 show_sysdock = False
 show_insdock = False
 
-nebfiles = cbinds.library_path / "nebfiles"
+nebfiles = cbinds.library_path.parent / "nebfiles"
 
 def draw():
     global scene, show_sysdock, show_insdock
@@ -72,6 +72,18 @@ def draw():
 
 renderer.draw_event = draw
 
+def import_path(path: pathlib.Path):
+    if path.is_dir():
+        if path.parent.name == 'nebfiles':
+            print(f"Added dir {path}")
+            savesys.folders.append(kernel.Folder(kernel.root, path.name))
+
+def loadnebfiles():
+    dosyalar = list(nebfiles.glob("*")) # why did i write the turkish for 'files'
+    print(f"nebfiles: {dosyalar}")
+    for i in dosyalar:
+        import_path(i)
+
 
 def main():
     global scene
@@ -79,7 +91,9 @@ def main():
     savesys.loadsys()
     if len(savesys.users) > 0:
         scene = 1
-
+    loadnebfiles()
+    print(savesys.folders)
+    
     renderer.init()
     kernel.initicons()
     renderer.run()
