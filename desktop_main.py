@@ -72,17 +72,23 @@ def draw():
 
 renderer.draw_event = draw
 
+currentfolder = nebfiles
 def import_path(path: pathlib.Path):
     if path.is_dir():
         if path.parent.name == 'nebfiles':
             print(f"Added dir {path}")
             savesys.folders.append(kernel.Folder(kernel.root, path.name))
 
-def loadnebfiles():
-    dosyalar = list(nebfiles.glob("*")) # why did i write the turkish for 'files'
-    print(f"nebfiles: {dosyalar}")
+def loadnebfiles(folder: pathlib.Path):
+    dosyalar = list(folder.glob("*")) # why did i write the turkish for 'files'
+    print(f"files loading: {dosyalar}")
     for i in dosyalar:
         import_path(i)
+
+        if i.is_dir():
+            currentfolder = i
+            loadnebfiles(i)
+            
 
 
 def main():
@@ -91,8 +97,24 @@ def main():
     savesys.loadsys()
     if len(savesys.users) > 0:
         scene = 1
-    loadnebfiles()
+    
+    systemf = kernel.Folder(kernel.root, "system")
+    sysprogs = kernel.Folder(systemf, "programs")
+    
+    savesys.folders.append(systemf)
+    savesys.folders.append(sysprogs)
+    
+    for i in list((nebfiles / "system/programs").glob("*")):
+        if i.is_file():
+            with open(str(i), "rb") as f:
+                e = kernel.File(sysprogs, i.name.split('.')[0], "nsm")
+                e.contents = f.read()
+                savesys.files.append(e)
+
+    print("folders")
     print(savesys.folders)
+    print("files")
+    print(savesys.files)
     
     renderer.init()
     kernel.initicons()

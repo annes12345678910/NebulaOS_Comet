@@ -99,7 +99,12 @@ class File:
         if self.parent is trace:
             return f"./{self.name}.{self.ext}"
         return folder_visual + f"/{self.name}.{self.ext}"
-
+    
+    def get_absolute(self):
+        if isinstance(self.parent, Folder):
+            return f"{self.parent.get_absolute()}/{self.name}.{self.ext}"
+        return f"/{self.name}"
+    
     def getreadable(self):
         try:
             return self.contents.decode()
@@ -108,6 +113,9 @@ class File:
 
     def getname(self):
         return f"{self.name}.{self.ext}"
+
+    def __repr__(self) -> str:
+        return f"File( Address: {hex(id(self))} Path: {self.get_absolute()} )"
 
 
 def getfilebyname(name, parent: Folder):
