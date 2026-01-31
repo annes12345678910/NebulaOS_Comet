@@ -1,10 +1,12 @@
 import kernel
 import renderer
-#import ultimateraylib as rl
+import ultimateraylib as rl
 import welcome
 import savesys
 import style
 import menu
+import cbinds
+import pathlib
 
 scene = 0
 '''
@@ -21,8 +23,10 @@ programs: list[kernel.Program] = []
 show_sysdock = False
 show_insdock = False
 
+nebfiles = cbinds.library_path / "nebfiles"
+
 def draw():
-    global scene
+    global scene, show_sysdock, show_insdock
     renderer.begin_drawing()
     renderer.fill_bg_color(*style.BRIGHTEST)
 
@@ -47,15 +51,27 @@ def draw():
         if menu.showdock: # dock
             renderer.draw_rectangle(0, winh - dock_size, winw, dock_size, *style.DARK)
 
-            renderer.gui_button("/\\", 10, winh + 10 - dock_size, dock_size - 20, dock_size - 20) # system apps button
+            if renderer.gui_button("\\/" if show_sysdock else "/\\", 10, winh + 10 - dock_size, dock_size - 20, dock_size - 20): # system apps button
+                show_sysdock = not show_sysdock
+                rl.play_sound(kernel.sounds['open'])
+                if show_sysdock: # subdock sys
+                    show_insdock = not show_sysdock
 
-            renderer.gui_button("/\\", winw // 2, winh + 10 - dock_size, dock_size - 20, dock_size - 20) # installed apps button
+            if renderer.gui_button("\\/" if show_insdock else "/\\", winw // 2, winh + 10 - dock_size, dock_size - 20, dock_size - 20): # installed apps button
+                show_insdock = not show_insdock
+                rl.play_sound(kernel.sounds['open'])
+                if show_insdock: # subdock ins
+                    show_sysdock = not show_insdock
+            
+            if show_insdock or show_sysdock:
+                renderer.draw_rectangle(0, winh - (dock_size * 2 + 10), winw, dock_size, *style.DARK)
 
         menu.draw_menu(*style.DARKEST)
 
     renderer.end_drawing()
 
 renderer.draw_event = draw
+
 
 def main():
     global scene

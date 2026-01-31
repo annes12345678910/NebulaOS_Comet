@@ -7,7 +7,6 @@ from colorama import Fore
 import load
 from savesys import *
 import renderer
-import style
 
 icons:dict[str, rl.Texture2D] = {}
 
@@ -499,7 +498,7 @@ def test():
         rl.clear_background(rl.RAYWHITE)
         for opo in programs:
             draw_window(opo)
-        menu.draw_menu()
+        menu.draw_menu(255, 0, 0)
         rl.end_drawing()
     rl.close_audio_device()
     rl.close_window()
