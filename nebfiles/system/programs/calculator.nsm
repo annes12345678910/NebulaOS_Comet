@@ -8,7 +8,9 @@
         "draw": [
             {"cal": ["_clearbg", 255, 255, 255, 255]},
 
-            {"cal": ["_drawtext", "calctext", 10, 10, 40, 0,0,0,255]}
+            {"cal": ["_drawtext", "calctext", 10, 10, 40, 0,0,0,255]},
+
+            {"cal": ["_guibutton", "1", 10, 50, 20, 20]}
         ],
 
         "main": [

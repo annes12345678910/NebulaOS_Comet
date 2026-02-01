@@ -298,7 +298,7 @@ class Program:
         
         elif func == "_guibutton":
             if len(args) < 5:
-                print("Too few arguments for _guibutton, need 6 arguments")
+                print("Too few arguments for _guibutton, need 5 arguments")
                 return
             rl.begin_texture_mode(self.buffer)
             self.addresses['eax'] = renderer.gui_button(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]))
