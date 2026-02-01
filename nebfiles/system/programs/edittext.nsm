@@ -1,6 +1,7 @@
 {
     "data": {
-        "EXE_TYPE": "standalone"
+        "EXE_TYPE": "standalone",
+        "nbgf": []
     },
 
     "text": {

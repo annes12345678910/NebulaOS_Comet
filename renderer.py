@@ -177,6 +177,16 @@ def draw_text(text: str, x: int, y: int, size: int, r: int, g: int, b: int, a: i
                 color=(r, g, b, a)
             ).draw()
 
+def draw_line(x1: int, y1: int, x2: int, y2: int, thick: float, r: int, g: int, b: int, a: int = 255):
+    if config.backend == 0: # raylib
+        rl.draw_line_ex(rl.Vector2(x1, y1), rl.Vector2(x2, y2), thick, rl.make_color(r, g, b, a))
+
+    if config.backend == 1: # pygame
+        pygame.draw.line(pygame_screen, (r, g, b, a), (x1, y1), (x2, y2), int(thick))
+
+    if config.backend == 2: # pyglet
+        pyglet.shapes.Line(x1, pyglet_window.height - y1, x2, pyglet_window.height - y2, thick, (r, g, b, a)).draw()
+
 # GUI
 
 def gui_button(text: str, x: int, y: int, width: int, height: int, text_size = 20):

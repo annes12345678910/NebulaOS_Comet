@@ -1,3 +1,4 @@
+import sys
 import kernel
 import renderer
 import ultimateraylib as rl
@@ -7,6 +8,9 @@ import style
 import menu
 import cbinds
 import pathlib
+import json
+
+import nbgf
 
 scene = 0
 '''
@@ -63,12 +67,38 @@ def draw():
                 if show_insdock: # subdock ins
                     show_sysdock = not show_insdock
             
-            if show_insdock or show_sysdock:
+            if show_insdock or show_sysdock: # second dock
                 renderer.draw_rectangle(0, winh - (dock_size * 2 + 10), winw, dock_size, *style.DARK)
+                if show_sysdock: # sysapps
+                    apin = 10
+                    for fl in savesys.files:
+                        if fl.parent == sysprogs:
+                            if renderer.gui_button(fl.name, apin, winh - (dock_size * 2), dock_size - 20, dock_size - 20):
+                                try:
+                                    prodat = json.loads(fl.contents)
+                                except json.JSONDecodeError as e:
+                                    print(f"Error jsoning the {fl.name} system app's code, please reinstall NebulaOS")
+                                    sys.exit(40)
+
+                                launched = kernel.Program(prodat)
+
+                                launched.addresses['_WINX'] = winw // 2
+                                launched.addresses['_WINY'] = winh // 2
+
+                                launched.run()
+                                programs.append(launched)
+                                
+                            apin += dock_size - 10
+        for prog in programs:
+            kernel.draw_window(prog)
 
         menu.draw_menu(*style.DARKEST)
 
     renderer.end_drawing()
+
+    for prog in programs: #update programs
+        if prog.loops["_DRAWLOOP"]:
+            prog.call(prog.loops["_DRAWLOOP"], [])
 
 renderer.draw_event = draw
 
@@ -89,7 +119,8 @@ def loadnebfiles(folder: pathlib.Path):
             currentfolder = i
             loadnebfiles(i)
             
-
+systemf = kernel.Folder(kernel.root, "system")
+sysprogs = kernel.Folder(systemf, "programs")
 
 def main():
     global scene
@@ -97,9 +128,6 @@ def main():
     savesys.loadsys()
     if len(savesys.users) > 0:
         scene = 1
-    
-    systemf = kernel.Folder(kernel.root, "system")
-    sysprogs = kernel.Folder(systemf, "programs")
     
     savesys.folders.append(systemf)
     savesys.folders.append(sysprogs)
