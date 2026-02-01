@@ -8,7 +8,8 @@
         "draw": [
             {"cal": ["_clearbg", 255, 255, 255, 255]},
 
-            {"cal": ["_drawtext", "calctext", 10, 10, 40, 0,0,0,255]},
+            {"cal": ["_drawtext", "calctext", 10, 10, 30, 0,0,0,255]},
+            {"cal": ["_drawtext", "result", 10, 40, 10, 0,0,255,255]},
 
             {"cal": ["_guibutton", "1", 0, 50, 100, 100]},
             {"if": ["eax", 
@@ -92,6 +93,14 @@
             {"if": ["eax", 
                 [
                     {"add": ["calctext", "."]}
+                ]
+            ]},
+
+            {"cal": ["_guibutton", "=", 200, 350, 100, 100]},
+            {"if": ["eax", 
+                [
+                    {"cal": ["_py", "calctext"]},
+                    {"mov": ["result", "eax"]}
                 ]
             ]}
         ],
