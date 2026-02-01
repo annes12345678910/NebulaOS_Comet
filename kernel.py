@@ -310,6 +310,12 @@ class Program:
         
         elif func == "_geticon":
             self.addresses['eax'] = icons[args[0]] if icons.__contains__(args[0]) else icons['null']
+        
+        elif func == "_py":
+            try:
+                self.addresses['eax'] = eval(args[0])
+            except Exception as e:
+                print(f"Python internally errored with {e} with the code {args[0]}")
 
         elif self.funcs.__contains__(func):
             for i in range(len(args)):
@@ -344,7 +350,10 @@ class Program:
                 #print(self.addresses)
 
             elif key == "div":
-                self.addresses[opo[0]] /= self._getvar(opo[1])
+                try:
+                    self.addresses[opo[0]] /= self._getvar(opo[1])
+                except ZeroDivisionError as e:
+                    print(f"Divided by 0! {line}: {e}")
                 #print(self.addresses)
 
             elif key == "pow":
@@ -427,7 +436,8 @@ def draw_usr_password_box(pos: tuple[int, int], user: User, r: int, g: int, b: i
     curpass = renderer.gui_textbox(curpass, 64, int(pos[0]) - 100, int(pos[1]), 200, 60)
     renderer.draw_text(f"{user.name} ({user.codename})", int(pos[0]) - 100, int(pos[1]) - 40, 40, r, g, b, 255) 
 
-def draw_window(prog: Program):
+def draw_window(prog: Program) -> bool:
+    'Returns True when the window should be closed'
     pos = rl.Vector2(
         prog.addresses["_WINX"],
         prog.addresses["_WINY"]
@@ -439,12 +449,13 @@ def draw_window(prog: Program):
         50
     )
     mousepos = rl.get_mouse_position()
-    if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT):
-        if rl.check_collision_point_rec(mousepos, toprect):
-            prog.addresses['_WINX'] = (mousepos.x - (toprect.width /2))
-            prog.addresses['_WINY'] = (mousepos.y + (toprect.height /2))
 
     if prog.addresses['_NEBWIN'] and rl.is_render_texture_valid(prog.buffer):
+        if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT):
+            if rl.check_collision_point_rec(mousepos, toprect):
+                prog.addresses['_WINX'] = (mousepos.x - (toprect.width /2))
+                prog.addresses['_WINY'] = (mousepos.y + (toprect.height /2))
+
         rl.draw_rectangle_v(rl.vector2_subtract(pos, rl.Vector2(10, 10)), 
                          
                             rl.Vector2(prog.buffer.texture.width + 20, 
@@ -475,6 +486,8 @@ def draw_window(prog: Program):
             "x"
         ):
             prog.addresses['_NEBWIN'] = False
+            return True
+    return False
 
 
 def test():

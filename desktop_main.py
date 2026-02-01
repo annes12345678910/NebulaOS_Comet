@@ -77,7 +77,7 @@ def draw():
                                 try:
                                     prodat = json.loads(fl.contents)
                                 except json.JSONDecodeError as e:
-                                    print(f"Error jsoning the {fl.name} system app's code, please reinstall NebulaOS")
+                                    print(f"Error jsoning the {fl.name} system app's code, please reinstall NebulaOS: {e}")
                                     sys.exit(40)
 
                                 launched = kernel.Program(prodat)
@@ -90,7 +90,8 @@ def draw():
                                 
                             apin += dock_size - 10
         for prog in programs:
-            kernel.draw_window(prog)
+            if kernel.draw_window(prog):
+                programs.remove(prog)
 
         menu.draw_menu(*style.DARKEST)
 
