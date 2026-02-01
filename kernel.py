@@ -329,7 +329,7 @@ class Program:
         
         elif func == "_py":
             try:
-                self.addresses['eax'] = eval(args[0])
+                self.addresses['eax'] = eval(args[0], self.addresses)
             except Exception as e:
                 print(f"Python internally errored with {e} with the code {args[0]}")
 
