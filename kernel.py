@@ -304,6 +304,14 @@ class Program:
             self.addresses['eax'] = renderer.gui_button(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]))
             rl.end_texture_mode()
         
+        elif func == "_drawtext":
+            if len(args) < 8:
+                print("Too few arguments for _drawtext, need 8 arguments")
+                return
+            rl.begin_texture_mode(self.buffer)
+            renderer.draw_text(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
+            rl.end_texture_mode()
+        
         elif func == "_getattr":
             self.addresses['eax'] = getattr(self._getvar(args[0]), self._getvar(args[1]))
         
