@@ -7,6 +7,8 @@
     "text": {
         "draw": [
             {"cal": ["_clearbg", 0, 0, 0, 255]}
+
+
         ],
 
         "main": [
