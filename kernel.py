@@ -300,7 +300,9 @@ class Program:
             if len(args) < 5:
                 print("Too few arguments for _guibutton, need 6 arguments")
                 return
-            self.addresses['eax'] = renderer.gui_button(args[0], args[1], args[2], args[3], args[4])
+            rl.begin_texture_mode(self.buffer)
+            self.addresses['eax'] = renderer.gui_button(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]))
+            rl.end_texture_mode()
         
         elif func == "_getattr":
             self.addresses['eax'] = getattr(self._getvar(args[0]), self._getvar(args[1]))
