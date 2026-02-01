@@ -271,6 +271,9 @@ class Program:
         elif func == "_toint":
             self.addresses["eax"] = int(self._getvar(args[0]))
         
+        elif func == "_tostr":
+            self.addresses["eax"] = str(self._getvar(args[0]))
+        
         elif func == "_loadtexture":
             # loadtexture 'dad.png'
             fad = getfilebyname(args[0], self.currentfolder)
