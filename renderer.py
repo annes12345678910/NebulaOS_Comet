@@ -239,13 +239,30 @@ shiftmap = {
 }
 
 def gui_multitextbox(text: str, x:int, y:int, textsize: int, r:int, g:int, b:int, a:int = 255) -> str:
-    opo = copy.deepcopy(text)
+    opo = text
     draw_rectangle(x, y, rl.measure_text(text.split('\n')[0] if text.count('\n') > 0 else text, textsize) + 10, int(rl.measure_text_ex(rl.get_font_default(), text, textsize, 1).y), r, g, b, a)
     draw_text(text, x + 5, y, textsize, 255 - r, 255 - g, 255 - b, a)
 
     o = rl.get_key_pressed()
     e = rl.get_key_name(o) if o >= 32 else ""
     skib = ""
+    if text:
+        first_line = text.split('\n')[0]
+        width = rl.measure_text(first_line, textsize) + 10
+        height = int(
+        rl.measure_text_ex(
+             rl.get_font_default(),
+                text,
+                textsize,
+                1
+            ).y
+        )
+
+        text_rect = Rect(x, y, width, height)
+        mouse_pos = Point(*get_mouse_pos())
+
+        if not text_rect.collidepoint(mouse_pos):
+            return text
     if e:
         skib = e.decode()
     if rl.is_key_down(rl.KEY_LEFT_SHIFT) or rl.is_key_down(rl.KEY_RIGHT_SHIFT):
@@ -348,7 +365,7 @@ def test_draw():
 
 def test():
     global draw_event, woe
-    woe = ""
+    woe = "o"
     draw_event = test_draw
     init(title="Renderer Test")
     run()
