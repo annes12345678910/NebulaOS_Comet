@@ -314,6 +314,12 @@ class Program:
             rl.begin_texture_mode(self.buffer)
             renderer.draw_text(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
             rl.end_texture_mode()
+
+        elif func == "_guitextbox":
+            if len(args) < 6:
+                print("Too few arguments for _guibutton, need 6 arguments")
+                return
+            self.addresses[self._getvar(args[0])] = renderer.gui_textbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]))
         
         elif func == "_getattr":
             self.addresses['eax'] = getattr(self._getvar(args[0]), self._getvar(args[1]))

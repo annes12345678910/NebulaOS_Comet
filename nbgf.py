@@ -10,9 +10,16 @@ def draw_nbgf(data: list, x: int, y: int):
 
                 if key == "line":
                     if len(args) < 9:
-                        print(f"Function draw_line does not have enough arguments at line {ln} ({line})")
+                        print(f"Function line does not have enough arguments at line {ln} ({line})")
                         return
                     renderer.draw_line(x + args[0], y + args[1], x + args[2], y + args[3], args[4], args[5], args[6], args[7], args[8])
+
+                elif key == "circ":
+                    if len(args) < 7:
+                        print(f"Function circ does not have enough arguments at line {ln} ({line})")
+                        return
+                    renderer.draw_circle(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
+
                 else:
                     print(f"Invalid Drawable {key} at line {ln}")
         else:
