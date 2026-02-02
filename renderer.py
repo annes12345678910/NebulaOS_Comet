@@ -1,6 +1,8 @@
 import sys
+import time
 import config
 import style
+import copy
 
 class Point:
     def __init__(self, x:int, y:int) -> None:
@@ -208,6 +210,67 @@ def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: 
     
     return ""
 
+shiftmap = {
+    "1":"!",
+    "2":"@",
+    "3":"#",
+    '4':'$',
+    '5':'%',
+    '6':'^',
+    '7':'&',
+    '8':'*',
+    '9':'(',
+    '0':')',
+
+    '§':'±',
+    '`':'~',
+    '-':'_',
+    '=':'+',
+
+    '[':'{',
+    ']':'}',
+    
+    ';':':',
+    "'":'"',
+    '\\':'|',
+    ',':'<',
+    '.':'>',
+    '/':'?'
+}
+
+def gui_multitextbox(text: str, x:int, y:int, textsize: int, r:int, g:int, b:int, a:int = 255) -> str:
+    opo = copy.deepcopy(text)
+    draw_rectangle(x, y, rl.measure_text(text.split('\n')[0] if text.count('\n') > 0 else text, textsize) + 10, int(rl.measure_text_ex(rl.get_font_default(), text, textsize, 1).y), r, g, b, a)
+    draw_text(text, x + 5, y, textsize, 255 - r, 255 - g, 255 - b, a)
+
+    o = rl.get_key_pressed()
+    e = rl.get_key_name(o) if o >= 32 else ""
+    skib = ""
+    if e:
+        skib = e.decode()
+    if rl.is_key_down(rl.KEY_LEFT_SHIFT) or rl.is_key_down(rl.KEY_RIGHT_SHIFT):
+        if len(skib) > 0  and 'a' <= skib <= 'z':
+            opo += chr(ord(skib) - 32)
+            #print(chr(ord(skib) - 32))
+        elif shiftmap.get(skib, None):
+            opo += shiftmap[skib]
+        else:
+            opo += skib
+    else:
+        opo += skib
+    
+    if rl.is_key_pressed(rl.KEY_ENTER):
+        opo += "\n"
+    
+    if rl.is_key_down(rl.KEY_BACKSPACE):
+        time.sleep(0.1)
+        opo = opo[:-1]
+    
+    if rl.is_key_pressed(rl.KEY_SPACE):
+        opo += ' '
+
+    return opo
+
 # drawing
 def begin_drawing():
     if config.backend == 0: # raylib
@@ -274,14 +337,18 @@ upd_event = _dummy
 "the function linked to this should have a 'dt' argument"
 
 def test_draw():
+    global woe
     begin_drawing()
     fill_bg_color(140, 0, 0)
     e = get_mouse_pos()
     draw_text(f"{e[0], e[1]}", int(e[0] + 100), int(e[1] + 100), 20, 255, 0, 0)
+
+    woe = gui_multitextbox(woe, 10, 10, 20, 0, 255, 0, 255)
     end_drawing()
 
 def test():
-    global draw_event
+    global draw_event, woe
+    woe = ""
     draw_event = test_draw
     init(title="Renderer Test")
     run()
