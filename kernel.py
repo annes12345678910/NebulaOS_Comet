@@ -118,7 +118,7 @@ class File:
         return f"File( Address: {hex(id(self))} Path: {self.get_absolute()} )"
 
 
-def getfilebyname(name, parent: Folder):
+def getfilebyname(name, parent: Folder) -> File | None:
     for file in files:
         if file.getvisual(parent) == name:
             return file
@@ -274,6 +274,27 @@ class Program:
         elif func == "_tostr":
             self.addresses["eax"] = str(self._getvar(args[0]))
         
+        elif func == "_getfilecontents":
+            if len(args) < 1:
+                print("Too few arguments for _getfilecontents, need 1 argument")
+                return
+            e = getfilebyname(self._getvar(args[0]), root)
+            self.addresses['eax'] = e.contents if e else ""
+        
+        elif func == "_getfileext":
+            if len(args) < 1:
+                print("Too few arguments for _getfileext, need 1 argument")
+                return
+            e = getfilebyname(self._getvar(args[0]), root)
+            self.addresses['eax'] = e.ext if e else ""
+
+        elif func == "_getfilename":
+            if len(args) < 1:
+                print("Too few arguments for _getfilename, need 1 argument")
+                return
+            e = getfilebyname(self._getvar(args[0]), root)
+            self.addresses['eax'] = e.name if e else ""
+
         elif func == "_loadtexture":
             # loadtexture 'dad.png'
             fad = getfilebyname(args[0], self.currentfolder)
