@@ -29,6 +29,9 @@ show_insdock = False
 
 nebfiles = cbinds.library_path.parent / "nebfiles"
 
+kernel.files = savesys.files
+kernel.folders = savesys.folders
+
 def draw():
     global scene, show_sysdock, show_insdock
     renderer.begin_drawing()

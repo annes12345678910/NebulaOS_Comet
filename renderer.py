@@ -238,6 +238,66 @@ shiftmap = {
     '/':'?'
 }
 
+optionmap = { # alt on windows keyboards
+    # i had to manually type this out btw
+    '1':'¡',
+    '2':'™',
+    '3':'£',
+    '4':'¢',
+    '5':'∞',
+    '6':'§',
+    '7':'¶',
+    '8':'•',
+    '9':'ª',
+    '0':'º',
+
+    '-':'–',
+    '=':'≠',
+    
+    'q':'œ',
+    'w':'∑',
+    'e':'´',
+    'r':'®',
+    't':'†',
+    'y':'¥',
+
+    'u':'¨',
+    'i':'ˆ',
+    'o':'ø',
+    'p':'π',
+
+    '[':'“',
+    ']':'‘',
+
+    'a':'å',
+    's':'ß',
+    'd':'∂',
+    'f':'ƒ',
+
+    'g':'©',
+    'h':'˙',
+    'j':'∆',
+    'k':'˚',
+    'l':'¬',
+
+    ';':'…',
+    "'":'æ',
+    '\\':'«',
+
+    'z':'Ω',
+    'x':'≈',
+    'c':'ç',
+    'v':'√',
+    'b':'∫',
+    
+    'n':'˜',
+    'm':'µ',
+
+    ',':'≤',
+    '.':'≥',
+    '/':'÷'
+}
+
 def gui_multitextbox(text: str, x:int, y:int, textsize: int, r:int, g:int, b:int, a:int = 255) -> str:
     opo = text
     draw_rectangle(x, y, rl.measure_text(text.split('\n')[0] if text.count('\n') > 0 else text, textsize) + 10, int(rl.measure_text_ex(rl.get_font_default(), text, textsize, 1).y), r, g, b, a)
@@ -273,6 +333,9 @@ def gui_multitextbox(text: str, x:int, y:int, textsize: int, r:int, g:int, b:int
             opo += shiftmap[skib]
         else:
             opo += skib
+    elif rl.is_key_down(rl.KEY_LEFT_ALT) or rl.is_key_down(rl.KEY_RIGHT_ALT):
+        if optionmap.get(skib, None):
+            opo += optionmap[skib]
     else:
         opo += skib
     
