@@ -93,6 +93,10 @@ class File:
         self.protected = False # enter the protector's password to modify
         self.protector = ""
 
+        for i in files:
+            if i.get_absolute() == self.get_absolute():
+                del self
+
     def getvisual(self, trace):
         folder_visual = self.parent.getvisual(trace)
 

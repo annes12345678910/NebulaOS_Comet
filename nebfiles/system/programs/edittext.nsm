@@ -9,7 +9,10 @@
             {"cal": ["_clearbg", 255, 255, 255, 255]},
 
             {"cal": ["_guitextbox", "fnm", 128, 10, 10, 100, 50]},
-            {"mov": ["fnm", "eax"]}
+            {"mov": ["fnm", "eax"]},
+
+            {"cal": ["_guitextbox", "fex", 128, 120, 10, 100, 50]},
+            {"mov": ["fex", "eax"]}
         ],
 
         "main": [
@@ -19,7 +22,7 @@
             {"mov": ["_WINTITLE", "EditText"]},
 
             {"mov": ["para", ""]},
-            {"mov": ["fnm", "a"]},
+            {"mov": ["fnm", "filename"]},
             {"mov": ["fex", "txt"]}
         ]
     }
