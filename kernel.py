@@ -475,11 +475,12 @@ class Program:
         self.errored = False
 
 class User:
-    def __init__(self, icon, codename="username", name="Name", password='P4ssw0rd') -> None:
+    def __init__(self, icon, codename="username", name="Name", password='P4ssw0rd', pastebindevkey="mydevkey") -> None:
         self.icon = icon
         self.codename = codename
         self.name = name
         self.password = password
+        self.devkey = pastebindevkey
     
     def tojson(self) -> dict:
         return {

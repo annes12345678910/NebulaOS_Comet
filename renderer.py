@@ -200,9 +200,15 @@ def gui_button(text: str, x: int, y: int, width: int, height: int, text_size = 2
         return Rect(x, y, width, height).collidepoint(Point(*get_mouse_pos())) and is_mouse_left_pressed()
 
 def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: int) -> str:
+    newtext = text
     if config.backend == 0: # raylib
         e = rl.make_rect(x, y, width, height)
-        return rl.gui_text_box(e, text, max_length, rl.check_collision_point_rec(rl.get_mouse_position(), e))[1]
+        
+        if rl.check_collision_point_rec(rl.get_mouse_position(), e):
+            if rl.is_key_down(rl.KEY_LEFT_SUPER) and rl.is_key_down(rl.KEY_V):
+                newtext = rl.get_clipboard_text().decode()
+
+        return rl.gui_text_box(e, newtext, max_length, rl.check_collision_point_rec(rl.get_mouse_position(), e))[1]
     if config.backend == 1: # pygame
         pass
     if config.backend == 2: # pyglet

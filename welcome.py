@@ -87,7 +87,11 @@ def draw_welcome():
         newuser.password = renderer.gui_textbox(newuser.password, 255, int(winw / skibidi + 10), int(winh / skibidi + 160), 300, 50)
 
     elif scene == 5:
-        if renderer.gui_button("Finish", winw // 4, (winh // 2) + 50, 100, 50):
+        renderer.draw_text("Optional", int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+
+        newuser.devkey = renderer.gui_textbox(newuser.devkey, 64, int(winw / skibidi + 10), int(winh / skibidi + 50), 300, 50)
+
+        if renderer.gui_button("Finish", int(winw / skibidi + 10), (winh // 2) + 50, 100, 50):
             is_done = True
 
     # previous and next
