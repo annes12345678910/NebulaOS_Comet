@@ -295,6 +295,12 @@ class Program:
             e = getfilebyname(self._getvar(args[0]), root)
             self.addresses['eax'] = e.name if e else ""
 
+        elif func == "_createfile":
+            if len(args) < 2:
+                print("Too few arguments for _createfile, need 2 arguments")
+                return
+            files.append(File(root, self._getvar(args[0]), self._getvar(args[1])))
+
         elif func == "_loadtexture":
             # loadtexture 'dad.png'
             fad = getfilebyname(args[0], self.currentfolder)
