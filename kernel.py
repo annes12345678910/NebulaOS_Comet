@@ -346,13 +346,17 @@ class Program:
             if len(args) < 6:
                 print("Too few arguments for _guitextbox, need 6 arguments")
                 return
+            rl.begin_texture_mode(self.buffer)
             self.addresses['eax'] = renderer.gui_textbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]))
+            rl.end_texture_mode()
         
         elif func == "_guimultitextbox":
             if len(args) < 6:
                 print("Too few arguments for _guimultitextbox, need 8 arguments")
                 return
+            rl.begin_texture_mode(self.buffer)
             self.addresses['eax'] = renderer.gui_multitextbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
+            rl.end_texture_mode()
 
         elif func == "_getattr":
             self.addresses['eax'] = getattr(self._getvar(args[0]), self._getvar(args[1]))
