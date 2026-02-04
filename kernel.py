@@ -486,7 +486,8 @@ class User:
         return {
             "codename": self.codename,
             "name": self.name,
-            "password": self.password
+            "password": self.password,
+            "devkey": self.devkey
         }
     
     @staticmethod
@@ -494,7 +495,8 @@ class User:
         return User(None, 
                         thejson.get("codename", "null"),
                         thejson.get("name", "None"),
-                        thejson.get("password", "null")
+                        thejson.get("password", "null"),
+                        thejson.get("devkey", "null")
                     )
     
 curpass = ''
