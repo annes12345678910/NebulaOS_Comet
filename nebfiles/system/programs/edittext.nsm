@@ -12,7 +12,10 @@
             {"mov": ["fnm", "eax"]},
 
             {"cal": ["_guitextbox", "fex", 128, 120, 10, 100, 50]},
-            {"mov": ["fex", "eax"]}
+            {"mov": ["fex", "eax"]},
+
+            {"cal": ["_guimultitextbox", "para", 10, 70, 20, 0, 0, 0, 255]},
+            {"mov": ["para", "eax"]}
         ],
 
         "main": [
