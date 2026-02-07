@@ -193,6 +193,13 @@ class Program:
         }
         self.errored = False
         self.funcs = []
+        self.accesslevel = 0
+        '''
+        0 = basic level (no permission)
+        1 = mild system level (Allow button - no admin) (Control other programs, control the mouse system-wide)
+        2 = safe-breaking system level (Allows programs to breach privacy, record your computer and such) Requires the user's password to allow
+        3 = full access (Can modify system files, unrestricted _py) - requires the root password to allow
+        '''
     
     def _getvar(self, string):
         if self.addresses.__contains__(string):
