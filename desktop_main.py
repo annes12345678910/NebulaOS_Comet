@@ -97,6 +97,7 @@ def draw():
                 programs.remove(prog)
 
         menu.draw_menu(*style.DARKEST)
+    rl.draw_texture_ex(kernel.icons['cursor'], rl.get_mouse_position(), 0, 0.45 if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT) else 0.5, rl.WHITE)
 
     renderer.end_drawing()
 
@@ -149,6 +150,7 @@ def main():
     print(savesys.files)
     
     renderer.init()
+    rl.hide_cursor()
     kernel.initicons()
     renderer.run()
 
