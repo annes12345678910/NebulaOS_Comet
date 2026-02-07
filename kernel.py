@@ -307,10 +307,12 @@ class Program:
             self.addresses['eax'] = e.name if e else ""
 
         elif func == "_createfile":
-            if len(args) < 2:
-                print("Too few arguments for _createfile, need 2 arguments")
+            if len(args) < 3:
+                print("Too few arguments for _createfile, need 3 arguments")
                 return
-            files.append(File(root, self._getvar(args[0]), self._getvar(args[1])))
+            e = File(root, self._getvar(args[0]), self._getvar(args[1]))
+            e.contents = self._getvar(args[2])
+            files.append(e)
 
         elif func == "_loadtexture":
             # loadtexture 'dad.png'
