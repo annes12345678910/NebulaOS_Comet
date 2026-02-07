@@ -14,6 +14,9 @@
             {"cal": ["_guitextbox", "fex", 128, 120, 10, 100, 50]},
             {"mov": ["fex", "eax"]},
 
+            {"cal": ["_guibutton", "Save", 230, 10, 50, 25]},
+            {"cal": ["_guibutton", "Load", 230, 35, 50, 25]},
+
             {"cal": ["_guimultitextbox", "para", 10, 70, 20, 0, 0, 0, 255]},
             {"mov": ["para", "eax"]}
         ],
