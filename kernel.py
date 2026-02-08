@@ -310,9 +310,15 @@ class Program:
             if len(args) < 3:
                 print("Too few arguments for _createfile, need 3 arguments")
                 return
-            e = File(root, self._getvar(args[0]), self._getvar(args[1]))
-            e.contents = self._getvar(args[2])
-            files.append(e)
+            
+            r = getfilebyname(f"./{self._getvar(args[0])}.{self._getvar(args[0])}", root)
+            if r:
+                r.contents = self._getvar(args[2])
+                
+            else:
+                e = File(root, self._getvar(args[0]), self._getvar(args[1]))
+                e.contents = self._getvar(args[2])
+                files.append(e)
 
         elif func == "_loadtexture":
             # loadtexture 'dad.png'

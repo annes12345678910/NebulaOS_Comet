@@ -15,6 +15,10 @@
             {"mov": ["fex", "eax"]},
 
             {"cal": ["_guibutton", "Save", 230, 10, 50, 25]},
+            {"if": ["eax", [
+                {"_createfile": ["fnm", "fex", "para"]}
+            ]]},
+
             {"cal": ["_guibutton", "Load", 230, 35, 50, 25]},
 
             {"cal": ["_guimultitextbox", "para", 10, 70, 20, 0, 0, 0, 255]},
