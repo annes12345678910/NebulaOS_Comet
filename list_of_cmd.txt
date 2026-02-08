@@ -3,7 +3,7 @@ List of commands that MUST be in all nebula versions
 meow
 cat <file>
 catraw <file>
-ls
+ls/dir
 echo <message>
 export <file>
 import

@@ -9,6 +9,17 @@ import ultimateraylib as rl
 x = 0
 y = 0
 
+# command functions
+
+def meow(*args):
+    rl.play_sound(kernel.sounds['meow'])
+    return "Meow!\n"
+
+cmds = {
+    "meow":meow,
+
+}
+
 def printtxt(*args, sep=" ", endl="\n"):
     global text
     string = sep.join(str(arg) for arg in args)
@@ -16,6 +27,10 @@ def printtxt(*args, sep=" ", endl="\n"):
 
 def computecmd(string: str):
     cmd = string.split(" ")
+    eo = cmd[0]
+
+    if cmds.get(eo):
+        return cmds[eo](*cmd[1:])
 
 def draw_terminal():
     global text, inpt
@@ -30,7 +45,7 @@ def test():
     rl.init_window(title="Skibidi")
     rl.set_target_fps(60)
     printtxt("plp", 21)
-    font = load.load_font("assets/img/nebulaos-default.otf")
+    font = load.load_font("assets/font/nebulaos-default.otf")
     while not rl.window_should_close():
         rl.begin_drawing()
         rl.clear_background(rl.RAYWHITE)
