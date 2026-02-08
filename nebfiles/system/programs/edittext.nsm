@@ -16,7 +16,7 @@
 
             {"cal": ["_guibutton", "Save", 230, 10, 50, 25]},
             {"if": ["eax", [
-                {"_createfile": ["fnm", "fex", "para"]}
+                {"cal": ["_createfile", "fnm", "fex", "para"]}
             ]]},
 
             {"cal": ["_guibutton", "Load", 230, 35, 50, 25]},
