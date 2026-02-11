@@ -7,11 +7,14 @@ import kernel
 import ultimateraylib as rl
 import renderer
 import style
+from savesys import *
 
 x = 0
 y = 0
 rtex = rl.RenderTexture()
 scrolly = 0
+
+currentfolder = kernel.root
 
 # command functions
 
@@ -19,9 +22,27 @@ def meow(*args):
     rl.play_sound(kernel.sounds['meow'])
     return "Meow!"
 
+def ls(*args):
+    try:
+        e = kernel.getfolderbyname(args[0], currentfolder)
+    except IndexError:
+        e = currentfolder
+        
+    for i in files:
+        if i.parent == e:
+            printtxt(f"{i.name}.{i.ext}")
+
+    for i in folders:
+        if i.parent == e:
+            printtxt(f"{i.name}")
+
 # follow list_of_cmd.txt and maybee more!
 cmds = {
     "meow":meow,
+
+    "ls":ls,
+    "dir":ls,
+
 
 }
 
@@ -79,6 +100,10 @@ def test():
     rl.set_target_fps(60)
     kernel.initicons()
     rtex = rl.load_render_texture(width, height)
+
+    files.append(kernel.File(currentfolder, "opo", "txt"))
+    folders.append(kernel.Folder(currentfolder, "p"))
+
     #printtxt("plp", 21)
     x = 10
     y = 10
