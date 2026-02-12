@@ -22,6 +22,18 @@ def meow(*args):
     rl.play_sound(kernel.sounds['meow'])
     return "Meow!"
 
+def write(*args):
+    if len(args) < 3:
+        return "Usage: write <file name> <file extension> <file content>"
+
+    e = kernel.File(currentfolder, args[0], args[1])
+    e.contents = args[2]
+    files.append(
+        e # this e is too lonely so im here
+    )
+    return f"{e.name}.{e.ext} Written!"
+
+
 def ls(*args):
     try:
         e = kernel.getfolderbyname(args[0], currentfolder)
@@ -43,7 +55,7 @@ cmds = {
     "ls":ls,
     "dir":ls,
 
-
+    "write":write
 }
 
 def printtxt(*args, sep=" ", endl="\n"):
