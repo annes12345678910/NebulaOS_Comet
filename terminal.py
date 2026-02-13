@@ -103,7 +103,18 @@ record (or rec) <filename> <extension> - record your terminal history into a fil
 
 help - Display this message
 
+pwd - Print current directory
+
 -- If you want to report any bugs, visit https://forms.gle/1N9vyiRtAMXobLFA9 .
+"""
+
+def pwd(*args):
+    return currentfolder.get_absolute()
+
+def version(*args):
+    return """
+Copyright © Annes Widow and contributors
+NebulaOS Comet (0.2.0)
 """
 
 # follow list_of_cmd.txt and maybee more!
@@ -126,7 +137,11 @@ cmds = {
     "record":record,
     "rec":record,
 
-    "help":help
+    "help":help,
+
+    "pwd":pwd,
+
+    "version":version
 }
 
 def printtxt(*args, sep=" ", endl="\n"):
