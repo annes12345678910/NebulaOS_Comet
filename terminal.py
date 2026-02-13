@@ -48,6 +48,24 @@ def ls(*args):
         if i.parent == e:
             printtxt(f"{i.name}")
 
+def cd(*args):
+    global currentfolder
+    if args[0] == "..":
+        currentfolder = currentfolder.parent if currentfolder.parent else currentfolder
+        return ""
+    else:
+        e = kernel.getfolderbyname(args[0], currentfolder)
+        if e:
+            currentfolder = e
+            return ""
+    return "Invalid Folder"
+
+def cat(*args):
+    e = kernel.getfilebyname(args[0], currentfolder)
+    if e:
+        return e.contents.decode()
+    return "Invalid File"
+
 # follow list_of_cmd.txt and maybee more!
 cmds = {
     "meow":meow,
@@ -55,7 +73,12 @@ cmds = {
     "ls":ls,
     "dir":ls,
 
-    "write":write
+    "write":write,
+
+    "cd":cd,
+
+    "cat":cat,
+    "type":cat
 }
 
 def printtxt(*args, sep=" ", endl="\n"):
@@ -113,7 +136,9 @@ def test():
     kernel.initicons()
     rtex = rl.load_render_texture(width, height)
 
-    files.append(kernel.File(currentfolder, "opo", "txt"))
+    eop = kernel.File(currentfolder, "opo", "txt")
+    eop.contents = b"Hi \x70\x64"
+    files.append(eop)
     folders.append(kernel.Folder(currentfolder, "p"))
 
     #printtxt("plp", 21)
