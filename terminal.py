@@ -86,9 +86,19 @@ def record(*args):
 
 def help(*args):
     return """
+System commands:
+
 meow - MEOW MEOWW
-ls <optional folder> (or dir) - list files and folders
-write <name> <extension> <contents> - write new file 
+ls (or dir) <optional folderpath> - list files and folders
+write <filename> <extension> <contents> - write new file 
+cd <folderpath> - change current folder
+cat (or type) <filepath> - print out the contents of the filepath provided
+clear (or cls) - clear all output
+record (or rec) <filename> <extension> - record your terminal history into a file
+
+help - Display this message
+
+-- If you want to report any bugs, visit https://forms.gle/1N9vyiRtAMXobLFA9 .
 """
 
 # follow list_of_cmd.txt and maybee more!
@@ -106,6 +116,7 @@ cmds = {
     "type":cat,
 
     "clear":clear,
+    "cls":clear,
 
     "record":record,
     "rec":record,
@@ -136,6 +147,7 @@ def draw_terminal():
     global text, inpt, rtex, scrolly,width,height
 
     if rtex.texture.width != width or rtex.texture.height != height:
+        rl.lib.UnloadRenderTexture(rtex)
         rtex = rl.load_render_texture(width, height)
 
     renderer.draw_rectangle(x, y, width, height, *style.BRIGHT)
