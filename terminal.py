@@ -26,13 +26,16 @@ def write(*args):
     if len(args) < 3:
         return "Usage: write <file name> <file extension> <file content>"
 
-    e = kernel.File(currentfolder, args[0], args[1])
-    e.contents = args[2]
-    files.append(
-        e # this e is too lonely so im here
-    )
+    r = kernel.getfilebyname(f"./{args[0]}.{args[1]}", currentfolder)
+    if r:
+        r.contents = args[2]
+    else:
+        e = kernel.File(currentfolder, args[0], args[1])
+        e.contents = args[2]
+        files.append(
+            e # this e is too lonely so im here
+        )
     return f"{e.name}.{e.ext} Written!"
-
 
 def ls(*args):
     try:
@@ -66,6 +69,28 @@ def cat(*args):
         return e.contents.decode()
     return "Invalid File"
 
+def clear(*args):
+    global text
+    text = ""
+    return ""
+
+def record(*args):
+    r = kernel.getfilebyname(f"./{args[0]}.{args[1]}", currentfolder)
+    if r:
+        r.contents = text.encode()
+    else:
+        e = kernel.File(currentfolder, args[0], args[1])
+        e.contents = text.encode()
+        files.append(e)
+    return ""
+
+def help(*args):
+    return """
+meow - MEOW MEOWW
+ls <optional folder> (or dir) - list files and folders
+write <name> <extension> <contents> - write new file 
+"""
+
 # follow list_of_cmd.txt and maybee more!
 cmds = {
     "meow":meow,
@@ -78,7 +103,14 @@ cmds = {
     "cd":cd,
 
     "cat":cat,
-    "type":cat
+    "type":cat,
+
+    "clear":clear,
+
+    "record":record,
+    "rec":record,
+
+    "help":help
 }
 
 def printtxt(*args, sep=" ", endl="\n"):
