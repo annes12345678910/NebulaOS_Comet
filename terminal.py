@@ -51,9 +51,13 @@ def ls(*args):
     for i in folders:
         if i.parent == e:
             printtxt(f"{i.name}")
+    return ""
 
 def cd(*args):
     global currentfolder
+    if len(args) < 1:
+        return "Usage: cd <folderpath>"
+
     if args[0] == "..":
         currentfolder = currentfolder.parent if currentfolder.parent else currentfolder
         return ""
