@@ -184,6 +184,10 @@ def draw_terminal():
         width += int(opo.x)
         height += int(opo.y)
 
+    renderer.draw_rectangle(x, y - 50, width, 50, *style.BRIGHTEST)
+    renderer.gui_button("Command Line", x, y - 50, 100, 50)
+    renderer.gui_button("Nebassembly", x + 110, y - 50, 100, 50)
+
     rl.begin_texture_mode(rtex)
     renderer.fill_bg_color(0, 0, 0, 0)
     renderer.draw_text(text, 10, int(scrolly), int(height / 20), *style.DARKEST)
@@ -213,8 +217,8 @@ def test():
     folders.append(kernel.Folder(currentfolder, "p"))
 
     #printtxt("plp", 21)
-    x = 10
-    y = 10
+    x = 100
+    y = 100
     while not rl.window_should_close():
         rl.begin_drawing()
         rl.clear_background(rl.BLUE)

@@ -9,6 +9,7 @@ import menu
 import cbinds
 import pathlib
 import json
+import terminal
 
 import nbgf
 
