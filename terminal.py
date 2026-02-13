@@ -130,10 +130,10 @@ def computecmd(string: str):
         return f"Invalid command {eo}"
 
 def get_collision():
-    return renderer.Rect(x, y, width, height).collidepoint(renderer.Point(*renderer.get_mouse_pos()))
+    return renderer.Rect(x, y, int(width), int(height)).collidepoint(renderer.Point(*renderer.get_mouse_pos()))
 
 def draw_terminal():
-    global text, inpt, rtex, scrolly
+    global text, inpt, rtex, scrolly,width,height
 
     if rtex.texture.width != width or rtex.texture.height != height:
         rtex = rl.load_render_texture(width, height)
@@ -145,9 +145,16 @@ def draw_terminal():
     inpt = renderer.gui_textbox(inpt, 1024, x + 10, y + 10, width - 70, 50)
     prs = renderer.gui_button("Run", x + width - 55, y + 10, 50, 50)
 
+    rec = renderer.Rect(x + width - 25, y + height - 25, 50, 50)
+    #renderer.draw_rectangle(rec.x, rec.y, rec.width, rec.height, 255, 0, 0)
+    if rec.collidepoint(renderer.Point(*renderer.get_mouse_pos())) and renderer.is_mouse_left_down():
+        opo:rl.Vector2 = rl.get_mouse_delta()
+        width += int(opo.x)
+        height += int(opo.y)
+
     rl.begin_texture_mode(rtex)
     renderer.fill_bg_color(0, 0, 0, 0)
-    renderer.draw_text(text, 10, int(scrolly), int(width / 20), *style.DARKEST)
+    renderer.draw_text(text, 10, int(scrolly), int(height / 20), *style.DARKEST)
     rl.end_texture_mode()
 
     if get_collision():
