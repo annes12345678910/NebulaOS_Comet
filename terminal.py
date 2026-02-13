@@ -28,14 +28,15 @@ def write(*args):
 
     r = kernel.getfilebyname(f"./{args[0]}.{args[1]}", currentfolder)
     if r:
-        r.contents = args[2]
+        r.contents = args[2].encode()
+        return f"{r.name}.{r.ext} Written!"
     else:
         e = kernel.File(currentfolder, args[0], args[1])
-        e.contents = args[2]
+        e.contents = args[2].encode()
         files.append(
             e # this e is too lonely so im here
         )
-    return f"{e.name}.{e.ext} Written!"
+        return f"{e.name}.{e.ext} Written!"
 
 def ls(*args):
     try:
