@@ -9,8 +9,8 @@ import renderer
 import style
 from savesys import *
 
-x = 0
-y = 0
+x = 10
+y = 70
 rtex = rl.RenderTexture()
 scrolly = 0
 
@@ -164,7 +164,7 @@ def get_collision():
     return renderer.Rect(x, y, int(width), int(height)).collidepoint(renderer.Point(*renderer.get_mouse_pos()))
 
 def draw_terminal():
-    global text, inpt, rtex, scrolly,width,height
+    global text, inpt, rtex, scrolly,width,height, opened, x , y
 
     if rtex.texture.width != width or rtex.texture.height != height:
         rl.lib.UnloadRenderTexture(rtex)
@@ -177,6 +177,7 @@ def draw_terminal():
     inpt = renderer.gui_textbox(inpt, 1024, x + 10, y + 10, width - 70, 50)
     prs = renderer.gui_button("Run", x + width - 55, y + 10, 50, 50)
 
+    # resizer
     rec = renderer.Rect(x + width - 25, y + height - 25, 50, 50)
     #renderer.draw_rectangle(rec.x, rec.y, rec.width, rec.height, 255, 0, 0)
     if rec.collidepoint(renderer.Point(*renderer.get_mouse_pos())) and renderer.is_mouse_left_down():
@@ -184,9 +185,18 @@ def draw_terminal():
         width += int(opo.x)
         height += int(opo.y)
 
-    renderer.draw_rectangle(x, y - 50, width, 50, *style.BRIGHTEST)
+    # top bar
+    eop = renderer.Rect(x, y - 50, width, 50)
+    renderer.draw_rectangle(eop.x, eop.y, eop.width, eop.height, *style.BRIGHTEST)
+    if eop.collidepoint(renderer.Point(*renderer.get_mouse_pos())) and renderer.is_mouse_left_down():
+        x = int(renderer.get_mouse_pos()[0] - (width // 2))
+        y = int(renderer.get_mouse_pos()[1] + 25)
+
     renderer.gui_button("Command Line", x, y - 50, 100, 50)
     renderer.gui_button("Nebassembly", x + 110, y - 50, 100, 50)
+
+    if renderer.gui_button("x", x + width - 50, y - 50, 50, 50):
+        opened = False
 
     rl.begin_texture_mode(rtex)
     renderer.fill_bg_color(0, 0, 0, 0)

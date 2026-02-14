@@ -75,6 +75,9 @@ def draw():
                 renderer.draw_rectangle(0, winh - (dock_size * 2 + 10), winw, dock_size, *style.DARK)
                 if show_sysdock: # sysapps
                     apin = 10
+                    if renderer.gui_button("Terminal", 10, winh - (dock_size * 3), dock_size - 20, dock_size - 20):
+                        terminal.opened = True
+
                     for fl in savesys.files:
                         if fl.parent == sysprogs:
                             if renderer.gui_button(fl.name, apin, winh - (dock_size * 2), dock_size - 20, dock_size - 20):
@@ -96,6 +99,9 @@ def draw():
         for prog in programs:
             if kernel.draw_window(prog):
                 programs.remove(prog)
+                
+        if terminal.opened:
+            terminal.draw_terminal()
 
         menu.draw_menu(*style.DARKEST)
     rl.draw_texture_ex(kernel.icons['cursor'], rl.get_mouse_position(), 0, 0.45 if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT) else 0.5, rl.WHITE)
