@@ -316,11 +316,11 @@ class Program:
 
             r = getfilebyname(f"./{self._getvar(args[0])}.{self._getvar(args[0])}", root)
             if r:
-                r.contents = self._getvar(args[2]).decode()
+                r.contents = self._getvar(args[2]).encode()
                 
             else:
                 e = File(root, self._getvar(args[0]), self._getvar(args[1]))
-                e.contents = self._getvar(args[2]).decode()
+                e.contents = self._getvar(args[2]).encode()
                 files.append(e)
 
         elif func == "_loadtexture":

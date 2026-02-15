@@ -32,10 +32,16 @@ def loadsys(path:str = "nebos/save.pkl"):
         print(f"Loading {data}")
 
         codedusers = data.get("users", [])
-        users = [kernel.User.fromjson(usr) for usr in codedusers]
         
-        folders = data.get("folders", [])
-        files = data.get("files", [])
+        users.clear()
+        users.extend([kernel.User.fromjson(usr) for usr in codedusers])
+        
+        folders.clear()
+        folders.extend(data.get("folders", []))
+
+        files.clear()
+        files.extend(data.get("files", []))
+
         print("Data loaded!")
     except FileNotFoundError:
         print("No save file found, starting fresh.")

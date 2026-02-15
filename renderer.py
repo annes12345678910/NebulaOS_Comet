@@ -206,7 +206,7 @@ def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: 
         
         if rl.check_collision_point_rec(rl.get_mouse_position(), e):
             if rl.is_key_down(rl.KEY_LEFT_SUPER) and rl.is_key_down(rl.KEY_V):
-                newtext = rl.get_clipboard_text().decode()
+                newtext = rl.get_clipboard_text()
 
         return rl.gui_text_box(e, newtext, max_length, rl.check_collision_point_rec(rl.get_mouse_position(), e))[1]
     if config.backend == 1: # pygame
@@ -330,7 +330,7 @@ def gui_multitextbox(text: str, x:int, y:int, textsize: int, r:int, g:int, b:int
         if not text_rect.collidepoint(mouse_pos):
             return text
     if e:
-        skib = e.decode()
+        skib = e.decode() # type: ignore
     if rl.is_key_down(rl.KEY_LEFT_SHIFT) or rl.is_key_down(rl.KEY_RIGHT_SHIFT):
         if len(skib) > 0  and 'a' <= skib <= 'z':
             opo += chr(ord(skib) - 32)
@@ -382,7 +382,7 @@ def get_window_size() -> tuple[int, int]:
 def get_mouse_pos() -> tuple[int, int]:
     if config.backend == 0: # raylib
         rey = rl.get_mouse_position()
-        return rey.x, rey.y
+        return int(rey.x), int(rey.y)
     if config.backend == 1: # pygame
         return pygame.mouse.get_pos()
     if config.backend == 2: # pyglet

@@ -39,6 +39,7 @@ def write(*args):
         return f"{e.name}.{e.ext} Written!"
 
 def ls(*args):
+    print(folders, files)
     try:
         e = kernel.getfolderbyname(args[0], currentfolder)
     except IndexError:
