@@ -311,13 +311,16 @@ class Program:
                 print("Too few arguments for _createfile, need 3 arguments")
                 return
             
+            if not type(self._getvar(args[2])) == str or type(self._getvar(args[2])) == bytes:
+                return
+
             r = getfilebyname(f"./{self._getvar(args[0])}.{self._getvar(args[0])}", root)
             if r:
-                r.contents = self._getvar(args[2])
+                r.contents = self._getvar(args[2]).decode()
                 
             else:
                 e = File(root, self._getvar(args[0]), self._getvar(args[1]))
-                e.contents = self._getvar(args[2])
+                e.contents = self._getvar(args[2]).decode()
                 files.append(e)
 
         elif func == "_loadtexture":

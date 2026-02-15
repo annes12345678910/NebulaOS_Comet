@@ -29,6 +29,7 @@ def loadsys(path:str = "nebos/save.pkl"):
     try:
         with open(path, "rb") as f:
             data:dict = pickle.load(f)
+        print(f"Loading {data}")
 
         codedusers = data.get("users", [])
         users = [kernel.User.fromjson(usr) for usr in codedusers]

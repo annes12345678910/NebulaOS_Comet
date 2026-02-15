@@ -33,6 +33,9 @@ nebfiles = cbinds.library_path.parent / "nebfiles"
 kernel.files = savesys.files
 kernel.folders = savesys.folders
 
+terminal.folders = savesys.folders
+terminal.files = savesys.files
+
 def draw():
     global scene, show_sysdock, show_insdock
     renderer.begin_drawing()
@@ -141,20 +144,22 @@ def main():
     if len(savesys.users) > 0:
         scene = 1
     
-    savesys.folders.append(systemf)
-    savesys.folders.append(sysprogs)
-    
-    for i in list((nebfiles / "system/programs").glob("*")):
-        if i.is_file():
-            with open(str(i), "rb") as f:
-                e = kernel.File(sysprogs, i.name.split('.')[0], "nsm")
-                e.contents = f.read()
-                savesys.files.append(e)
+    poo = kernel.getfolderbyname("./system", kernel.root)
+    print(poo)
+    if not poo:
+        savesys.folders.append(systemf)
+        savesys.folders.append(sysprogs)
+        for i in list((nebfiles / "system/programs").glob("*")):
+            if i.is_file():
+                with open(str(i), "rb") as f:
+                    e = kernel.File(sysprogs, i.name.split('.')[0], i.name.split('.')[1])
+                    e.contents = f.read()
+                    savesys.files.append(e)
 
-    print("folders")
-    print(savesys.folders)
-    print("files")
-    print(savesys.files)
+    #print("folders")
+    #print(savesys.folders)
+    #print("files")
+    #print(savesys.files)
     
     renderer.init()
     rl.hide_cursor()
