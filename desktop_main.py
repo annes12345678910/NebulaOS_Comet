@@ -101,6 +101,7 @@ def draw():
                             apin += dock_size - 10
         for prog in programs:
             if kernel.draw_window(prog):
+                rl.unload_render_texture(prog.buffer)
                 programs.remove(prog)
                 
         if terminal.opened:

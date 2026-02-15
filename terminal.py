@@ -70,6 +70,9 @@ def cd(*args):
     return "Invalid Folder"
 
 def cat(*args):
+    if len(args) < 1:
+        return "Usage: cat <filepath>"
+    
     e = kernel.getfilebyname(args[0], currentfolder)
     if e:
         return e.contents.decode()
@@ -79,6 +82,24 @@ def clear(*args):
     global text
     text = ""
     return ""
+
+def delete(*args): # del is reserved bruh
+    if len(args) < 1:
+        return "Usage: del <path>"
+    
+    e = kernel.getfilebyname(args[0], currentfolder)
+    r = kernel.getfolderbyname(args[0], currentfolder)
+
+    if e:
+        files.remove(e)
+
+    elif r:
+        folders.remove(r)
+
+    else:
+        return "Invalid path"
+
+    return "Path deleted"
 
 def record(*args):
     r = kernel.getfilebyname(f"./{args[0]}.{args[1]}", currentfolder)
@@ -100,11 +121,16 @@ write <filename> <extension> <contents> - write new file
 cd <folderpath> - change current folder
 cat (or type) <filepath> - print out the contents of the filepath provided
 clear (or cls) - clear all output
+
+del (or rm) - delete a file or folder
+
 record (or rec) <filename> <extension> - record your terminal history into a file
 
 help - Display this message
 
 pwd - Print current directory
+
+version - Version and copyright stuff
 
 -- If you want to report any bugs, visit https://forms.gle/1N9vyiRtAMXobLFA9 .
 """
@@ -134,6 +160,9 @@ cmds = {
 
     "clear":clear,
     "cls":clear,
+
+    "del":delete,
+    "rm":delete,
 
     "record":record,
     "rec":record,
@@ -207,8 +236,9 @@ def draw_terminal():
     if get_collision():
         scrolly -= renderer.get_mouse_scroll()
 
+    # enter command
     if prs or get_collision() and rl.is_key_pressed(rl.KEY_ENTER):
-        printtxt(f"> {inpt}")
+        printtxt(f"{currentfolder.get_absolute()}> {inpt}")
         printtxt(computecmd(inpt))
         inpt = ""
 

@@ -95,7 +95,8 @@ class File:
 
         for i in files:
             if i.get_absolute() == self.get_absolute():
-                del self
+                print(f"duplicate removed: {self}")
+                return
 
     def getvisual(self, trace):
         folder_visual = self.parent.getvisual(trace)
