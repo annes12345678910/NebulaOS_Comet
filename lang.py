@@ -15,6 +15,7 @@ langs = {
         """,
 
         "start-langchoice": "Choose a Language",
+        "start-timezone":"Choose a timezone",
         "start-choosetheme": "Choose a Theme",
         "mode-light": "Light Mode",
         "mode-dark": "Dark Mode",

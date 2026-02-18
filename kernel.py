@@ -33,6 +33,8 @@ def warn(msg, namespace: str=__name__):
 def info(msg, namespace: str=__name__):
     print(f"[{namespace}: INFO] {msg}")
 
+#info(f"Timezones: {pytz.all_timezones}")
+
 os.makedirs("nbc_cache", exist_ok=True)
 
 def exit():
