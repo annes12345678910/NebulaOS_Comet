@@ -146,7 +146,7 @@ def main():
         scene = 1
     
     poo = kernel.getfolderbyname("./system", kernel.root)
-    print(poo)
+    kernel.info(f"System Folder: {poo}", __name__)
     if not poo:
         savesys.folders.append(systemf)
         savesys.folders.append(sysprogs)

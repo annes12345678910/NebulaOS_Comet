@@ -24,14 +24,14 @@ def initicons():
         if os.path.isfile((load.fold / f'assets/sound/{i}')):
             sounds[(load.fold / f'assets/sound/{i}').stem] = load.load_sound(f"assets/sound/{i}")
 
-def error(string: str):
-    print(f"{Fore.RED}[{__name__}: ERROR] {string}{Fore.RESET}")
+def error(msg, namespace: str=__name__):
+    print(f"{Fore.RED}[{namespace}: ERROR] {msg}{Fore.RESET}")
 
-def warn(string: str):
-    print(f"{Fore.YELLOW}[{__name__}: WARNING] {string}{Fore.RESET}")
+def warn(msg, namespace: str=__name__):
+    print(f"{Fore.YELLOW}[{namespace}: WARNING] {msg}{Fore.RESET}")
 
-def info(string: str):
-    print(f"[{__name__}: INFO] {string}")
+def info(msg, namespace: str=__name__):
+    print(f"[{namespace}: INFO] {msg}")
 
 os.makedirs("nbc_cache", exist_ok=True)
 
@@ -102,7 +102,7 @@ class File:
 
         for i in files:
             if i.get_absolute() == self.get_absolute():
-                print(f"duplicate removed: {self}")
+                warn(f"duplicate removed: {self}")
                 return
 
     def getvisual(self, trace):
