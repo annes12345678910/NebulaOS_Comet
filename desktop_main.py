@@ -87,7 +87,7 @@ def draw():
                                 try:
                                     prodat = json.loads(fl.contents)
                                 except json.JSONDecodeError as e:
-                                    print(f"Error jsoning the {fl.name} system app's code, please reinstall NebulaOS: {e}")
+                                    kernel.error(f"Error jsoning the {fl.name} system app's code, please reinstall NebulaOS: {e}")
                                     sys.exit(40)
 
                                 launched = kernel.Program(prodat)

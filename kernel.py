@@ -24,7 +24,13 @@ def initicons():
             sounds[(load.fold / f'assets/sound/{i}').stem] = load.load_sound(f"assets/sound/{i}")
 
 def error(string: str):
-    print(f"{Fore.RED}[ERROR] {string}{Fore.RESET}")
+    print(f"{Fore.RED}[{__name__}: ERROR] {string}{Fore.RESET}")
+
+def warn(string: str):
+    print(f"{Fore.YELLOW}[{__name__}: WARNING] {string}{Fore.RESET}")
+
+def info(string: str):
+    print(f"[{__name__}: INFO] {string}")
 
 os.makedirs("nbc_cache", exist_ok=True)
 
