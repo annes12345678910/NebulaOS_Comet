@@ -1,4 +1,5 @@
 import sys
+import cursor
 import kernel
 import renderer
 import ultimateraylib as rl
@@ -109,7 +110,7 @@ def draw():
             terminal.draw_terminal()
 
         menu.draw_menu(*style.DARKEST)
-    rl.draw_texture_ex(kernel.icons['cursor'], rl.get_mouse_position(), 0, 0.45 if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT) else 0.5, rl.WHITE)
+    cursor.draw()
 
     renderer.end_drawing()
 
@@ -165,6 +166,7 @@ def main():
     
     renderer.init()
     rl.hide_cursor()
+    cursor.init()
     kernel.initicons()
     renderer.run()
 

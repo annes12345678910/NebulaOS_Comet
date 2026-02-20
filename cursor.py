@@ -1,5 +1,5 @@
 import os
-import load
+import load,logger
 import renderer,ultimateraylib as rl
 
 cursors = []
@@ -15,8 +15,11 @@ def draw():
 
 def init():
     global cursors
-    cursors = {}
+    cursors = []
+    
     for i in os.listdir(str(load.fold / 'assets/cursor')):
         if os.path.isfile((load.fold / f'assets/cursor/{i}')):
-            cursors[(load.fold / f'cursor/{i}').stem] = load.load_sound(f"assets/sound/{i}")
-
+            cursors.append(load.load_texture(f"assets/cursor/{i}"))
+            
+    logger.info(cursors)
+    
