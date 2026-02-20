@@ -3,11 +3,11 @@ import random
 import sys
 import ultimateraylib as rl
 import json
-from colorama import Fore
 import load
 from savesys import *
 import renderer
 import pytz
+import logger
 
 icons:dict[str, rl.Texture2D] = {}
 
@@ -23,15 +23,6 @@ def initicons():
     for i in os.listdir(str(load.fold / 'assets/sound')):
         if os.path.isfile((load.fold / f'assets/sound/{i}')):
             sounds[(load.fold / f'assets/sound/{i}').stem] = load.load_sound(f"assets/sound/{i}")
-
-def error(msg, namespace: str=__name__):
-    print(f"{Fore.RED}[{namespace}: ERROR] {msg}{Fore.RESET}")
-
-def warn(msg, namespace: str=__name__):
-    print(f"{Fore.YELLOW}[{namespace}: WARNING] {msg}{Fore.RESET}")
-
-def info(msg, namespace: str=__name__):
-    print(f"[{namespace}: INFO] {msg}")
 
 #info(f"Timezones: {pytz.all_timezones}")
 
@@ -104,7 +95,7 @@ class File:
 
         for i in files:
             if i.get_absolute() == self.get_absolute():
-                warn(f"duplicate removed: {self}")
+                logger.warn(f"duplicate removed: {self}")
                 return
 
     def getvisual(self, trace):
@@ -419,7 +410,7 @@ class Program:
             for line in self.text[func]:
                 self.computeline(line)
         else:
-            error(f"Undefined Error: Invalid function {func}")
+            logger.error(f"Undefined Error: Invalid function {func}")
             self.errored = True
     
     def computeline(self, line: dict):
@@ -488,7 +479,7 @@ class Program:
                 pass
 
             else:
-                error(f"Undefined Error: Invalid key {key}")
+                logger.error(f"Undefined Error: Invalid key {key}")
                 self.errored = True
     
     def run(self):

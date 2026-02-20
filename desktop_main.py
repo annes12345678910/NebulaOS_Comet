@@ -10,6 +10,7 @@ import cbinds
 import pathlib
 import json
 import terminal
+import logger
 
 import nbgf
 
@@ -87,7 +88,7 @@ def draw():
                                 try:
                                     prodat = json.loads(fl.contents)
                                 except json.JSONDecodeError as e:
-                                    kernel.error(f"Error jsoning the {fl.name} system app's code, please reinstall NebulaOS: {e}")
+                                    logger.error(f"Error jsoning the {fl.name} system app's code, please reinstall NebulaOS: {e}")
                                     sys.exit(40)
 
                                 launched = kernel.Program(prodat)
@@ -146,7 +147,7 @@ def main():
         scene = 1
     
     poo = kernel.getfolderbyname("./system", kernel.root)
-    kernel.info(f"System Folder: {poo}", __name__)
+    logger.info(f"System Folder: {poo}", __name__)
     if not poo:
         savesys.folders.append(systemf)
         savesys.folders.append(sysprogs)
