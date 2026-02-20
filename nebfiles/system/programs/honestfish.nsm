@@ -6,11 +6,21 @@
 
     "text": {
         "draw": [
-            {"cal": ["_clearbg", 255, 255, 255, 255]}
+            {"cal": ["_clearbg", 255, 255, 255, 255]},
+
+            {"cal": ["_update3dcam", "cam", 2]},
+
+            {"cal": ["_drawtext", "VISIBLE?", 20, 20, 20, 0,0,0,255]},
+            {"cal": ["_drawgrid", 10, 1]},
+            {"cal": ["_drawcube", [0,0,0], 1, 1, 1, 255, 0, 0, 255]}
         ],
 
         "main": [
             {"cal": ["_setupdrawbuffer", 400, 300]},
+
+            {"cal": ["_make3dcam", [2, 1, 2], [0,0,0], [0,1,0], 60, 0]},
+            {"mov": ["cam", "eax"]},
+
             {"cal": ["_setloop", "_DRAWLOOP", "draw"]},
             {"mov": ["_NEBWIN", true]},
             {"mov": ["_WINTITLE", "Honest Fish"]}

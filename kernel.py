@@ -182,7 +182,8 @@ class Program:
             "_NEBWIN": False,
             "_WINTITLE": "Program",
             "_WINX": 0,
-            "_WINY": 0
+            "_WINY": 0,
+            "cam": rl.Camera3D()
         }
         self.consts: dict = {
             "_KEY_ONE": rl.KEY_ONE,
@@ -201,14 +202,18 @@ class Program:
         2 = safe-breaking system level (Allows programs to breach privacy, record your computer and such) Requires the user's password to allow
         3 = full access (Can modify system files, unrestricted _py) - requires the root password to allow
         '''
-
-        self.is_mode_3d = False
     
     def _getvar(self, string):
-        if self.addresses.__contains__(string):
-            return self.addresses[string]
-        if self.consts.__contains__(string):
-            return self.consts[string]
+        e = string
+        try:
+            hash(e)
+        except TypeError:
+            e = tuple(e)
+
+        if self.addresses.__contains__(e):
+            return self.addresses[str(e)]
+        if self.consts.__contains__(e):
+            return self.consts[str(e)]
         return string
     
     def call(self, func, args):
@@ -384,14 +389,6 @@ class Program:
             rl.end_texture_mode()
         
         #3d
-        elif func == "_begin3d":
-            self.is_mode_3d = True
-            rl.begin_mode_3d(self._getvar(args[0]))
-        
-        elif func == "_end3d":
-            self.is_mode_3d = False
-            rl.end_mode_3d()
-
         elif func == "_make3dcam":
             self.addresses['eax'] = rl.make_camera(
                 rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]),
@@ -404,15 +401,24 @@ class Program:
         elif func == "_update3dcam":
             rl.update_camera(self._getvar(args[0]), self._getvar(args[1]))
 
+        elif func == "_drawgrid":
+            rl.begin_texture_mode(self.buffer)
+            rl.begin_mode_3d(self.addresses['cam'])
+            rl.draw_grid(self._getvar(args[0]), self._getvar(args[1]))
+            rl.end_mode_3d()
+            rl.end_texture_mode()
+
         elif func == "_drawcube":
             rl.begin_texture_mode(self.buffer)
+            rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_cube(
                 rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]),
                 args[1],
                 args[2],
                 args[3],
-                rl.make_color(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]))
+                rl.make_color(self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
             )
+            rl.end_mode_3d()
             rl.end_texture_mode()
 
         # attrs
@@ -532,9 +538,6 @@ class Program:
             if self.errored:
                 break
         self.errored = False
-
-        if self.is_mode_3d:
-            rl.end_mode_3d()
 
 class User:
     def __init__(self, icon, codename="username", name="Name", password='P4ssw0rd', pastebindevkey="mydevkey") -> None:
