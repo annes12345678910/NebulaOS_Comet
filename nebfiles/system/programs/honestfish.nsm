@@ -1,0 +1,19 @@
+{
+    "data": {
+        "EXE_TYPE": "standalone",
+        "nbgf": []
+    },
+
+    "text": {
+        "draw": [
+            {"cal": ["_clearbg", 255, 255, 255, 255]}
+        ],
+
+        "main": [
+            {"cal": ["_setupdrawbuffer", 400, 300]},
+            {"cal": ["_setloop", "_DRAWLOOP", "draw"]},
+            {"mov": ["_NEBWIN", true]},
+            {"mov": ["_WINTITLE", "Honest Fish"]}
+        ]
+    }
+}

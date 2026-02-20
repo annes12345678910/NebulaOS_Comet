@@ -201,6 +201,8 @@ class Program:
         2 = safe-breaking system level (Allows programs to breach privacy, record your computer and such) Requires the user's password to allow
         3 = full access (Can modify system files, unrestricted _py) - requires the root password to allow
         '''
+
+        self.is_mode_3d = False
     
     def _getvar(self, string):
         if self.addresses.__contains__(string):
@@ -380,16 +382,54 @@ class Program:
             rl.begin_texture_mode(self.buffer)
             self.addresses['eax'] = renderer.gui_multitextbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
             rl.end_texture_mode()
+        
+        #3d
+        elif func == "_begin3d":
+            self.is_mode_3d = True
+            rl.begin_mode_3d(self._getvar(args[0]))
+        
+        elif func == "_end3d":
+            self.is_mode_3d = False
+            rl.end_mode_3d()
 
+        elif func == "_make3dcam":
+            self.addresses['eax'] = rl.make_camera(
+                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]),
+                rl.Vector3(self._getvar(args[1])[0], self._getvar(args[1])[1], self._getvar(args[1])[2]),
+                rl.Vector3(self._getvar(args[2])[0], self._getvar(args[2])[1], self._getvar(args[2])[2]),
+                args[3],
+                args[4]
+            )
+        
+        elif func == "_update3dcam":
+            rl.update_camera(self._getvar(args[0]), self._getvar(args[1]))
+
+        elif func == "_drawcube":
+            rl.begin_texture_mode(self.buffer)
+            rl.draw_cube(
+                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]),
+                args[1],
+                args[2],
+                args[3],
+                rl.make_color(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]))
+            )
+            rl.end_texture_mode()
+
+        # attrs
         elif func == "_getattr":
             self.addresses['eax'] = getattr(self._getvar(args[0]), self._getvar(args[1]))
         
+        elif func == "_setattr":
+            setattr(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]))
+
+        # print
         elif func == "_print":
             self.output += str(self._getvar(args[0]))
 
         elif func == "_println":
             self.output += str(self._getvar(args[0])) + "\n"
         
+        # input
         elif func == "_iskeypressed":
             self.addresses['eax'] = rl.is_key_pressed(self._getvar(args[0]))
         
@@ -492,6 +532,9 @@ class Program:
             if self.errored:
                 break
         self.errored = False
+
+        if self.is_mode_3d:
+            rl.end_mode_3d()
 
 class User:
     def __init__(self, icon, codename="username", name="Name", password='P4ssw0rd', pastebindevkey="mydevkey") -> None:
