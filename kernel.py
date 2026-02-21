@@ -338,7 +338,7 @@ class Program:
                 print(f"loading {fad.getvisual(self.currentfolder)}")
                 iop = fad.contents
                 #print(iop)
-                with open(f"nbc_cache/{args[0]}", 'wb') as f:
+                with open(f"nbc_cache/{args[0].replace('/', '-')}", 'wb') as f:
                     f.write(iop)
                 self.addresses['eax'] = rl.load_texture(f"nbc_cache/{args[0]}")
                 print(self.addresses['eax'])
@@ -445,6 +445,18 @@ class Program:
 
             rl.end_mode_3d()
             rl.end_texture_mode()
+
+        elif func == "_loadmodel":
+            # loadmodel 'e.glb'
+            fad = getfilebyname(args[0], self.currentfolder)
+            if isinstance(fad, File):
+                logger.info(f"Nebasm is loading {fad.getvisual(self.currentfolder)}")
+                iop = fad.contents
+                #print(iop)
+                with open(f"nbc_cache/{args[0].replace('/', '-')}", 'wb') as f:
+                    f.write(iop)
+                self.addresses['eax'] = rl.load_model(f"nbc_cache/{args[0]}")
+                print(self.addresses['eax'])
 
         # attrs
         elif func == "_getattr":
