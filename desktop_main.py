@@ -153,6 +153,9 @@ def main():
         savesys.folders.append(systemf)
         savesys.folders.append(sysprogs)
         for i in list((nebfiles / "system/programs").glob("*")):
+            print(i)
+            if i.name == ".DS_Store": # stupid macos
+                continue
             if i.is_file():
                 with open(str(i), "rb") as f:
                     e = kernel.File(sysprogs, i.name.split('.')[0], i.name.split('.')[1])

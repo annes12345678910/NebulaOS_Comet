@@ -295,28 +295,28 @@ class Program:
         
         elif func == "_getfilecontents":
             if len(args) < 1:
-                print("Too few arguments for _getfilecontents, need 1 argument")
+                logger.error("Too few arguments for _getfilecontents, need 1 argument")
                 return
             e = getfilebyname(self._getvar(args[0]), root)
             self.addresses['eax'] = e.contents if e else ""
         
         elif func == "_getfileext":
             if len(args) < 1:
-                print("Too few arguments for _getfileext, need 1 argument")
+                logger.error("Too few arguments for _getfileext, need 1 argument")
                 return
             e = getfilebyname(self._getvar(args[0]), root)
             self.addresses['eax'] = e.ext if e else ""
 
         elif func == "_getfilename":
             if len(args) < 1:
-                print("Too few arguments for _getfilename, need 1 argument")
+                logger.error("Too few arguments for _getfilename, need 1 argument")
                 return
             e = getfilebyname(self._getvar(args[0]), root)
             self.addresses['eax'] = e.name if e else ""
 
         elif func == "_createfile":
             if len(args) < 3:
-                print("Too few arguments for _createfile, need 3 arguments")
+                logger.error("Too few arguments for _createfile, need 3 arguments")
                 return
             
             if not type(self._getvar(args[2])) == str or type(self._getvar(args[2])) == bytes:
@@ -358,7 +358,7 @@ class Program:
         
         elif func == "_guibutton":
             if len(args) < 5:
-                print("Too few arguments for _guibutton, need 5 arguments")
+                logger.error("Too few arguments for _guibutton, need 5 arguments")
                 return
             rl.begin_texture_mode(self.buffer)
             self.addresses['eax'] = renderer.gui_button(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]))
@@ -366,7 +366,7 @@ class Program:
         
         elif func == "_drawtext":
             if len(args) < 8:
-                print("Too few arguments for _drawtext, need 8 arguments")
+                logger.error("Too few arguments for _drawtext, need 8 arguments")
                 return
             rl.begin_texture_mode(self.buffer)
             renderer.draw_text(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
@@ -374,7 +374,7 @@ class Program:
 
         elif func == "_guitextbox":
             if len(args) < 6:
-                print("Too few arguments for _guitextbox, need 6 arguments")
+                logger.error("Too few arguments for _guitextbox, need 6 arguments")
                 return
             rl.begin_texture_mode(self.buffer)
             self.addresses['eax'] = renderer.gui_textbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]))
@@ -382,7 +382,7 @@ class Program:
         
         elif func == "_guimultitextbox":
             if len(args) < 6:
-                print("Too few arguments for _guimultitextbox, need 8 arguments")
+                logger.error("Too few arguments for _guimultitextbox, need 8 arguments")
                 return
             rl.begin_texture_mode(self.buffer)
             self.addresses['eax'] = renderer.gui_multitextbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
@@ -409,6 +409,9 @@ class Program:
             rl.end_texture_mode()
 
         elif func == "_drawcube":
+            if len(args) < 8:
+                logger.error("Too few arguments for _drawcube, need 8 arguments")
+                return
             rl.begin_texture_mode(self.buffer)
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_cube(
@@ -418,6 +421,28 @@ class Program:
                 args[3],
                 rl.make_color(self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
             )
+            rl.end_mode_3d()
+            rl.end_texture_mode()
+
+            #rl.begin_texture_mode(self.buffer)
+            #rl.begin_mode_3d(self.addresses['cam'])
+            #rl.end_mode_3d()
+            #rl.end_texture_mode()
+            
+        elif func == "_drawsphere":
+            if len(args) < 6:
+                logger.error("Too few arguments for _drawsphere, need 6 arguments")
+                return
+            
+            rl.begin_texture_mode(self.buffer)
+            rl.begin_mode_3d(self.addresses['cam'])
+            
+            rl.draw_sphere(
+                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]),
+                self._getvar(args[1]),
+                rl.make_color(self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]))
+            )
+
             rl.end_mode_3d()
             rl.end_texture_mode()
 
