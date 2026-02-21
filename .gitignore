@@ -1,6 +1,9 @@
 nbc_cache/*
 nebos/*
 __pycache__/*
+.github/*
+.vscode/*
+
 .DS_Store
 
 capi/test

@@ -9,8 +9,7 @@
             {"cal": ["_clearbg", 255, 255, 255, 255]},
 
             {"cal": ["_update3dcam", "cam", 2]},
-
-            {"cal": ["_drawtext", "VISIBLE?", 20, 20, 20, 0,0,0,255]},
+            
             {"cal": ["_drawgrid", 10, 1]},
             {"cal": ["_drawcube", [0,0,0], 1, 1, 1, 255, 0, 0, 255]}
         ],
