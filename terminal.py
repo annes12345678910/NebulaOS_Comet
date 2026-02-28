@@ -63,8 +63,9 @@ def ls(*args):
 
 def importt(*args):
     fs = filedialogs.askfiles(title="Import to NebOS")
-    if fs:
-        for i in fs:
+    print(fs)
+    if fs != [filedialogs.Path('.')]: # not canceled
+        for i in fs:  # type: ignore
             with open(str(i), "rb") as f:
                 kernel.writetofile(f"./{i.name}", f.read(), currentfolder)
                 printtxt(f"Wrote {i.name}")
