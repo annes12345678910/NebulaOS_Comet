@@ -3,6 +3,10 @@ inpt = ""
 width = 400
 height = 300
 opened = False
+
+history = [""]
+hisdex = 0
+
 import kernel
 import ultimateraylib as rl
 import renderer
@@ -201,11 +205,10 @@ def printtxt(*args, sep=" ", endl="\n"):
 def computecmd(string: str):
     cmd = string.split(" ")
     eo = cmd[0]
-
+    if cmd == []:
+        return ""
     if cmds.get(eo):
         return cmds[eo](*cmd[1:])
-    elif cmd == "":
-        return ""
     else:
         return f"Invalid command {eo}"
 
@@ -213,7 +216,7 @@ def get_collision():
     return renderer.Rect(x, y, int(width), int(height)).collidepoint(renderer.Point(*renderer.get_mouse_pos()))
 
 def draw_terminal():
-    global text, inpt, rtex, scrolly,width,height, opened, x , y
+    global text, inpt, rtex, scrolly,width,height, opened, x , y, hisdex
 
     if rtex.texture.width != width or rtex.texture.height != height:
         rl.lib.UnloadRenderTexture(rtex)
@@ -259,7 +262,23 @@ def draw_terminal():
     if prs or get_collision() and rl.is_key_pressed(rl.KEY_ENTER):
         printtxt(f"{currentfolder.get_absolute()}> {inpt}")
         printtxt(computecmd(inpt))
+        history.append(inpt)
+        history[0] = ""
         inpt = ""
+    
+    # history
+    if -1 - hisdex == -1:
+        history[-1] = inpt
+    
+    if rl.is_key_pressed(rl.KEY_UP):
+        hisdex += 1 if len(history) - 1 > hisdex else 0
+        inpt = history[-1 - hisdex]
+        print(hisdex)
+
+    if rl.is_key_pressed(rl.KEY_DOWN):
+        hisdex -= 1 if 0 < hisdex else 0
+        inpt = history[-1 - hisdex]
+        print(hisdex)
 
 def test():
     global x, y, rtex
