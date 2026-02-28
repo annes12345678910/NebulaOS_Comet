@@ -8,6 +8,7 @@ import ultimateraylib as rl
 import renderer
 import style
 from savesys import *
+import filedialogs
 
 x = 10
 y = 70
@@ -25,18 +26,19 @@ def meow(*args):
 def write(*args):
     if len(args) < 3:
         return "Usage: write <file name> <file extension> <file content>"
-
-    r = kernel.getfilebyname(f"./{args[0]}.{args[1]}", currentfolder)
-    if r:
-        r.contents = args[2].encode()
-        return f"{r.name}.{r.ext} Written!"
-    else:
-        e = kernel.File(currentfolder, args[0], args[1])
-        e.contents = args[2].encode()
-        files.append(
-            e # this e is too lonely so im here
-        )
-        return f"{e.name}.{e.ext} Written!"
+    kernel.writetofile(f"./{args[0]}.{args[1]}", args[2].encode(), currentfolder)
+    return f"Written to {args[0]}.{args[1]}"
+    #r = kernel.getfilebyname(f"./{args[0]}.{args[1]}", currentfolder)
+    #if r:
+    #    r.contents = args[2].encode()
+    #    return f"{r.name}.{r.ext} Written!"
+    #else:
+    #    e = kernel.File(currentfolder, args[0], args[1])
+    #    e.contents = args[2].encode()
+    #    files.append(
+    #        e # this e is too lonely so im here
+    #    )
+    #    return f"{e.name}.{e.ext} Written!"
 
 def ls(*args):
     print(folders, files)
@@ -102,14 +104,9 @@ def delete(*args): # del is reserved bruh
     return "Path deleted"
 
 def record(*args):
-    r = kernel.getfilebyname(f"./{args[0]}.{args[1]}", currentfolder)
-    if r:
-        r.contents = text.encode()
-    else:
-        e = kernel.File(currentfolder, args[0], args[1])
-        e.contents = text.encode()
-        files.append(e)
-    return ""
+    if len(args) < 2:
+        return "Usage: record (or rec) <filename> <extension>"
+    kernel.writetofile(f"./{args[0]}.{args[1]}", text.encode(), currentfolder)
 
 def help(*args):
     return """
@@ -143,6 +140,12 @@ def version(*args):
 Copyright © Annes Widow and contributors
 NebulaOS Comet (0.2.0)
 """
+
+def importt(*args):
+    f = filedialogs.askfiles(title="Import to NebOS")
+    if f:
+        ""
+    return ""
 
 # follow list_of_cmd.txt and maybee more!
 cmds = {

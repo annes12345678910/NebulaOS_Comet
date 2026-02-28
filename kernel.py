@@ -121,9 +121,9 @@ class File:
 
     def __repr__(self) -> str:
         return f"File( Address: {hex(id(self))} Path: {self.get_absolute()} )"
+root = Folder(None, "root")
 
-
-def getfilebyname(name, parent: Folder) -> File | None:
+def getfilebyname(name:str, parent: Folder) -> File | None:
     for file in files:
         if file.getvisual(parent) == name:
             return file
@@ -134,6 +134,19 @@ def getfolderbyname(name, parent: Folder):
         if folder.getvisual(parent) == name:
             return folder
     return None
+
+def writetofile(path: str, contents: bytes, parent=root):
+    r = kernel.getfilebyname(path, parent)
+    if r:
+        r.contents = contents
+    else:
+        opo = path.removeprefix('./')
+        print(opo)
+        e = kernel.File(parent, opo.split(".")[0], opo.split('.')[1])
+        e.contents = contents
+        files.append(
+            e # this e is too lonely so im here
+        )
 
 # example program
 """
@@ -154,8 +167,6 @@ def getfolderbyname(name, parent: Folder):
     }
 }
 """
-
-root = Folder(None, "root")
 
 class Program:
     def __init__(self, code:dict={}) -> None:
@@ -457,6 +468,18 @@ class Program:
                     f.write(iop)
                 self.addresses['eax'] = rl.load_model(f"nbc_cache/{args[0]}")
                 print(self.addresses['eax'])
+
+        elif func == "_drawmodel":
+            rl.begin_texture_mode(self.buffer)
+            rl.begin_mode_3d(self.addresses['cam'])
+            rl.draw_model(
+                self._getvar(args[0]),
+                rl.Vector3(self._getvar(args[1])[0], self._getvar(args[1])[1], self._getvar(args[1])[2]),
+                self._getvar(args[2]),
+                self._getvar(args[3])
+            )
+            rl.end_mode_3d()
+            rl.end_texture_mode()
 
         # attrs
         elif func == "_getattr":
