@@ -9,6 +9,7 @@ import renderer
 import style
 from savesys import *
 import filedialogs
+import textwrap
 
 x = 10
 y = 70
@@ -77,12 +78,18 @@ def cat(*args):
     
     e = kernel.getfilebyname(args[0], currentfolder)
     if e:
-        return e.contents.decode()
+        try:
+            return e.contents.decode()
+        except UnicodeDecodeError:
+            if '-force' in args:
+                return textwrap.fill(str(e.contents), width)
+            return "File not unicode. Use catraw or provide argument -force"
     return "Invalid File"
 
 def clear(*args):
-    global text
+    global text,scrolly
     text = ""
+    scrolly = 0
     return ""
 
 def delete(*args): # del is reserved bruh
@@ -113,10 +120,14 @@ def help(*args):
 System commands:
 
 meow - MEOW MEOWW
+
 ls (or dir) <optional folderpath> - list files and folders
+import - import a file to here
+
 write <filename> <extension> <contents> - write new file 
 cd <folderpath> - change current folder
 cat (or type) <filepath> - print out the contents of the filepath provided
+
 clear (or cls) - clear all output
 
 del (or rm) - delete a file or folder
@@ -142,10 +153,13 @@ NebulaOS Comet (0.2.0)
 """
 
 def importt(*args):
-    f = filedialogs.askfiles(title="Import to NebOS")
-    if f:
-        ""
-    return ""
+    fs = filedialogs.askfiles(title="Import to NebOS")
+    if fs:
+        for i in fs:
+            with open(str(i), "rb") as f:
+                kernel.writetofile(f"./{i.name}", f.read(), currentfolder)
+                printtxt(f"Wrote {i.name}")
+    return "Canceled."
 
 # follow list_of_cmd.txt and maybee more!
 cmds = {
@@ -153,6 +167,8 @@ cmds = {
 
     "ls":ls,
     "dir":ls,
+
+    "import":importt,
 
     "write":write,
 

@@ -142,7 +142,7 @@ def writetofile(path: str, contents: bytes, parent=root):
     else:
         opo = path.removeprefix('./')
         print(opo)
-        e = kernel.File(parent, opo.split(".")[0], opo.split('.')[1])
+        e = kernel.File(parent, opo.split(".")[0], opo.split('.')[1] if opo.count('.') > 0 else 'bin')
         e.contents = contents
         files.append(
             e # this e is too lonely so im here
