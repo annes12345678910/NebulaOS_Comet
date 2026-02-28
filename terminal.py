@@ -61,6 +61,28 @@ def ls(*args):
             printtxt(f"{i.name}")
     return ""
 
+def importt(*args):
+    fs = filedialogs.askfiles(title="Import to NebOS")
+    if fs:
+        for i in fs:
+            with open(str(i), "rb") as f:
+                kernel.writetofile(f"./{i.name}", f.read(), currentfolder)
+                printtxt(f"Wrote {i.name}")
+    return "Canceled."
+
+def export(*args):
+    f = filedialogs.asksave(title="Export File", initial_file=args[0].removeprefix('./'))
+    e = kernel.getfilebyname(args[0], currentfolder)
+    if f:
+        with open(str(f), "wb") as s:
+            if e:
+                s.write(e.contents)
+                s.close()
+                return "File written"
+            s.close()
+            return f"Invalid File {args[0]}"
+    return "Canceled"
+
 def cd(*args):
     global currentfolder
     if len(args) < 1:
@@ -126,7 +148,9 @@ System commands:
 meow - MEOW MEOWW
 
 ls (or dir) <optional folderpath> - list files and folders
+
 import - import a file to here
+export - export a file to the parent OS
 
 write <filename> <extension> <contents> - write new file 
 cd <folderpath> - change current folder
@@ -156,15 +180,6 @@ Copyright © Annes Widow and contributors
 NebulaOS Comet (0.2.0)
 """
 
-def importt(*args):
-    fs = filedialogs.askfiles(title="Import to NebOS")
-    if fs:
-        for i in fs:
-            with open(str(i), "rb") as f:
-                kernel.writetofile(f"./{i.name}", f.read(), currentfolder)
-                printtxt(f"Wrote {i.name}")
-    return "Canceled."
-
 # follow list_of_cmd.txt and maybee more!
 cmds = {
     "meow":meow,
@@ -173,6 +188,7 @@ cmds = {
     "dir":ls,
 
     "import":importt,
+    "export":export,
 
     "write":write,
 
