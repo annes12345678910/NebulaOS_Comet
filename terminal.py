@@ -137,6 +137,16 @@ def delete(*args): # del is reserved bruh
 
     return "Path deleted"
 
+def rename(*args):
+    if len(args) < 2:
+        return "Usage: rename <path> <newname>"
+    
+    e = kernel.getfilebyname(args[0], currentfolder)
+
+    if e:
+        files.remove(e)
+        kernel.writetofile(args[1], e.contents, currentfolder)
+
 def record(*args):
     if len(args) < 2:
         return "Usage: record (or rec) <filename> <extension>"
@@ -159,7 +169,8 @@ cat (or type) <filepath> - print out the contents of the filepath provided
 
 clear (or cls) - clear all output
 
-del (or rm) - delete a file or folder
+del (or rm) <path> - delete a file or folder
+rename <path> <newname> - rename a file
 
 record (or rec) <filename> <extension> - record your terminal history into a file
 
@@ -203,6 +214,7 @@ cmds = {
 
     "del":delete,
     "rm":delete,
+    "rename":rename,
 
     "record":record,
     "rec":record,
