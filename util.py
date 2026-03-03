@@ -14,14 +14,14 @@ def icon_button(icon: str, pos_x: int, pos_y: int):
     if rl.check_collision_point_rec(rl.get_mouse_position(), opo):
         if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT):
             clr = style.BRIGHTEST
-            rl.draw_rectangle_rounded(opo, 0.4, 2, clr)
+            rl.draw_rectangle_rounded(opo, 0.4, 2, rl.make_color(clr[0], clr[1], clr[2]))
 
             rl.draw_texture(e, pos_x + 10, pos_y + 10, rl.WHITE)
             return True
         else:
             clr = style.BRIGHTBRIGHT
     
-    rl.draw_rectangle_rounded(opo, 0.4, 2, clr)
+    rl.draw_rectangle_rounded(opo, 0.4, 2, rl.make_color(clr[0], clr[1], clr[2]))
 
     rl.draw_texture(e, pos_x + 10, pos_y + 10, rl.WHITE)
     return False

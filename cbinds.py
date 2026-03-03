@@ -1,12 +1,13 @@
 import pathlib,platform
 import ctypes
 from typing import TYPE_CHECKING
+import logger
 
 libex = ''
 if platform.system() == "Darwin": # macos
     libex = 'nebcapi.dylib'
 else:
-    print("C Bindings not avaliable for this parent system, reverting to Python Standard")
+    logger.warn("C Bindings not avaliable for this parent system, reverting to Python Standard", __name__)
 
 library_path = pathlib.Path(__file__).parent / libex
 
