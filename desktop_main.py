@@ -1,8 +1,10 @@
 import sys
+import config
 import cursor
 import kernel
-import renderer
-import ultimateraylib as rl
+if not config.terminal_mode:
+    import renderer
+    import ultimateraylib as rl
 import welcome
 import savesys
 import style
@@ -118,7 +120,8 @@ def draw():
         if prog.loops["_DRAWLOOP"]:
             prog.call(prog.loops["_DRAWLOOP"], [])
 
-renderer.draw_event = draw
+if not config.terminal_mode:
+    renderer.draw_event = draw
 
 currentfolder = nebfiles
 def import_path(path: pathlib.Path):
@@ -167,11 +170,18 @@ def main():
     #print("files")
     #print(savesys.files)
     
-    renderer.init()
-    rl.hide_cursor()
-    cursor.init()
-    kernel.initicons()
-    renderer.run()
+    if config.terminal_mode:
+        terminal.opened = True
+        print("\nNebulaOS Terminal Mode\n")
+        while terminal.opened:
+            terminal.text_terminal()
+    else:
+        renderer.init()
+        rl.hide_cursor()
+        cursor.init()
+        if not config.terminal_mode:
+            kernel.initicons()
+        renderer.run()
 
 if __name__ == "__main__":
     main()

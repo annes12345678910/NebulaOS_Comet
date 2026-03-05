@@ -1,4 +1,4 @@
-terminal_mode = False
+terminal_mode = True # for oses with no graphics server
 
 backend = 0
 """

@@ -7,9 +7,12 @@ opened = False
 history = [""]
 hisdex = 0
 
+import config
+
 import kernel
-import ultimateraylib as rl
-import renderer
+if not config.terminal_mode:
+    import renderer
+    import ultimateraylib as rl
 import style
 from savesys import *
 import filedialogs
@@ -17,8 +20,9 @@ import textwrap
 
 x = 10
 y = 70
-rtex = rl.RenderTexture()
-scrolly = 0
+if not config.terminal_mode:
+    rtex = rl.RenderTexture()
+    scrolly = 0
 
 currentfolder = kernel.root
 
@@ -46,7 +50,8 @@ def write(*args):
     #    return f"{e.name}.{e.ext} Written!"
 
 def ls(*args):
-    print(folders, files)
+    if not config.terminal_mode:
+        print(folders, files)
     try:
         e = kernel.getfolderbyname(args[0], currentfolder)
     except IndexError:
@@ -228,8 +233,11 @@ cmds = {
 
 def printtxt(*args, sep=" ", endl="\n"):
     global text
-    string = sep.join(str(arg) for arg in args)
-    text = text + string + endl
+    if config.terminal_mode:
+        print(*args, sep=sep, end=endl)
+    else:
+        string = sep.join(str(arg) for arg in args)
+        text = text + string + endl
 
 def computecmd(string: str):
     cmd = string.split(" ")
@@ -243,6 +251,18 @@ def computecmd(string: str):
 
 def get_collision():
     return renderer.Rect(x, y, int(width), int(height)).collidepoint(renderer.Point(*renderer.get_mouse_pos()))
+
+def text_terminal():
+    global inpt, opened
+    inpt = input(f"{currentfolder.get_absolute()}> ")
+    print(computecmd(inpt))
+    history.append(inpt)
+    history[0] = ""
+        #printtxt(f"{currentfolder.get_absolute()}> {inpt}")
+        #printtxt(computecmd(inpt))
+        #history.append(inpt)
+        #history[0] = ""
+        #inpt = ""
 
 def draw_terminal():
     global text, inpt, rtex, scrolly,width,height, opened, x , y, hisdex
