@@ -1,11 +1,32 @@
+from __future__ import annotations
 import os
 import random
 import sys
-import ultimateraylib as rl
-import json
+
+import config
+
+from typing import TYPE_CHECKING
+import types
+
+if TYPE_CHECKING:
+    import ultimateraylib as rl
+
+if not config.terminal_mode:
+    import ultimateraylib as rl
+    import renderer
+    
+else:
+    class _RL:
+        def __getattr__(self, name):
+            def dummy(*a, **k):
+                return None
+            return dummy
+
+    rl = _RL()
 import load
+import ctypes
+import json
 from savesys import *
-import renderer
 import pytz
 import logger
 

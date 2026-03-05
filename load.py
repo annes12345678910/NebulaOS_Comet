@@ -1,7 +1,11 @@
-import ultimateraylib as rl
+from __future__ import annotations
+
 from pathlib import Path
+import kernel
 
 fold = Path(__file__).parent
+
+rl = kernel.rl
 
 def load_texture(file: str) -> rl.Texture2D:
     return rl.load_texture(str(fold / file))
