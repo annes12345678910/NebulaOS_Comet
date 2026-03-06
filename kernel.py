@@ -30,7 +30,7 @@ from savesys import *
 import pytz
 import logger
 
-icons:dict[str, rl.Texture2D] = {}
+icons:dict[str, rl.Texture2D] = {} # type: ignore
 
 def initicons():
     global icons, sounds
@@ -258,7 +258,7 @@ class Program:
             self.loops[args[0]] = args[1]
         
         elif func == "_drawcircle":
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             rl.draw_circle(self._getvar(args[0][0]), 
                            self._getvar(args[0][1]), 
                            self._getvar(args[1]), 
@@ -267,12 +267,12 @@ class Program:
                                self._getvar(args[2][1]), 
                                self._getvar(args[2][2]), 
                                self._getvar(args[2][3])
-                            )
+                            ) # type: ignore
                         )
             rl.end_texture_mode()
 
         elif func == "_drawrect":
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             rl.draw_rectangle(
                 self._getvar(args[0][0]), 
                 self._getvar(args[0][1]), 
@@ -283,19 +283,19 @@ class Program:
                     self._getvar(args[2][1]), 
                     self._getvar(args[2][2]), 
                     self._getvar(args[2][3])
-                )
+                ) # type: ignore
             )
             rl.end_texture_mode()
 
         elif func == "_clearbg":
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             rl.clear_background(
                 rl.make_color(
                     self._getvar(args[0]),
                     self._getvar(args[1]),
                     self._getvar(args[2]),
                     self._getvar(args[3])
-                )
+                ) # type: ignore
             )
             rl.end_texture_mode()
         
@@ -312,8 +312,8 @@ class Program:
         elif func == "_checkcollisionrecs":
             # _checkcollisionrecs, rec1: [[0, 0], [20, 20]] rec2: [[0,0], [30, 30]]
             self.addresses['eax'] = rl.check_collision_recs(
-                rl.Rectangle(self._getvar(args[0][0][0]), self._getvar(args[0][0][1]), self._getvar(args[0][1][0]), self._getvar(args[0][1][1])), 
-                rl.Rectangle(self._getvar(args[1][0][0]), self._getvar(args[1][0][1]), self._getvar(args[1][1][0]), self._getvar(args[1][1][1]))
+                rl.Rectangle(self._getvar(args[0][0][0]), self._getvar(args[0][0][1]), self._getvar(args[0][1][0]), self._getvar(args[0][1][1])),  # type: ignore
+                rl.Rectangle(self._getvar(args[1][0][0]), self._getvar(args[1][0][1]), self._getvar(args[1][1][0]), self._getvar(args[1][1][1])) # type: ignore
             )
         
         elif func == "_rand":
@@ -377,14 +377,14 @@ class Program:
 
         elif func == "_drawtexture":
             #drawtexture tex[Texture] x y tint[r g b]
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
 
             rl.draw_texture(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), rl.make_color(
                 self._getvar(args[3][0]),
                 self._getvar(args[3][1]),
                 self._getvar(args[3][2]),
                 self._getvar(args[3][3])
-            ))
+            )) # type: ignore
 
             rl.end_texture_mode()
         
@@ -392,7 +392,7 @@ class Program:
             if len(args) < 5:
                 logger.error("Too few arguments for _guibutton, need 5 arguments")
                 return
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             self.addresses['eax'] = renderer.gui_button(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]))
             rl.end_texture_mode()
         
@@ -400,7 +400,7 @@ class Program:
             if len(args) < 8:
                 logger.error("Too few arguments for _drawtext, need 8 arguments")
                 return
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             renderer.draw_text(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
             rl.end_texture_mode()
 
@@ -408,7 +408,7 @@ class Program:
             if len(args) < 6:
                 logger.error("Too few arguments for _guitextbox, need 6 arguments")
                 return
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             self.addresses['eax'] = renderer.gui_textbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]))
             rl.end_texture_mode()
         
@@ -416,16 +416,16 @@ class Program:
             if len(args) < 6:
                 logger.error("Too few arguments for _guimultitextbox, need 8 arguments")
                 return
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             self.addresses['eax'] = renderer.gui_multitextbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
             rl.end_texture_mode()
         
         #3d
         elif func == "_make3dcam":
             self.addresses['eax'] = rl.make_camera(
-                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]),
-                rl.Vector3(self._getvar(args[1])[0], self._getvar(args[1])[1], self._getvar(args[1])[2]),
-                rl.Vector3(self._getvar(args[2])[0], self._getvar(args[2])[1], self._getvar(args[2])[2]),
+                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]), # type: ignore
+                rl.Vector3(self._getvar(args[1])[0], self._getvar(args[1])[1], self._getvar(args[1])[2]), # type: ignore
+                rl.Vector3(self._getvar(args[2])[0], self._getvar(args[2])[1], self._getvar(args[2])[2]), # type: ignore
                 args[3],
                 args[4]
             )
@@ -434,7 +434,7 @@ class Program:
             rl.update_camera(self._getvar(args[0]), self._getvar(args[1]))
 
         elif func == "_drawgrid":
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_grid(self._getvar(args[0]), self._getvar(args[1]))
             rl.end_mode_3d()
@@ -444,14 +444,14 @@ class Program:
             if len(args) < 8:
                 logger.error("Too few arguments for _drawcube, need 8 arguments")
                 return
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_cube(
-                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]),
+                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]), # type: ignore
                 args[1],
                 args[2],
                 args[3],
-                rl.make_color(self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
+                rl.make_color(self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7])) # type: ignore
             )
             rl.end_mode_3d()
             rl.end_texture_mode()
@@ -466,13 +466,13 @@ class Program:
                 logger.error("Too few arguments for _drawsphere, need 6 arguments")
                 return
             
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             rl.begin_mode_3d(self.addresses['cam'])
             
             rl.draw_sphere(
-                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]),
+                rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]), # type: ignore
                 self._getvar(args[1]),
-                rl.make_color(self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]))
+                rl.make_color(self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5])) # type: ignore
             )
 
             rl.end_mode_3d()
@@ -491,11 +491,11 @@ class Program:
                 print(self.addresses['eax'])
 
         elif func == "_drawmodel":
-            rl.begin_texture_mode(self.buffer)
+            rl.begin_texture_mode(self.buffer) # type: ignore
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_model(
                 self._getvar(args[0]),
-                rl.Vector3(self._getvar(args[1])[0], self._getvar(args[1])[1], self._getvar(args[1])[2]),
+                rl.Vector3(self._getvar(args[1])[0], self._getvar(args[1])[1], self._getvar(args[1])[2]), # type: ignore
                 self._getvar(args[2]),
                 self._getvar(args[3])
             )
@@ -658,44 +658,44 @@ def draw_window(prog: Program) -> bool:
         prog.addresses["_WINY"]
     )
     toprect = rl.make_rect(
-        pos.x - 10,
-        pos.y - 60,
-        prog.buffer.texture.width - 30,
+        pos.x - 10, # type: ignore
+        pos.y - 60, # type: ignore
+        prog.buffer.texture.width - 30, # type: ignore
         50
     )
     mousepos = rl.get_mouse_position()
 
-    if prog.addresses['_NEBWIN'] and rl.is_render_texture_valid(prog.buffer):
-        if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT):
-            if rl.check_collision_point_rec(mousepos, toprect):
-                prog.addresses['_WINX'] = (mousepos.x - (toprect.width /2))
-                prog.addresses['_WINY'] = (mousepos.y + (toprect.height /2))
+    if prog.addresses['_NEBWIN'] and rl.is_render_texture_valid(prog.buffer): # type: ignore
+        if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT): # type: ignore
+            if rl.check_collision_point_rec(mousepos, toprect): # type: ignore
+                prog.addresses['_WINX'] = (mousepos.x - (toprect.width /2)) # type: ignore
+                prog.addresses['_WINY'] = (mousepos.y + (toprect.height /2)) # type: ignore
 
-        rl.draw_rectangle_v(rl.vector2_subtract(pos, rl.Vector2(10, 10)), 
+        rl.draw_rectangle_v(rl.vector2_subtract(pos, rl.Vector2(10, 10)),  # type: ignore
                          
-                            rl.Vector2(prog.buffer.texture.width + 20, 
-                                       prog.buffer.texture.height + 20
+                            rl.Vector2(prog.buffer.texture.width + 20,  # type: ignore
+                                       prog.buffer.texture.height + 20 # type: ignore
                                     ), 
         
-                            rl.GRAY
+                            rl.GRAY # type: ignore
                         )
         
-        rl.draw_texture_rec(prog.buffer.texture, rl.make_rect(0,0,prog.buffer.texture.width, -prog.buffer.texture.height), pos, rl.WHITE)
+        rl.draw_texture_rec(prog.buffer.texture, rl.make_rect(0,0,prog.buffer.texture.width, -prog.buffer.texture.height), pos, rl.WHITE) # type: ignore
 
-        rl.draw_rectangle_rec(toprect, rl.DARKGRAY)
+        rl.draw_rectangle_rec(toprect, rl.DARKGRAY) # type: ignore
 
         rl.draw_text(
             str(prog.addresses['_WINTITLE']), 
-            int(pos.x - 5),
-            int(pos.y - 50),
+            int(pos.x - 5), # type: ignore
+            int(pos.y - 50), # type: ignore
             20, 
-            rl.BLACK
+            rl.BLACK # type: ignore
         )
 
         if rl.gui_button(
             rl.make_rect(
-                int(pos.x + (prog.buffer.texture.width - 40)),
-                int(pos.y - 60),
+                int(pos.x + (prog.buffer.texture.width - 40)), # type: ignore
+                int(pos.y - 60), # type: ignore
                 50,50
             ),
             "x"
@@ -712,7 +712,7 @@ def test():
     #dfe = File(root, "dad", 'png')
     #dfe.contents = data
 
-    rl.set_config_flags(rl.FLAG_WINDOW_RESIZABLE)
+    rl.set_config_flags(rl.FLAG_WINDOW_RESIZABLE) # type: ignore
     rl.init_window()
     rl.init_audio_device()
     rl.set_target_fps(60)
@@ -734,7 +734,7 @@ def test():
                opo.call(opo.loops["_DRAWLOOP"], ["e"])
             
         rl.begin_drawing()
-        rl.clear_background(rl.RAYWHITE)
+        rl.clear_background(rl.RAYWHITE) # type: ignore
         for opo in programs:
             draw_window(opo)
         menu.draw_menu(255, 0, 0)
