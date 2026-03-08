@@ -8,3 +8,5 @@ backend = 0
 
 2 = pyglet
 """
+
+use_unicode_font = False # Use all 13000 glyphs of the Arial font (Useful for working with languages like Greek)

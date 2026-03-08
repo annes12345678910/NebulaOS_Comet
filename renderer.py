@@ -3,7 +3,9 @@ import time
 import config
 import style
 import copy
-
+import load
+import ctypes
+loadfont = False
 class Point:
     def __init__(self, x:int, y:int) -> None:
         self.x = x
@@ -48,12 +50,20 @@ left_pressed = False
 #    if config.backend == 0: # raylib
 #    if config.backend == 1: # pygame
 #    if config.backend == 2: # pyglet
-
+font: rl.Font
 def init(title="NebulaOS Comet"):
+    global font
     if config.backend == 0:
         rl.set_config_flags(rl.FLAG_WINDOW_RESIZABLE)
         rl.init_window(title=f"{title} (raylib)")
         rl.init_audio_device()
+        if loadfont:
+
+            glyphs = (ctypes.c_int * (0x3400 - 0x0000 + 1))()
+
+            for i, code in enumerate(range(0x0000, 0x3400)):
+                glyphs[i] = code
+            font = rl.load_font_ex(str(load.fold / "assets/font/Arial.ttf"), 20, glyphs) # type: ignore
     elif config.backend == 1:
         global pygame_screen
         pygame.init()
@@ -147,12 +157,15 @@ def draw_circle(x: int, y: int, radius: int, r: int, g: int, b: int, a: int = 25
     if config.backend == 2: # pyglet
         pyglet.shapes.Circle(x, pyglet_window.height - y, radius, color=(r, g, b, a)).draw()
 
-def draw_text(text: str, x: int, y: int, size: int, r: int, g: int, b: int, a: int = 255):
+def draw_text(text: str, x: int, y: int, size: int, r: int, g: int, b: int, a: int = 255, usefont=False):
     splits = []
     offsety = 0
     if config.backend == 0: # raylib
         # raylib supports newline text
-        rl.draw_text(text, x, y, size, rl.make_color(r, g, b, a))
+        if usefont:
+            rl.draw_text_ex(font, text, rl.Vector2(x, y), size, 1, rl.make_color(r, g, b, a))
+        else:
+            rl.draw_text(text, x, y, size, rl.make_color(r, g, b, a))
     else:
         splits = text.split('\n')
 
@@ -304,10 +317,10 @@ optionmap = { # alt on windows keyboards
     '/':'÷'
 }
 
-def gui_multitextbox(text: str, x:int, y:int, textsize: int, r:int, g:int, b:int, a:int = 255) -> str:
+def gui_multitextbox(text: str, x:int, y:int, textsize: int, r:int, g:int, b:int, a:int = 255, usefont = False) -> str:
     opo = text
     draw_rectangle(x, y, rl.measure_text(text.split('\n')[0] if text.count('\n') > 0 else text, textsize) + 10, int(rl.measure_text_ex(rl.get_font_default(), text, textsize, 1).y), r, g, b, a)
-    draw_text(text, x + 5, y, textsize, 255 - r, 255 - g, 255 - b, a)
+    draw_text(text, x + 5, y, textsize, 255 - r, 255 - g, 255 - b, a, usefont)
 
     o = rl.get_key_pressed()
     e = rl.get_key_name(o) if o >= 32 else ""
@@ -427,15 +440,16 @@ def test_draw():
     begin_drawing()
     fill_bg_color(140, 0, 0)
     e = get_mouse_pos()
-    draw_text(f"{e[0], e[1]}", int(e[0] + 100), int(e[1] + 100), 20, 255, 0, 0)
+    draw_text(f"{e[0], e[1]}", int(e[0] + 100), int(e[1] + 100), 20, 255, 0, 0, usefont=True)
 
-    woe = gui_multitextbox(woe, 10, 10, 20, 0, 255, 0, 255)
+    woe = gui_multitextbox(woe, 10, 10, 20, 0, 255, 0, 255, True)
     end_drawing()
 
 def test():
-    global draw_event, woe
+    global draw_event, woe, loadfont
     woe = "o"
     draw_event = test_draw
+    loadfont = True
     init(title="Renderer Test")
     run()
 
