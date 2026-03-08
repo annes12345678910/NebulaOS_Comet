@@ -195,6 +195,31 @@ No need to go anywhere, everything can be done here!
 
         "file-jclass": "Java learning tools", #.class
         "file-jar": "JAR files in Java", #.jar
+    },
+    "gr-gr": { # Greek
+        "is_joke": False,
+
+        # lang
+        "lang-desc": "ελληνικά (Ελλάδα)",
+
+        # welcome stuff
+        "start-intro": "Καλώς ορίσατε στο NebulaOS Comet!",
+
+        "start-desc": """Το NebulaOS προσπαθεί να είναι ένα sandbox για προγραμματιστές. 
+        
+*Το NebulaOS τώρα έχει το NebAssemby, μία απλή όμως ισχυρή γλόσσα για να φτιάξετε παιχνίδια και εφαρμογές. Δεν πρέπει τώρα να χρησιμοποιήσετε ένα τερματικό, μπορείτε να τα κάνετε όλα οπτικά! """, # my friend actually translated this one
+
+        "start-langchoice": "Επιλέξτε μια γλώσσα",
+        "start-timezone":"Επιλέξτε μια ζώνη ώρας",
+        "start-choosetheme": "Επιλέξτε ένα θέμα",
+        "mode-light": "Λειτουργία φωτισμού",
+        "mode-dark": "Σκοτεινή λειτουργία",
+
+        "enter-rpass":"Εισαγάγετε τον κωδικό πρόσβασης root",
+        "enter-userinfo": "Εισαγάγετε πληροφορίες χρήστη",
+        
+        "hover-pls": "Τοποθετήστε το ποντίκι πάνω από αυτό",
+
     }
 }
 
@@ -203,3 +228,39 @@ def langkey(key: str):
     if not langs[lang].__contains__(key):
         return f"Skibidi, Invalid langkey {key}"
     return langs[lang][key]
+
+def test():
+    def draw():
+        global index
+        if rl.is_key_pressed(rl.KEY_LEFT) and index > 0:
+            index -= 1
+
+        if rl.is_key_pressed(rl.KEY_RIGHT) and index < len(opo)-1:
+            index += 1
+            
+        renderer.begin_drawing()
+        renderer.fill_bg_color(255,255,255)
+        rl.draw_text_ex(fnt, str(opo[index]), rl.Vector2(10, 10), 20, 1, rl.BLACK)
+        renderer.end_drawing()
+    global lang,index
+    lang = "gr-gr"
+    import renderer, load, ultimateraylib as rl
+
+    import ctypes
+
+    glyphs = (ctypes.c_int * (0x3400 - 0x0000 + 1))()
+
+    for i, code in enumerate(range(0x0000, 0x3400)):
+        glyphs[i] = code
+    index = 0
+    opo = list(langs[lang].values())
+    print(opo)
+    renderer.init(title="Langtest")
+    fnt = rl.load_font_ex(str(load.fold / "assets/font/Arial.ttf"), 20, glyphs) # type: ignore
+    renderer.draw_event = draw
+    renderer.run()
+
+    
+
+if __name__ == "__main__":
+    test()

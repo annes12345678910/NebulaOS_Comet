@@ -7,13 +7,13 @@ fold = Path(__file__).parent
 
 rl = kernel.rl
 
-def load_texture(file: str) -> rl.Texture2D:
+def load_texture(file: str) -> rl.Texture2D: # type: ignore
     return rl.load_texture(str(fold / file))
 
-def load_sound(file: str) -> rl.Sound:
+def load_sound(file: str) -> rl.Sound: # type: ignore
     return rl.load_sound(str(fold / file))
 
-def load_font(file: str) -> rl.Font:
+def load_font(file: str) -> rl.Font: # type: ignore
     return rl.load_font(str(fold / file))
 
 class DynamicFont:
@@ -44,7 +44,7 @@ class DynamicFont:
     def draw(self, text="Text", pos=rl.Vector2(0,0), font_size = 20, spacing = 1, color=rl.BLACK):
         rl.draw_text_ex(self.get_font(), text, pos, font_size, spacing, color)
 
-default_font: rl.Font
+default_font: rl.Font # type: ignore
 def init():
     global default_font
     default_font = load_font("assets/font/nebulaos-default.otf")
