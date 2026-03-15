@@ -659,10 +659,10 @@ class User:
                     )
     
 curpass = ''
-def draw_usr_password_box(pos: tuple[int, int], user: User, r: int, g: int, b: int):
+def draw_usr_password_box(pos: tuple[int, int], user: User, r: int, g: int, b: int, a=255):
     global curpass
     curpass = renderer.gui_textbox(curpass, 64, int(pos[0]) - 100, int(pos[1]), 200, 60)
-    renderer.draw_text(f"{user.name} ({user.codename})", int(pos[0]) - 100, int(pos[1]) - 40, 40, r, g, b, 255) 
+    renderer.draw_text(f"{user.name} ({user.codename})", int(pos[0]) - 100, int(pos[1]) - 40, 40, r, g, b, a, False) 
 
 def draw_window(prog: Program) -> bool:
     'Returns True when the window should be closed'

@@ -10,7 +10,7 @@ draw_options = False
 
 showdock = True
 
-def draw_menu(r: int, g: int, b: int):
+def draw_menu(r: int, g: int, b: int, a=255):
     global menu_pos, is_dragging, drag_offset, draw_options
     global showdock
 
@@ -38,8 +38,8 @@ def draw_menu(r: int, g: int, b: int):
             rl.play_sound(kernel.sounds['tap'])
     
     # drawing
-    rl.draw_circle_v(menu_pos, MENU_RADIUS, rl.make_color(r, g, b))
-    rl.draw_texture_ex(kernel.icons['logowhite'], rl.vector2_subtract(menu_pos, rl.Vector2(45,45)), 0, 0.39, rl.make_color(255 - r, 255 - g, 255 - b))
+    rl.draw_circle_v(menu_pos, MENU_RADIUS, rl.make_color(r, g, b,a))
+    rl.draw_texture_ex(kernel.icons['logowhite'], rl.vector2_subtract(menu_pos, rl.Vector2(45,45)), 0, 0.39, rl.make_color(255 - r, 255 - g, 255 - b, a))
 
     # draw options
     if draw_options:
