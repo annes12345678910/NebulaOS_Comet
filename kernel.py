@@ -234,7 +234,11 @@ class Program:
         2 = safe-breaking system level (Allows programs to breach privacy, record your computer and such) Requires the user's password to allow
         3 = full access (Can modify system files, unrestricted _py) - requires the root password to allow
         '''
-    
+
+    def print(self, *args, sep=' ', endl='\n'):
+        string = sep.join(str(arg) for arg in args)
+        self.output = self.output + string + endl
+
     def _getvar(self, string):
         e = string
         try:
@@ -525,7 +529,16 @@ class Program:
         
         elif func == "_py":
             try:
-                self.addresses['eax'] = eval(self._getvar(args[0]), self.addresses)
+                o:dict = {}
+                o |= self.addresses
+                o['__builtins__'] = {
+                    "print":self.print,
+                    "min":min,
+                    "max":max,
+                }
+                o['win'] = win
+                print(o)
+                self.addresses['eax'] = exec(self._getvar(args[0]), o)
             except Exception as e:
                 print(f"Python internally errored with {e} with the code {self._getvar(args[0])}")
 
@@ -742,5 +755,48 @@ def test():
     rl.close_audio_device()
     rl.close_window()
 
+class Gen:
+    def __setattr__(self, name: str, value) -> None:
+        super().__setattr__(name, value)
+
+class fstream:
+
+    def close(self):
+        pass
+
+    def readable(self):
+        return False
+
+    def writable(self):
+        return False
+    
+    def seek(self, cookie:int, whence=0):
+        pass
+    
+
+f = open("README.md")
+
+win = Gen()
+win.poop = rl.lib.poop
+
+def test2():
+    o = Program({
+    "data": {
+        "EXE_TYPE": "standalone"
+    },
+
+    "text": {
+        "main": [
+        ]
+    }
+    })
+    opo = """win.poop()
+eax = 5
+print(eax)
+"""
+    print(opo.__repr__())
+    o.computeline({"cal": ["_py", opo]})
+    print(o.output)
+
 if __name__ == "__main__":
-    test()
+    test2()
