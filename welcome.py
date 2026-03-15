@@ -4,6 +4,7 @@ import kernel
 import style, savesys
 import lang
 import renderer
+import config
 
 scene = 0
 '''
@@ -45,9 +46,9 @@ def draw_welcome():
 
     # welcome!
     if scene == 0:
-        renderer.draw_text(lang.langkey("start-intro"), int(winw / skibidi) + 10, int(winh / skibidi) + 10, int(winw / skibidi / 3), *style.DARKEST)
+        renderer.draw_text(lang.langkey("start-intro"), int(winw / skibidi) + 10, int(winh / skibidi) + 10, int(winw / skibidi / 3), *style.DARKEST, config.use_unicode_font)
 
-        renderer.draw_text(lang.langkey("start-desc"), int(winw / skibidi) + 10, int(winh / skibidi) + 80, int(winw / skibidi / 8), *style.DARKEST)
+        renderer.draw_text(lang.langkey("start-desc"), int(winw / skibidi) + 10, int(winh / skibidi) + 80, int(winw / skibidi / 8), *style.DARKEST, config.use_unicode_font)
 
     # languages
     elif scene == 1:
@@ -63,9 +64,9 @@ def draw_welcome():
             if renderer.gui_button(f"{lang.langs[i]['lang-desc']} ({i})", int(winw / 3), int(ere), int(winw / 3), 50):
                 lang.lang = i
         
-        renderer.draw_text(lang.langkey("start-langchoice"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+        renderer.draw_text(lang.langkey("start-langchoice"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST, config.use_unicode_font)
 
-        renderer.draw_text(lang.langkey("lang-desc"), int(winw / skibidi + 10), int(winh / skibidi + 50), 20, *style.DARKEST)
+        renderer.draw_text(lang.langkey("lang-desc"), int(winw / skibidi + 10), int(winh / skibidi + 50), 20, *style.DARKEST, config.use_unicode_font)
     
     elif scene == 2: # timezone
         renderer.draw_rectangle(int(winw / 3 - 10), 0, int(winw / 3 + 20), winh, *style.BRIGHTEST) # that strip you see on meat packages
@@ -81,12 +82,12 @@ def draw_welcome():
                 timezone = i
                 kernel.pytz.timezone(i)
 
-        renderer.draw_text(lang.langkey("start-timezone"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+        renderer.draw_text(lang.langkey("start-timezone"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST, config.use_unicode_font)
 
-        renderer.draw_text(timezone, int(winw / skibidi + 10), int(winh / skibidi + 50), 20, *style.DARKEST)
+        renderer.draw_text(timezone, int(winw / skibidi + 10), int(winh / skibidi + 50), 20, *style.DARKEST, config.use_unicode_font)
 
     elif scene == 3: # theme thingy
-        renderer.draw_text(lang.langkey("start-choosetheme"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+        renderer.draw_text(lang.langkey("start-choosetheme"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST, config.use_unicode_font)
 
         # light button
         if renderer.gui_button(lang.langkey("mode-light"), (winw // 2) - 140, winh // 2, 70, 40):
@@ -96,19 +97,19 @@ def draw_welcome():
             style.changeblack(True)
     
     elif scene == 4: # rootpass
-        renderer.draw_text(lang.langkey("enter-rpass"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+        renderer.draw_text(lang.langkey("enter-rpass"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST, config.use_unicode_font)
         
         savesys.rootpass = renderer.gui_textbox(savesys.rootpass, 255, winw // 2, winh // 2, 200, 50)
     
     elif scene == 5:
-        renderer.draw_text(lang.langkey("enter-userinfo"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+        renderer.draw_text(lang.langkey("enter-userinfo"), int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST, config.use_unicode_font)
 
         newuser.name = renderer.gui_textbox(newuser.name, 255, int(winw / skibidi + 10), int(winh / skibidi + 40), 300, 50)
         newuser.codename = renderer.gui_textbox(newuser.codename, 255, int(winw / skibidi + 10), int(winh / skibidi + 100), 300, 50)
         newuser.password = renderer.gui_textbox(newuser.password, 255, int(winw / skibidi + 10), int(winh / skibidi + 160), 300, 50)
 
     elif scene == 6:
-        renderer.draw_text("Optional", int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST)
+        renderer.draw_text("Optional", int(winw / skibidi + 10), int(winh / skibidi + 10), 30, *style.DARKEST, config.use_unicode_font)
 
         newuser.devkey = renderer.gui_textbox(newuser.devkey, 64, int(winw / skibidi + 10), int(winh / skibidi + 50), 300, 50)
 
@@ -121,6 +122,7 @@ def draw_welcome():
 
     if renderer.gui_button("Next", skiend - 100, skihend - 60, 100, 50) and scene <= 5:
         scene += 1
+    #renderer.draw_text("TEST", 100, 100, 20, 0, 0, 0, 255, True)
 
 def test_draw():
     renderer.begin_drawing()
@@ -136,7 +138,9 @@ def test_draw():
 renderer.draw_event = test_draw
 
 def test():
+    renderer.loadfont = True
     renderer.init("Welcome")
+    print(renderer.font)
 
     #rl.set_window_min_size(600, 400)
     

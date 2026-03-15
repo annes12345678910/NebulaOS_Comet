@@ -58,17 +58,18 @@ def init(title="NebulaOS Comet"):
         rl.init_window(title=f"{title} (raylib)")
         rl.init_audio_device()
         if loadfont:
-
             glyphs = (ctypes.c_int * (0x3400 - 0x0000 + 1))()
 
             for i, code in enumerate(range(0x0000, 0x3400)):
                 glyphs[i] = code
             font = rl.load_font_ex(str(load.fold / "assets/font/Arial.ttf"), 20, glyphs) # type: ignore
+
     elif config.backend == 1:
         global pygame_screen
         pygame.init()
         pygame_screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
         pygame.display.set_caption(f"{title} (Pygame)")
+        
     elif config.backend == 2:
         global pyglet_window, pyglet_mouse
         pyglet_window = pyglet.window.Window(800, 600, f"{title} (pyglet)", resizable=True)
