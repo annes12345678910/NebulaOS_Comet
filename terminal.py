@@ -17,6 +17,7 @@ import style
 from savesys import *
 import filedialogs
 import textwrap
+import json
 
 x = 10
 y = 70
@@ -25,6 +26,7 @@ if not config.terminal_mode:
     scrolly = 0
 
 currentfolder = kernel.root
+currentprogram = None
 
 # command functions
 
@@ -152,6 +154,20 @@ def rename(*args):
         files.remove(e)
         kernel.writetofile(args[1], e.contents, currentfolder)
 
+def nsm(*args):
+    global currentprogram
+    # nsm <file>
+    # nsm -c <line>
+    f = kernel.getfilebyname(args[0], currentfolder)
+    if f:
+        code = f.contents.decode()
+        dic = json.loads(code)
+        opo = kernel.Program(dic)
+        currentprogram = opo
+        opo.run()
+        return opo.output
+    return f"{args[0]} is not a file"
+
 def record(*args):
     if len(args) < 2:
         return "Usage: record (or rec) <filename> <extension>"
@@ -176,6 +192,8 @@ clear (or cls) - clear all output
 
 del (or rm) <path> - delete a file or folder
 rename <path> <newname> - rename a file
+
+nsm <path> - run a NebAssembly program
 
 record (or rec) <filename> <extension> - record your terminal history into a file
 
@@ -221,6 +239,8 @@ cmds = {
     "rm":delete,
     "rename":rename,
 
+    "nsm":nsm,
+
     "record":record,
     "rec":record,
 
@@ -265,7 +285,7 @@ def text_terminal():
         #inpt = ""
 
 def draw_terminal():
-    global text, inpt, rtex, scrolly,width,height, opened, x , y, hisdex
+    global text, inpt, rtex, scrolly,width,height, opened, x , y, hisdex, currentprogram
 
     if rtex.texture.width != width or rtex.texture.height != height:
         rl.lib.UnloadRenderTexture(rtex)
@@ -287,7 +307,7 @@ def draw_terminal():
         height += int(opo.y)
 
     # top bar
-    eop = renderer.Rect(x, y - 50, width, 50)
+    eop = renderer.Rect(x, y - 50, width - 50, 50)
     renderer.draw_rectangle(eop.x, eop.y, eop.width, eop.height, *style.BRIGHTEST)
     if eop.collidepoint(renderer.Point(*renderer.get_mouse_pos())) and renderer.is_mouse_left_down():
         x = int(renderer.get_mouse_pos()[0] - (width // 2))
@@ -298,10 +318,22 @@ def draw_terminal():
 
     if renderer.gui_button("x", x + width - 50, y - 50, 50, 50):
         opened = False
+        if currentprogram and currentprogram.buffer:
+            rl.unload_render_texture(currentprogram.buffer)
+            currentprogram = None
+        return
 
     rl.begin_texture_mode(rtex)
     renderer.fill_bg_color(0, 0, 0, 0)
     renderer.draw_text(text, 10, int(scrolly), int(height / 20), *style.DARKEST)
+
+    if currentprogram:
+        if currentprogram.loops["_DRAWLOOP"]:
+            currentprogram.call(currentprogram.loops["_DRAWLOOP"], [])
+
+        if currentprogram.buffer:
+            rl.draw_texture_rec(currentprogram.buffer.texture, rl.make_rect(0,0,width, -height), rl.Vector2(x,y), rl.WHITE)
+
     rl.end_texture_mode()
 
     if get_collision():
@@ -310,7 +342,10 @@ def draw_terminal():
     # enter command
     if prs or get_collision() and rl.is_key_pressed(rl.KEY_ENTER):
         printtxt(f"{currentfolder.get_absolute()}> {inpt}")
-        printtxt(computecmd(inpt))
+        try:
+            printtxt(computecmd(inpt))
+        except:
+            printtxt("The command broke")
         history.append(inpt)
         history[0] = ""
         inpt = ""
@@ -328,9 +363,10 @@ def draw_terminal():
         hisdex -= 1 if 0 < hisdex else 0
         inpt = history[-1 - hisdex]
         print(hisdex)
+    
 
 def test():
-    global x, y, rtex
+    global x, y, rtex, opened
     import ultimateraylib as rl
     rl.set_config_flags(rl.FLAG_WINDOW_RESIZABLE)
     rl.init_audio_device()
@@ -339,8 +375,57 @@ def test():
     kernel.initicons()
     rtex = rl.load_render_texture(width, height)
 
-    eop = kernel.File(currentfolder, "opo", "txt")
-    eop.contents = b"Hi \x70\x64"
+    eop = kernel.File(currentfolder, "opo", "nsm")
+    eop.contents = b"""
+{
+    "data": {
+        "EXE_TYPE": "standalone"
+    },
+
+    "text": {
+        "draw": [
+            {"if": [ "kpop", 
+                [
+                    {"add": ["opop", 1]},
+                    {"mod": ["opop", 300]},
+
+                    {"cal": ["_iskeypressed", 32]},
+
+                    {"if": [ "eax",
+                        [
+                            {"add": ["opp", 10]},
+                            {"mod": ["opp", 400]}
+                        ]
+                    ]},
+
+                    {"cal": ["_clearbg", 0, 255, 0, 255]},
+                    {"cal": ["_drawtexture", "tex", "opop", "opp", [255, 0, 0, 255]]}
+                ]
+            ]}
+        ],
+        "main": [
+            {"comment": "opopopopop"},
+            {"cal": ["_geticon", "logomeow"]},
+            {"mov": ["tex", "eax"]},
+
+            {"mov": ["opp", 0]},
+
+            {"cal": ["_println", "Hello World!"]},
+
+            {"mov": ["_WINX", 100]},
+            {"mov": ["_WINY", 100]},
+
+            {"mov": ["kpop", true]},
+            {"mov": ["opop", 0]},
+            {"cal": ["_setupdrawbuffer", 400, 300]},
+            {"cal": ["_setloop", "_DRAWLOOP", "draw"]},
+            {"mov": ["_NEBWIN", true]}
+        ]
+    }
+    
+}
+"""
+    opened = True
     files.append(eop)
     folders.append(kernel.Folder(currentfolder, "p"))
 
@@ -350,7 +435,8 @@ def test():
     while not rl.window_should_close():
         rl.begin_drawing()
         rl.clear_background(rl.BLUE)
-        draw_terminal()
+        if opened:
+            draw_terminal()
         rl.end_drawing()
     rl.close_audio_device()
     rl.close_window()

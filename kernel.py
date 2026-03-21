@@ -196,6 +196,7 @@ class Program:
         self.text:dict = self.code["text"]
         self.buffer = rl.RenderTexture()
         self.currentfolder = root
+        self.ind = 0
         self.addresses = {
             "eax":0,
             "ebx":0,
@@ -535,10 +536,15 @@ class Program:
                     "print":self.print,
                     "min":min,
                     "max":max,
+                    "nsm_call":self.call,
+                    "nsm_getvar":self._getvar,
+                    "nsm_setaddr":self.addresses.__setitem__
                 }
                 o['win'] = win
                 print(o)
-                self.addresses['eax'] = exec(self._getvar(args[0]), o)
+                
+                exec(self._getvar(args[0]), o)
+
             except Exception as e:
                 print(f"Python internally errored with {e} with the code {self._getvar(args[0])}")
 
@@ -791,8 +797,9 @@ def test2():
     }
     })
     opo = """win.poop()
-eax = 5
-print(eax)
+nsm_call("_rand", [0, 5])
+if nsm_getvar("eax") == 5:
+    print("Woah")
 """
     print(opo.__repr__())
     o.computeline({"cal": ["_py", opo]})
