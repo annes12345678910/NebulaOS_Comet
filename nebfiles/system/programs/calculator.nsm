@@ -100,7 +100,7 @@
             {"cal": ["_guibutton", "=", 200, 350, 100, 100]},
             {"if": ["eax", 
                 [
-                    {"cal": ["_pytype", "calctext"]},
+                    {"cal": ["_pyeval", "calctext"]},
                     {"cal": ["_tostr", "eax"]},
 
                     {"mov": ["result", "eax"]}
