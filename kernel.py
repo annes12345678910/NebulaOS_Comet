@@ -4,6 +4,7 @@ import random
 import sys
 
 import config
+import ast
 
 from typing import TYPE_CHECKING
 import types
@@ -547,6 +548,19 @@ class Program:
 
             except Exception as e:
                 print(f"Python internally errored with {e} with the code {self._getvar(args[0])}")
+
+        elif func == "_pytype":
+            try:
+                self.addresses['eax'] = ast.literal_eval(self._getvar(args[0]))
+            except Exception as e:
+                print(f"Python internally errored with {e} with the code {self._getvar(args[0])}")
+
+        elif func == "_pyeval":
+            try:
+                self.addresses['eax'] = eval(self._getvar(args[0]))
+            except Exception as e:
+                print(f"Python internally errored with {e} with the code {self._getvar(args[0])}")
+
 
         elif self.funcs.__contains__(func):
             for i in range(len(args)):
