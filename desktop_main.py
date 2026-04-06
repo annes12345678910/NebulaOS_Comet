@@ -107,6 +107,9 @@ def draw():
             if kernel.draw_window(prog):
                 rl.unload_render_texture(prog.buffer) # type: ignore
                 programs.remove(prog)
+
+            if prog.loops["_DRAWLOOP"]:
+                prog.call(prog.loops["_DRAWLOOP"], [])
                 
         if terminal.opened:
             terminal.draw_terminal()
@@ -116,9 +119,6 @@ def draw():
 
     renderer.end_drawing()
 
-    for prog in programs: #update programs
-        if prog.loops["_DRAWLOOP"]:
-            prog.call(prog.loops["_DRAWLOOP"], [])
 
 if not config.terminal_mode:
     renderer.draw_event = draw

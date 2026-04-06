@@ -398,9 +398,11 @@ class Program:
             if len(args) < 5:
                 logger.error("Too few arguments for _guibutton, need 5 arguments")
                 return
-            rl.begin_texture_mode(self.buffer) # type: ignore
-            self.addresses['eax'] = renderer.gui_button(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]))
-            rl.end_texture_mode()
+
+            self.addresses['eax'] = renderer.gui_button(self._getvar(args[0]), 
+                                                        self.addresses["_WINX"] + self._getvar(args[1]), self.addresses["_WINY"] + self._getvar(args[2]), 
+                                                        self._getvar(args[3]), self._getvar(args[4]))
+
         
         elif func == "_drawtext":
             if len(args) < 8:
@@ -414,18 +416,21 @@ class Program:
             if len(args) < 6:
                 logger.error("Too few arguments for _guitextbox, need 6 arguments")
                 return
-            rl.begin_texture_mode(self.buffer) # type: ignore
-            self.addresses['eax'] = renderer.gui_textbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]))
-            rl.end_texture_mode()
+
+            self.addresses['eax'] = renderer.gui_textbox(self._getvar(args[0]), self._getvar(args[1]), 
+                                                         self.addresses["_WINX"] + self._getvar(args[2]), self.addresses["_WINY"] + self._getvar(args[3]), 
+                                                        self._getvar(args[4]), self._getvar(args[5]))
+
         
         elif func == "_guimultitextbox":
             if len(args) < 6:
                 logger.error("Too few arguments for _guimultitextbox, need 8 arguments")
                 return
-            rl.begin_texture_mode(self.buffer) # type: ignore
-            self.addresses['eax'] = renderer.gui_multitextbox(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
-            rl.end_texture_mode()
-        
+
+            self.addresses['eax'] = renderer.gui_multitextbox(self._getvar(args[0]), 
+                                                            int(self.addresses["_WINX"] + self._getvar(args[1])), int(self.addresses["_WINY"] + self._getvar(args[2])), 
+                                                              self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
+
         #3d
         elif func == "_make3dcam":
             self.addresses['eax'] = rl.make_camera(
