@@ -6,7 +6,15 @@
 }
 
 .reg {
+    font-size: inherit;
+}
+
+.reg, .bigreg {
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.bigreg {
+    font-size: xx-large;
 }
 
 .code {
