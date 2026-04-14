@@ -1,3 +1,5 @@
+## NOT to be confused with [nebula-os/nebula](https://github.com/nebula-os/nebula) or the New Nebula OS 2.0 on Android XR.
+
 # NebulaOS Comet
 
 ![NebulaOS Comet Icon](/assets/img/logomeow.png)
