@@ -3,21 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Nebassembly Docs</title>
 </head>
 <body>
-    <h1>These docs put functions in the way they were coded.</h1>
+    <h1 class="reg">These docs put functions in the way they were coded.</h1>
     <br>
-    <h2>_setupdrawbuffer [WIDTH, HEIGHT]</h2>
-    <h3>This sets up the draw buffer that will be shown in the program window</h3>
+
+    <h2 class="code">_setupdrawbuffer [WIDTH, HEIGHT]</h2>
+    <p class="reg">This sets up the draw buffer that will be shown in the program window</p>
 
     <br>
-    <h2>_setloop [LOOP, FUNCNAME]</h2>
+    <h2 class="code">_setloop [LOOP, FUNCNAME]</h2>
+    <p class="reg">Set a loop so that when it is called, FUNCNAME is called.</p>
 
     <br>
-    <h2>_drawcircle [[X, Y], RADIUS, [R, G, B, A]]</h2>
+    <h2 class="code">_drawcircle [[X, Y], RADIUS, [R, G, B, A]]</h2>
+    <p class="reg">Draw circle in selected framebuffer</p>
 
     <br>
-    <h2>_drawrect [[X, Y], [WIDTH, HEIGHT], [R, G, B, A]]</h2>
+    <h2 class="code">_drawrect [[X, Y], [WIDTH, HEIGHT], [R, G, B, A]]</h2>
+    <p class="reg">Draw Rectangle in selected framebuffer</p>
+
+    <br>
+    <h2 class="code">_clearbg [R, G, B, A]</h2>
+    <p class="reg">fill the selected framebuffer with a color</p>
+
+    <br>
+    <h2 class="code">_startloop [LOOP]</h2>
+    <p class="reg">Run LOOP</p>
+
+    <br>
+    <h2 class="code">_len [LIST] -> (int in eax)</h2>
+    <p class="reg">Get the length of a list, or other iterable</p>
+
+    <br>
+    <h2 class="code">_checkcollisionrecs [[X1, Y1], [W1, H1]] [[X2, Y2], [H2, H2]] -> (bool in eax)</h2>
+    <p class="reg">Return true if the rectangles are colliding</p>
+
+    <br>
+    <h2 class="code">_rand [MIN, MAX] -> (int in eax)</h2>
+    <p class="reg">Return a random number between MIN and MAX</p>
+
+    <br>
+    <h2 class="code">_toint [OBJ] -> (int in eax)</h2>
+    <p class="reg">Return OBJ converted to an integer</p>
+
+    <br>
+    <h2 class="code">_tostr [OBJ] -> (string in eax)</h2>
+    <p class="reg">Return OBJ converted to a string</p>
+
+    <br>
+    <h2 class="code">_getfilecontents [PATH] -> (bytes in eax)</h2>
+    <p class="reg">Get contents of a virtual file</p>
+
+    <br>
+    <h2 class="code">_getfileext [PATH] -> (string in eax)</h2>
+    <p class="reg">Get final extension of a virtual file</p>
+
+    <br>
+    <h2 class="code">_getfilename [PATH] -> (string in eax)</h2>
+    <p class="reg">Get final name of a virtual file</p>
+
+    <br>
+    <h2 class="code">_createfile [NAME, EXT, CONTENTS]</h2>
+
+    <br>
+    <h2 class="code">_loadtexture [PATH] -> (Texture in eax)</h2>
+
+    <br>
+    <h2 class="code">_drawtexture [TEXTURE, X, Y, [R, G, B, A]]</h2>
+
+    <br>
+    <h2 class="code">_guibutton [TEXT, X, Y, WIDTH, HEIGHT]</h2>
+
+    <br>
+    <h2 class="code">_drawtext [TEXT, X, Y, SIZE, R,G,B,A]</h2>
+
+    <br>
+    <h2 class="code">_guitextbox []</h2>
 </body>
 </html>

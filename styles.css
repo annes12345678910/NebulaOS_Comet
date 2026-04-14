@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'fira'; /* The name you will use in your CSS */
+  src: url('fira.ttf') format('truetype'); /* Path to your .ttf file */
+  font-weight: normal;
+  font-style: normal;
+}
+
+.reg {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.code {
+    font-family: fira, Arial, sans-serif;
+}
