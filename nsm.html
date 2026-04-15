@@ -7,6 +7,26 @@
     <title>Nebassembly Docs</title>
 </head>
 <body>
+<!--{
+    "data": {
+        "EXE_TYPE": "standalone",
+        "nbgf": [],
+        "copyright": "© Annes Widow & Contributors - 2026 - Paint"
+    },
+
+    "text": {
+        "draw": [
+            {"cal": ["_clearbg", 0, 0, 0, 255]}
+        ],
+
+        "main": [
+            {"cal": ["_setupdrawbuffer", 400, 300]},
+            {"cal": ["_setloop", "_DRAWLOOP", "draw"]},
+            {"mov": ["_NEBWIN", true]},
+            {"mov": ["_WINTITLE", "Paint"]}
+        ]
+    }
+}-->
     <h1 class="bigreg">JSON Structure </h1>
     <p class="reg">Since Nebassembly is a JSON based language, your program
         needs to have a proper structure.
@@ -14,6 +34,29 @@
 
     <h1 class="reg">Data section</h1>
     <p class="reg">The Data section contains program metadata such as Copyright.</p>
+
+    <h2 class="reg">Metadata Keys</h2>
+    
+    <h3 class="reg">copyright</h3>
+    <p class="reg">Human readable copyright</p>
+    <br>
+    
+    <h3 class="reg">nbgf</h3>
+    <p class="reg">The application icon written in NBGF</p>
+    <br>
+    
+    <h3 class="reg">EXE_TYPE</h3>
+    <p class="reg">Whether it is an executable or a library</p>
+    <br>
+
+    <h3 class="reg">Example Data Section</h3>
+    <p class="code">
+    "data": {
+        "EXE_TYPE": "standalone",
+        "nbgf": [],
+        "copyright": "© Annes Widow & Contributors - 2026 - Paint"
+    }
+    </p>
 
     <h1 class="reg">Text section</h1>
     <p class="reg">This section contains the code that will be interpreted.</p>
