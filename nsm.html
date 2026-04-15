@@ -27,60 +27,81 @@
         ]
     }
 }-->
+    <h1 class="bigreg">JSON Knowledge is recommended since this uses a lot of JSON terms.</h1>
+    <br>
     <h1 class="bigreg">JSON Structure </h1>
-    <p class="reg">Since Nebassembly is a JSON based language, your program
-        needs to have a proper structure.
-    </p>
+        <p class="reg">Since Nebassembly is a JSON based language, your program
+            needs to have a proper structure.
+        </p>
 
     <h1 class="reg">Data section</h1>
-    <p class="reg">The Data section contains program metadata such as Copyright.</p>
+        <p class="reg">The Data section contains program metadata such as Copyright.</p>
 
-    <h2 class="reg">Metadata Keys</h2>
+        <h2 class="reg">Metadata Keys</h2>
     
-    <h3 class="reg">copyright</h3>
-    <p class="reg">Human readable copyright</p>
-    <br>
+        <h3 class="reg">copyright</h3>
+        <p class="reg">Human readable copyright</p>
+        <br>
     
-    <h3 class="reg">nbgf</h3>
-    <p class="reg">The application icon written in NBGF</p>
-    <br>
+        <h3 class="reg">nbgf</h3>
+        <p class="reg">The application icon written in NBGF</p>
+        <br>
     
-    <h3 class="reg">EXE_TYPE</h3>
-    <p class="reg">Whether it is an executable or a library<br>Can be either "standalone" or "library"</p>
-    <br>
+        <h3 class="reg">EXE_TYPE</h3>
+        <p class="reg">Whether it is an executable or a library<br>Can be either "standalone" or "library"</p>
+        <br>
 
-    <h3 class="reg">Example Data Section</h3>
-    <p class="code">
-    "data": {
-        "EXE_TYPE": "standalone",
-        "nbgf": [],
-        "copyright": "© Annes Widow & Contributors - 2026 - Paint"
-    }
-    </p>
+        <h3 class="reg">Example Data Section</h3>
+        <pre class="code">
+        "data": {
+            "EXE_TYPE": "standalone",
+            "nbgf": [],
+            "copyright": "© Annes Widow & Contributors - 2026 - Paint"
+        }
+        </pre>
 
     <h1 class="reg">Text section</h1>
-    <p class="reg">This section contains the code that will be interpreted.</p>
+        <p class="reg">This section is where the functions of your program are.</p>
+        <p class="reg">To create a function, simply create a dictionary key with the name of your function.</p>
+
+        <p class="reg">Note: the "main" function is your program's entrypoint.</p>
+
+        <h3>Example Text Section</h3>
+        <pre class="code">
+        "text": {
+            "draw": [
+                {"cal": ["_clearbg", 0, 0, 0, 255]}
+            ],
+
+            "main": [
+                {"cal": ["_setupdrawbuffer", 400, 300]},
+                {"cal": ["_setloop", "_DRAWLOOP", "draw"]},
+                {"mov": ["_NEBWIN", true]},
+                {"mov": ["_WINTITLE", "Paint"]}
+            ]
+        }
+        </pre>
 
     <!-- Functions -->
     <h1 class="bigreg">Functions </h1>
     
-    <h1 class="reg">These docs put functions in the way they were coded.</h1>
-    <br>
+        <h1 class="reg">These docs put functions in the way they were coded.</h1>
+        <br>
 
-    <h2 class="code">_setupdrawbuffer [WIDTH, HEIGHT]</h2>
-    <p class="reg">This sets up the draw buffer that will be shown in the program window</p>
+        <h2 class="code">_setupdrawbuffer [WIDTH, HEIGHT]</h2>
+        <p class="reg">This sets up the draw buffer that will be shown in the program window</p>
 
-    <br>
-    <h2 class="code">_setloop [LOOP, FUNCNAME]</h2>
-    <p class="reg">Set a loop so that when it is called, FUNCNAME is called.</p>
+        <br>
+        <h2 class="code">_setloop [LOOP, FUNCNAME]</h2>
+        <p class="reg">Set a loop so that when it is called, FUNCNAME is called.</p>
 
-    <br>
-    <h2 class="code">_drawcircle [[X, Y], RADIUS, [R, G, B, A]]</h2>
-    <p class="reg">Draw circle in selected framebuffer</p>
+        <br>
+        <h2 class="code">_drawcircle [[X, Y], RADIUS, [R, G, B, A]]</h2>
+        <p class="reg">Draw circle in selected framebuffer</p>
 
-    <br>
-    <h2 class="code">_drawrect [[X, Y], [WIDTH, HEIGHT], [R, G, B, A]]</h2>
-    <p class="reg">Draw Rectangle in selected framebuffer</p>
+        <br>
+        <h2 class="code">_drawrect [[X, Y], [WIDTH, HEIGHT], [R, G, B, A]]</h2>
+        <p class="reg">Draw Rectangle in selected framebuffer</p>
 
     <br>
     <h2 class="code">_clearbg [R, G, B, A]</h2>
