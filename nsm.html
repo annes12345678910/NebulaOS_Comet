@@ -28,7 +28,7 @@
     }
 }-->
     <h1 class="bigreg">JSON Knowledge is recommended since this uses a lot of JSON terms.</h1>
-    <br>
+    <hr>
     <h1 class="bigreg">JSON Structure </h1>
         <p class="reg">Since Nebassembly is a JSON based language, your program
             needs to have a proper structure.
@@ -81,6 +81,24 @@
             ]
         }
         </pre>
+    
+    <hr>
+
+    <h1 class="bigreg">Mnemonics </h1>
+
+    <h1 class="reg">To use a mnemonic, you need to put a dictionary in a function.</h1>
+    <h1 class="code">Syntax: { "mnemonic" : [args] }</h1>
+    
+    <h1 class="reg">mov</h1>
+
+    <p class="reg">
+        the mov istruction moves a value into an address.
+        Can be used to make variables or modify NebulaOS values
+    </p>
+    <p class="code">
+        Syntax: {"mov" : ["address", value]}
+    </p>
+    <hr>
 
     <!-- Functions -->
     <h1 class="bigreg">Functions </h1>
@@ -147,7 +165,7 @@
     <h2 class="code">_createfile [NAME, EXT, CONTENTS]</h2>
 
     <br>
-    <h2 class="code">_loadtexture [PATH] -> (Texture in eax)</h2>
+    <h2 class="code">_loadtexture [PATH] -> (Image in eax)</h2>
 
     <br>
     <h2 class="code">_drawtexture [TEXTURE, X, Y, [R, G, B, A]]</h2>
