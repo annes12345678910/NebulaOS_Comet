@@ -67,8 +67,8 @@ class Image:
                 self.pygsprite.draw()
     
     def unload(self):
-        #if config.backend == 0: # raylib
-            
+        if config.backend == 0: # raylib
+            self.rlimage = None
         if config.backend == 1: # pygame
             self.pyimage = None
         if config.backend == 2: # pyglet
@@ -176,6 +176,35 @@ class Sound:
         if config.backend == 2: # pyglet
             if self.pygsound:
                 self.pygsound.play()
+
+class Font:
+    def __init__(self,path,size) -> None:
+        self.rlfont = None
+        self.pyfont = None
+        self.pygfont = None
+        self.size = size
+        if config.backend == 0: # raylib
+            self.rlfont = load.load_font(path)
+        if config.backend == 1: # pygame
+            self.pyfont = pygame.font.Font(load.fold / path, size)
+        if config.backend == 2: # pyglet
+            pyglet.font.add_file(str(load.fold / path))
+            self.pygfont = pyglet.font.load(size=size)
+
+    def draw(self, text, x, y, r,g,b,a):
+        if config.backend == 0: # raylib
+            if self.rlfont:
+                rl.draw_text_ex(self.rlfont, text, rl.Vector2(x,y), self.size, 1, rl.make_color(r,g,b,a))
+        if config.backend == 1: # pygame
+            if self.pyfont:
+                op = self.pyfont.render(text, True, (r,g,b,a))
+                get_surface_target().blit(op, (x,y))
+
+        if config.backend == 2: # pyglet
+            if self.pygfont:
+                pyglet.text.Label(
+                    text, *pygtoreg(x,y), color=(r,g,b,a),font_name=self.pygfont.name, font_size=self.size
+                ).draw()
 
 def get_surface_target():
     if current_render:
@@ -609,20 +638,24 @@ def test_draw():
 
     #woe = gui_multitextbox(woe, 10, 10, 20, 0, 255, 0, 255, True)
     test_img.draw(200, 200, 255,255,255,255)
+    
     testbuf.begin_drawing()
     draw_rectangle(0,0,20,20,255,0,0)
     draw_rectangle(0,0,1,1,0,0,255)
     testbuf.end_drawing()
+
     testbuf.draw(300,300)
+    testfont.draw("bobs", 400, 400, 0, 255, 0, 255)
     end_drawing()
 
 def test():
-    global draw_event, woe, loadfont,test_img, testbuf
+    global draw_event, woe, loadfont,test_img, testbuf,testfont
     woe = "o"
     draw_event = test_draw
     loadfont = True
     init(title="Renderer Test")
     testbuf = FrameBuffer(20, 20)
+    testfont = Font("assets/font/nebulaos-default.otf", 20)
     test_img = Image("assets/cursor/arrow.png")
     
     run()
