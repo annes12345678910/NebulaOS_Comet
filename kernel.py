@@ -33,6 +33,7 @@ import pytz
 import logger
 
 icons:dict[str, renderer.Image] = {} # type: ignore
+sounds:dict[str, renderer.Sound] = {}
 
 def initicons():
     global icons, sounds
@@ -42,7 +43,7 @@ def initicons():
         if os.path.isfile((load.fold / f'assets/img/{i}')):
             icons[(load.fold / f'assets/img/{i}').stem] = renderer.Image(f"assets/img/{i}")
     
-    sounds = {}
+
     for i in os.listdir(str(load.fold / 'assets/sound')):
         if os.path.isfile((load.fold / f'assets/sound/{i}')):
             sounds[(load.fold / f'assets/sound/{i}').stem] = renderer.Sound(f"assets/sound/{i}")

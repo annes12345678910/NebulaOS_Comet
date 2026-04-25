@@ -1,5 +1,6 @@
 import kernel
 import ultimateraylib as rl
+import renderer
 import time
 import lang
 
@@ -35,11 +36,20 @@ def draw_menu(r: int, g: int, b: int, a=255):
     if rl.is_mouse_button_pressed(rl.MOUSE_BUTTON_RIGHT):
         if rl.check_collision_point_circle(mouse_pos, menu_pos, MENU_RADIUS):
             draw_options = not draw_options
-            rl.play_sound(kernel.sounds['tap'])
+            kernel.sounds['tap'].play()
     
     # drawing
-    rl.draw_circle_v(menu_pos, MENU_RADIUS, rl.make_color(r, g, b,a))
-    rl.draw_texture_ex(kernel.icons['logowhite'], rl.vector2_subtract(menu_pos, rl.Vector2(45,45)), 0, 0.39, rl.make_color(255 - r, 255 - g, 255 - b, a))
+    #rl.draw_circle_v(menu_pos, MENU_RADIUS, rl.make_color(r, g, b,a))
+    renderer.draw_circle(
+        int(menu_pos.x),int(menu_pos.y), MENU_RADIUS, r,g,b,a
+    )
+
+    #rl.draw_texture_ex(kernel.icons['logowhite'], rl.vector2_subtract(menu_pos, rl.Vector2(45,45)), 0, 0.39, rl.make_color(255 - r, 255 - g, 255 - b, a))
+    kernel.icons['logowhite'].draw(
+        menu_pos.x - 45,
+        menu_pos.y - 45,
+        255 - r, 255 - g, 255 - b, a,0.39
+    )
 
     # draw options
     if draw_options:
@@ -47,17 +57,18 @@ def draw_menu(r: int, g: int, b: int, a=255):
         # exit button draw
         rl.draw_circle_v(rl.vector2_add(menu_pos, rl.Vector2(MENU_RADIUS + ((MENU_RADIUS / 2) + 10), 0)), MENU_RADIUS / 2, rl.make_color(r, g, b))
 
-        rl.draw_texture_ex(
-            kernel.icons['power'], 
-            rl.vector2_add(menu_pos, rl.Vector2(MENU_RADIUS + ((MENU_RADIUS / 2) + -5), -20)), 
-            0, 0.4, rl.WHITE
-        )
+        #rl.draw_texture_ex(
+        #    kernel.icons['power'], 
+        #    rl.vector2_add(menu_pos, rl.Vector2(MENU_RADIUS + ((MENU_RADIUS / 2) + -5), -20)), 
+        #    0, 0.4, rl.WHITE
+        #)
+        
 
         # showhide dock button draw
         rl.draw_circle_v(rl.vector2_add(menu_pos, rl.Vector2(0, (MENU_RADIUS + ((MENU_RADIUS / 2))) * -1 - 10)), MENU_RADIUS / 2, rl.make_color(r, g, b))
 
         # clicky
-        if rl.is_mouse_button_pressed(rl.MOUSE_BUTTON_LEFT):
+        if renderer.is_mouse_left_pressed():
 
             # exit button event
             if rl.check_collision_point_circle(mouse_pos, 
@@ -80,7 +91,7 @@ def test():
     rl.init_audio_device()
     rl.set_target_fps(60)
     kernel.initicons()
-    rl.hide_cursor()
+    #rl.hide_cursor()
     #print(kernel.icons)
     while not rl.window_should_close():
         rl.begin_drawing()
@@ -89,7 +100,7 @@ def test():
 
         draw_menu(255, 0, 0)
 
-        rl.draw_texture_ex(kernel.icons['cursor'], rl.get_mouse_position(), 0, 0.45 if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT) else 0.5, rl.WHITE)
+        #rl.draw_texture_ex(kernel.icons['cursor'], rl.get_mouse_position(), 0, 0.45 if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT) else 0.5, rl.WHITE)
         
         rl.end_drawing()
     rl.close_audio_device()

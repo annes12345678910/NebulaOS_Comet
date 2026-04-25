@@ -51,7 +51,7 @@ class Image:
         if config.backend == 2: # pyglet
             self.pygimage = pyglet.image.load(str(load.fold / path))
     
-    def draw(self, x, y, r,g,b,a, size=1):
+    def draw(self, x, y, r,g,b,a, size:float=1):
         if config.backend == 0: # raylib
             if self.rlimage:
                 rl.draw_texture_ex(self.rlimage, rl.Vector2(x,y), 0, size, rl.make_color(r, g, b, a))
@@ -564,6 +564,14 @@ def is_mouse_left_pressed():
         return rl.is_mouse_button_pressed(rl.MOUSE_BUTTON_LEFT)
     else:
         return left_pressed
+
+def hide_cursor():
+    if config.backend == 0: # raylib
+        rl.hide_cursor()
+    if config.backend == 1: # pygame
+        pygame.mouse.set_visible(False)
+    if config.backend == 2: # pyglet
+        pyglet_window.set_mouse_visible(False)
 
 # events
 def _dummy(*args):

@@ -68,13 +68,13 @@ def draw():
 
             if renderer.gui_button("\\/" if show_sysdock else "/\\", 10, winh + 10 - dock_size, dock_size - 20, dock_size - 20): # system apps button
                 show_sysdock = not show_sysdock
-                rl.play_sound(kernel.sounds['open'])
+                kernel.sounds['open'].play()
                 if show_sysdock: # subdock sys
                     show_insdock = not show_sysdock
 
             if renderer.gui_button("\\/" if show_insdock else "/\\", winw // 2, winh + 10 - dock_size, dock_size - 20, dock_size - 20): # installed apps button
                 show_insdock = not show_insdock
-                rl.play_sound(kernel.sounds['open'])
+                kernel.sounds['open'].play()
                 if show_insdock: # subdock ins
                     show_sysdock = not show_insdock
             
@@ -177,7 +177,7 @@ def main():
             terminal.text_terminal()
     else:
         renderer.init()
-        rl.hide_cursor()
+        renderer.hide_cursor()
         cursor.init()
         if not config.terminal_mode:
             kernel.initicons()
