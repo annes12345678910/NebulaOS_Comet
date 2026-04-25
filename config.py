@@ -1,6 +1,6 @@
 terminal_mode = False # for oses with no graphics server
 
-backend = 0
+backend = 1
 """
 0 = raylib
 

@@ -217,6 +217,7 @@ elif config.backend == 1:
     import pygame
     pygame_screen: pygame.Surface
     pygame_mouse_scroll = 0
+    pygame_event = None
 elif config.backend == 2:
     import pyglet
     import pyglet.gl as gl
@@ -263,7 +264,7 @@ def init(title="NebulaOS Comet"):
 
 # run a window loop
 def run(fps=60):
-    global pygame_mouse_scroll, left_pressed
+    global pygame_mouse_scroll, left_pressed,pygame_event
     if config.backend == 0: # raylib
         rl.set_target_fps(fps)
         while not rl.window_should_close():
@@ -279,14 +280,16 @@ def run(fps=60):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame_should_close = True
+
                 if event.type == pygame.MOUSEWHEEL:
                     pygame_mouse_scroll = event.y
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         left_pressed = True
                 if event.type == pygame.MOUSEBUTTONUP:
-                    if event.button == 1:
-                        left_pressed = False
+                    left_pressed = False
+
+                pygame_event = event
             upd_event()
             draw_event()
             clock.tick(fps)
@@ -398,7 +401,7 @@ def gui_button(text: str, x: int, y: int, width: int, height: int, text_size = 2
         draw_text(text, x, y, text_size, *style.DARK)
         return Rect(x, y, width, height).collidepoint(Point(*get_mouse_pos())) and is_mouse_left_pressed()
 
-def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: int) -> str:
+def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: int, r,g,b,a, textsize=20, usefont=False) -> str:
     newtext = text
     if config.backend == 0: # raylib
         e = rl.make_rect(x, y, width, height)
@@ -408,12 +411,46 @@ def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: 
                 newtext = rl.get_clipboard_text()
 
         return rl.gui_text_box(e, newtext, max_length, rl.check_collision_point_rec(rl.get_mouse_position(), e))[1]
-    if config.backend == 1: # pygame
-        pass
-    if config.backend == 2: # pyglet
-        pass
+    # else
+
+    opo = text
+    draw_rectangle(x, y, rl.measure_text(text.split('\n')[0] if text.count('\n') > 0 else text, textsize) + 10, int(rl.measure_text_ex(rl.get_font_default(), text, textsize, 1).y), r, g, b, a)
+    draw_text(text, x + 5, y, textsize, 255 - r, 255 - g, 255 - b, a, usefont)
+
+    o = rl.get_key_pressed()
+    e = rl.get_key_name(o) if o >= 32 else ""
+    skib = ""
+    if text:
+
+        text_rect = Rect(x, y, width, height)
+        mouse_pos = Point(*get_mouse_pos())
+
+        if not text_rect.collidepoint(mouse_pos):
+            return text
+    if e:
+        skib = e.decode() # type: ignore
+    if rl.is_key_down(rl.KEY_LEFT_SHIFT) or rl.is_key_down(rl.KEY_RIGHT_SHIFT):
+        if len(skib) > 0  and 'a' <= skib <= 'z':
+            opo += chr(ord(skib) - 32)
+            #print(chr(ord(skib) - 32))
+        elif shiftmap.get(skib, None):
+            opo += shiftmap[skib]
+        else:
+            opo += skib
+    elif rl.is_key_down(rl.KEY_LEFT_ALT) or rl.is_key_down(rl.KEY_RIGHT_ALT):
+        if optionmap.get(skib, None):
+            opo += optionmap[skib]
+    else:
+        opo += skib
     
-    return ""
+    if rl.is_key_down(rl.KEY_BACKSPACE):
+        time.sleep(0.1)
+        opo = opo[:-1]
+    
+    if rl.is_key_pressed(rl.KEY_SPACE):
+        opo += ' '
+
+    return opo
 
 shiftmap = {
     "1":"!",
@@ -588,6 +625,10 @@ def get_mouse_pos() -> tuple[int, int]:
         return pyglet_mouse['x'], pyglet_window.height - pyglet_mouse['y']
     return 0, 0
 
+def get_mouse_point() -> Point:
+    e = get_mouse_pos()
+    return Point(e[0],e[1])
+
 def get_mouse_scroll(macscroll = False) -> float:
     if config.backend == 0: # raylib
         return -rl.get_mouse_wheel_move() if macscroll else rl.get_mouse_wheel_move()
@@ -611,6 +652,17 @@ def is_mouse_left_pressed():
         return rl.is_mouse_button_pressed(rl.MOUSE_BUTTON_LEFT)
     else:
         return left_pressed
+
+def is_key_pressed(key) -> bool:
+    if config.backend == 0: # raylib
+        return rl.is_key_pressed(key)
+    if config.backend == 1: # pygame
+        if pygame_event:
+            if pygame_event.type == pygame.KEYDOWN:
+                if pygame_event.key == key:
+                    return True
+    #if config.backend == 2: # pyglet
+    return False
 
 def hide_cursor():
     if config.backend == 0: # raylib
@@ -638,7 +690,10 @@ def test_draw():
 
     #woe = gui_multitextbox(woe, 10, 10, 20, 0, 255, 0, 255, True)
     test_img.draw(200, 200, 255,255,255,255)
-    
+
+    if is_mouse_left_pressed():
+        print("OPO")
+
     testbuf.begin_drawing()
     draw_rectangle(0,0,20,20,255,0,0)
     draw_rectangle(0,0,1,1,0,0,255)
