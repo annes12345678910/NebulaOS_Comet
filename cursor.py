@@ -19,7 +19,6 @@ def init():
     
     for i in os.listdir(str(load.fold / 'assets/cursor')):
         if os.path.isfile((load.fold / f'assets/cursor/{i}')):
-            cursors.append(load.load_texture(f"assets/cursor/{i}"))
+            cursors.append(renderer.Image(f"assets/cursor/{i}"))
             
     logger.info(cursors)
-    

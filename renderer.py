@@ -6,7 +6,7 @@ import copy
 import load
 import ctypes
 loadfont = False
-
+current_render = None
 def pygtoreg(x,y):
     return x, pyglet_window.height - y
 
@@ -30,6 +30,11 @@ class Rect:
             point.y <= self.y + self.height):
             return True
         return False
+    
+    def draw(self, r,g,b,a):
+        draw_rectangle(
+            int(self.x), int(self.y), int(self.width), int(self.height), r,g,b,a
+        )
 
 class Image:
     def __init__(self, path:str) -> None:
@@ -37,23 +42,127 @@ class Image:
         self.rlimage = None
         self.pyimage = None
         self.pygimage = None
+        self.pygsprite = None
+        
         if config.backend == 0: # raylib
-            self.rlimage = rl.load_texture(path)
+            self.rlimage = load.load_texture(path)
         if config.backend == 1: # pygame
-            self.pyimage = pygame.image.load(path)
+            self.pyimage = pygame.image.load(load.fold / path)
         if config.backend == 2: # pyglet
-            self.pygimage = pyglet.image.load(path)
+            self.pygimage = pyglet.image.load(str(load.fold / path))
     
-    def draw(self, x, y, r,g,b,a):
+    def draw(self, x, y, r,g,b,a, size=1):
         if config.backend == 0: # raylib
             if self.rlimage:
-                rl.draw_texture(self.rlimage, x, y, rl.make_color(r, g, b, a))
+                rl.draw_texture_ex(self.rlimage, rl.Vector2(x,y), 0, size, rl.make_color(r, g, b, a))
         if config.backend == 1: # pygame
             if self.pyimage:
-                pygame_screen.blit(self.pyimage, (x,y))
+                poop = pygame.transform.scale(self.pyimage, (self.pyimage.get_width() * size, self.pyimage.get_height() * size))
+                get_surface_target().blit(poop, (x,y))
         if config.backend == 2: # pyglet
             if self.pygimage:
-                self.pygimage.blit(*pygtoreg(x,y))
+                self.pygsprite = pyglet.sprite.Sprite(self.pygimage, *pygtoreg(x,y))
+                self.pygsprite.scale = size
+                self.pygsprite.draw()
+
+class FrameBuffer:
+    def __init__(self, w, h) -> None:
+        self.rlrender = None
+        self.pyrender = None
+        self.pygrender = None
+        self.pygtex = None
+        self.w = w
+        self.h = h
+
+        if config.backend == 0: # raylib
+            self.rlrender = rl.load_render_texture(w,h)
+        if config.backend == 1: # pygame
+            self.pyrender = pygame.Surface((w,h))
+        if config.backend == 2: # pyglet
+            self.pygtex = pyglet.image.Texture.create(w, h)
+            self.pygrender = pyglet.image.buffer.Framebuffer()
+            self.pygrender.attach_texture(self.pygtex)
+    
+    def begin_drawing(self):
+        global current_render
+        if config.backend == 0: # raylib
+            if self.rlrender:
+                rl.begin_texture_mode(self.rlrender)
+        if config.backend == 1: # pygame
+            if self.pyrender:
+                current_render = self.pyrender
+        if config.backend == 2: # pyglet
+            if self.pygrender:
+                self.pygrender.bind()
+
+    def end_drawing(self):
+        global current_render
+
+        if config.backend == 0:  # raylib
+            rl.end_texture_mode()
+
+        elif config.backend == 1:  # pygame
+            current_render = None  # restore default target
+
+        elif config.backend == 2:  # pyglet
+            if self.pygrender:
+                self.pygrender.unbind()
+
+    def get_texture(self):
+        if config.backend == 0:
+            return self.rlrender.texture if self.rlrender else None
+
+        elif config.backend == 1:
+            return self.pyrender
+
+        elif config.backend == 2:
+            return self.pygtex
+    
+    def draw(self, x, y):
+        if config.backend == 0: # raylib
+            if self.rlrender:
+                rl.draw_texture_rec(
+                    self.rlrender.texture,
+                    rl.Rectangle(0,0, self.rlrender.texture.width, -self.rlrender.texture.height),
+                    rl.Vector2(x,y),
+                    rl.WHITE
+                )
+        if config.backend == 1: # pygame
+            if self.pyrender:
+                get_surface_target().blit(self.pyrender, (x,y))
+        if config.backend == 2: # pyglet
+            if self.pygtex:
+                self.pygtex.blit(*pygtoreg(x,y))
+
+class Sound:
+    def __init__(self, path:str) -> None:
+        self.path = path
+        self.rlsound = None
+        self.pysound = None
+        self.pygsound = None
+        
+        if config.backend == 0: # raylib
+            self.rlsound = load.load_sound(path)
+        if config.backend == 1: # pygame
+            self.pysound = pygame.mixer.Sound(load.fold / path)
+        if config.backend == 2: # pyglet
+            self.pygsound = pyglet.media.load(str(load.fold / path))
+
+    def play(self):
+        if config.backend == 0: # raylib
+            if self.rlsound:
+                rl.play_sound(self.rlsound)
+        if config.backend == 1: # pygame
+            if self.pysound:
+                self.pysound.play()
+        if config.backend == 2: # pyglet
+            if self.pygsound:
+                self.pygsound.play()
+
+def get_surface_target():
+    if current_render:
+        return current_render
+    return pygame_screen
 
 if config.backend == 0:
     import ultimateraylib as rl
@@ -163,7 +272,7 @@ def fill_bg_color(r: int, g: int, b: int, a: int = 255):
     if config.backend == 0: # raylib
         rl.clear_background(rl.make_color(r, g, b, a))
     if config.backend == 1: # pygame
-        pygame_screen.fill((r, g, b, a))
+        get_surface_target().fill((r, g, b, a))
     if config.backend == 2: # pyglet
         gl.glClearColor(r / 255, g / 255, b / 255, a / 255)
         pyglet_window.clear()
@@ -174,7 +283,7 @@ def draw_rectangle(x: int, y: int, width: int, height: int, r: int, g: int, b: i
         rl.draw_rectangle(x, y, width, height, rl.make_color(r, g, b, a))
     if config.backend == 1: # pygame
         e = pygame.Rect(x, y, width, height)
-        pygame.draw.rect(pygame_screen, (r, g, b, a), e)
+        pygame.draw.rect(get_surface_target(), (r, g, b, a), e)
     if config.backend == 2: # pyglet
         o = pyglet.shapes.Rectangle(x, pyglet_window.height - y, width, -height, (r, g, b, a))
         o.draw()
@@ -474,14 +583,20 @@ def test_draw():
 
     #woe = gui_multitextbox(woe, 10, 10, 20, 0, 255, 0, 255, True)
     test_img.draw(200, 200, 255,255,255,255)
+    testbuf.begin_drawing()
+    draw_rectangle(0,0,20,20,255,0,0)
+    draw_rectangle(0,0,1,1,0,0,255)
+    testbuf.end_drawing()
+    testbuf.draw(300,300)
     end_drawing()
 
 def test():
-    global draw_event, woe, loadfont,test_img
+    global draw_event, woe, loadfont,test_img, testbuf
     woe = "o"
     draw_event = test_draw
     loadfont = True
     init(title="Renderer Test")
+    testbuf = FrameBuffer(20, 20)
     test_img = Image("assets/cursor/arrow.png")
     
     run()

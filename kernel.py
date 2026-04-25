@@ -24,6 +24,7 @@ else:
             return dummy
 
     rl = _RL()
+
 import load
 import ctypes
 import json
@@ -31,7 +32,7 @@ from savesys import *
 import pytz
 import logger
 
-icons:dict[str, rl.Texture2D] = {} # type: ignore
+icons:dict[str, renderer.Image] = {} # type: ignore
 
 def initicons():
     global icons, sounds
@@ -39,12 +40,12 @@ def initicons():
     for i in os.listdir(str(load.fold / 'assets/img')):
         #print(str(load.fold / f'assets/img/{i}'))
         if os.path.isfile((load.fold / f'assets/img/{i}')):
-            icons[(load.fold / f'assets/img/{i}').stem] = load.load_texture(f"assets/img/{i}")
+            icons[(load.fold / f'assets/img/{i}').stem] = renderer.Image(f"assets/img/{i}")
     
     sounds = {}
     for i in os.listdir(str(load.fold / 'assets/sound')):
         if os.path.isfile((load.fold / f'assets/sound/{i}')):
-            sounds[(load.fold / f'assets/sound/{i}').stem] = load.load_sound(f"assets/sound/{i}")
+            sounds[(load.fold / f'assets/sound/{i}').stem] = renderer.Sound(f"assets/sound/{i}")
 
 #info(f"Timezones: {pytz.all_timezones}")
 
@@ -195,7 +196,7 @@ class Program:
         self.code:dict = code
         self.exetype = self.code["data"]["EXE_TYPE"]
         self.text:dict = self.code["text"]
-        self.buffer = rl.RenderTexture()
+        self.buffer = renderer.FrameBuffer(0,0)
         self.currentfolder = root
         self.ind = 0
         self.addresses = {
@@ -256,7 +257,7 @@ class Program:
     
     def call(self, func, args):
         if func == "_setupdrawbuffer":
-            self.buffer = rl.load_render_texture(self._getvar(args[0]), self._getvar(args[1]))
+            self.buffer = renderer.FrameBuffer(self._getvar(args[0]), self._getvar(args[1]))
             print(f"Init Buffer [{self._getvar(args[0])}, {self._getvar(args[1])}]")
         
         elif func == "_setloop":
@@ -264,46 +265,47 @@ class Program:
             self.loops[args[0]] = args[1]
         
         elif func == "_drawcircle":
-            rl.begin_texture_mode(self.buffer) # type: ignore
-            rl.draw_circle(self._getvar(args[0][0]), 
+            self.buffer.begin_drawing()
+            renderer.draw_circle(self._getvar(args[0][0]), 
                            self._getvar(args[0][1]), 
                            self._getvar(args[1]), 
-                           rl.make_color(
+                           
                                self._getvar(args[2][0]), 
                                self._getvar(args[2][1]), 
                                self._getvar(args[2][2]), 
                                self._getvar(args[2][3])
-                            ) # type: ignore
+                            
                         )
-            rl.end_texture_mode()
+            
+            self.buffer.end_drawing()
 
         elif func == "_drawrect":
-            rl.begin_texture_mode(self.buffer) # type: ignore
-            rl.draw_rectangle(
+            self.buffer.begin_drawing()
+            renderer.draw_rectangle(
                 self._getvar(args[0][0]), 
                 self._getvar(args[0][1]), 
                 self._getvar(args[1][0]), 
                 self._getvar(args[1][1]),
-                rl.make_color(
+                
                     self._getvar(args[2][0]), 
                     self._getvar(args[2][1]), 
                     self._getvar(args[2][2]), 
                     self._getvar(args[2][3])
-                ) # type: ignore
+                
             )
-            rl.end_texture_mode()
+            self.buffer.end_drawing()
 
         elif func == "_clearbg":
-            rl.begin_texture_mode(self.buffer) # type: ignore
-            rl.clear_background(
-                rl.make_color(
+            self.buffer.begin_drawing()
+            renderer.fill_bg_color(
+                
                     self._getvar(args[0]),
                     self._getvar(args[1]),
                     self._getvar(args[2]),
                     self._getvar(args[3])
-                ) # type: ignore
+                
             )
-            rl.end_texture_mode()
+            self.buffer.end_drawing()
         
         elif func == "_startloop":
             if self.loops[args[0]]:
@@ -378,22 +380,24 @@ class Program:
                 #print(iop)
                 with open(f"nbc_cache/{args[0].replace('/', '-')}", 'wb') as f:
                     f.write(iop)
-                self.addresses['eax'] = rl.load_texture(f"nbc_cache/{args[0]}")
-                print(self.addresses['eax'])
+                self.addresses['eax'] = renderer.Image(f"nbc_cache/{args[0]}")
+                #print(self.addresses['eax'])
 
         elif func == "_drawtexture":
             #drawtexture tex[Texture] x y tint[r g b]
-            rl.begin_texture_mode(self.buffer) # type: ignore
+            self.buffer.begin_drawing()
+            e = self._getvar(args[0])
+            if isinstance(e, renderer.Image):
+                    e.draw(self._getvar(args[1]), self._getvar(args[2]), 
+                    
+                    self._getvar(args[3][0]),
+                    self._getvar(args[3][1]),
+                    self._getvar(args[3][2]),
+                    self._getvar(args[3][3])
+                ) # type: ignore
 
-            rl.draw_texture(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), rl.make_color(
-                self._getvar(args[3][0]),
-                self._getvar(args[3][1]),
-                self._getvar(args[3][2]),
-                self._getvar(args[3][3])
-            )) # type: ignore
+            self.buffer.end_drawing()
 
-            rl.end_texture_mode()
-        
         elif func == "_guibutton":
             if len(args) < 5:
                 logger.error("Too few arguments for _guibutton, need 5 arguments")
@@ -403,14 +407,13 @@ class Program:
                                                         self.addresses["_WINX"] + self._getvar(args[1]), self.addresses["_WINY"] + self._getvar(args[2]), 
                                                         self._getvar(args[3]), self._getvar(args[4]))
 
-        
         elif func == "_drawtext":
             if len(args) < 8:
                 logger.error("Too few arguments for _drawtext, need 8 arguments")
                 return
-            rl.begin_texture_mode(self.buffer) # type: ignore
+            self.buffer.begin_drawing()
             renderer.draw_text(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
-            rl.end_texture_mode()
+            self.buffer.end_drawing()
 
         elif func == "_guitextbox":
             if len(args) < 6:
@@ -691,57 +694,60 @@ def draw_usr_password_box(pos: tuple[int, int], user: User, r: int, g: int, b: i
 
 def draw_window(prog: Program) -> bool:
     'Returns True when the window should be closed'
-    pos = rl.Vector2(
+    if not prog and not prog.buffer:
+        return False
+    
+    pos = renderer.Point(
         prog.addresses["_WINX"],
         prog.addresses["_WINY"]
     )
-    toprect = rl.make_rect(
-        pos.x - 10, # type: ignore
-        pos.y - 60, # type: ignore
-        prog.buffer.texture.width - 30, # type: ignore
+    toprect = renderer.Rect(
+        pos.x - 10, 
+        pos.y - 60, 
+        prog.buffer.w - 30,  # pyright: ignore[reportOptionalMemberAccess]
         50
     )
-    mousepos = rl.get_mouse_position()
+    mousepos = renderer.Point(*renderer.get_mouse_pos())
 
-    if prog.addresses['_NEBWIN'] and rl.is_render_texture_valid(prog.buffer): # type: ignore
-        if rl.is_mouse_button_down(rl.MOUSE_BUTTON_LEFT): # type: ignore
-            if rl.check_collision_point_rec(mousepos, toprect): # type: ignore
+    if prog.addresses['_NEBWIN'] and prog.buffer: # type: ignore
+        if renderer.is_mouse_left_down(): # type: ignore
+            if toprect.collidepoint(mousepos): # type: ignore
                 prog.addresses['_WINX'] = (mousepos.x - (toprect.width /2)) # type: ignore
                 prog.addresses['_WINY'] = (mousepos.y + (toprect.height /2)) # type: ignore
 
-        rl.draw_rectangle_v(rl.vector2_subtract(pos, rl.Vector2(10, 10)),  # type: ignore
-                         
-                            rl.Vector2(prog.buffer.texture.width + 20,  # type: ignore
-                                       prog.buffer.texture.height + 20 # type: ignore
-                                    ), 
+        #rl.draw_rectangle_v(rl.vector2_subtract(pos, rl.Vector2(10, 10)),  # type: ignore
+        renderer.draw_rectangle(     
+                            int(pos.x - 10),
+                            int(pos.y - 10),
+                            int(prog.buffer.w + 20),  # type: ignore
+                            int(prog.buffer.h + 20) # type: ignore
+                                    , 
         
-                            rl.GRAY # type: ignore
+                            130, 130, 130, 255
                         )
         
-        rl.draw_texture_rec(prog.buffer.texture, rl.make_rect(0,0,prog.buffer.texture.width, -prog.buffer.texture.height), pos, rl.WHITE) # type: ignore
+        #rl.draw_texture_rec(prog.buffer.texture, rl.make_rect(0,0,prog.buffer.texture.width, -prog.buffer.texture.height), pos, rl.WHITE) # type: ignore
+        
+        prog.buffer.draw(pos.x, pos.y) # pyright: ignore[reportOptionalMemberAccess]
+        toprect.draw(80, 80, 80, 255)
 
-        rl.draw_rectangle_rec(toprect, rl.DARKGRAY) # type: ignore
-
-        rl.draw_text(
+        renderer.draw_text(
             str(prog.addresses['_WINTITLE']), 
             int(pos.x - 5), # type: ignore
             int(pos.y - 50), # type: ignore
             20, 
-            rl.BLACK # type: ignore
+            0, 0, 0, 255, config.use_unicode_font
         )
 
-        if rl.gui_button(
-            rl.make_rect(
-                int(pos.x + (prog.buffer.texture.width - 40)), # type: ignore
+        if renderer.gui_button(
+            "x",
+                int(pos.x + (prog.buffer.w - 40)), # type: ignore
                 int(pos.y - 60), # type: ignore
                 50,50
-            ),
-            "x"
         ):
             prog.addresses['_NEBWIN'] = False
             return True
     return False
-
 
 def test():
     import menu
@@ -750,10 +756,20 @@ def test():
     #dfe = File(root, "dad", 'png')
     #dfe.contents = data
 
-    rl.set_config_flags(rl.FLAG_WINDOW_RESIZABLE) # type: ignore
-    rl.init_window()
-    rl.init_audio_device()
-    rl.set_target_fps(60)
+    def draw():
+        for opo in programs:
+            if opo.loops["_DRAWLOOP"]:
+               opo.call(opo.loops["_DRAWLOOP"], ["e"])
+            
+        renderer.begin_drawing()
+        renderer.fill_bg_color(255,255,255) # type: ignore
+        for opo in programs:
+            draw_window(opo)
+        #menu.draw_menu(255, 0, 0)
+        renderer.end_drawing()
+
+    renderer.init("Kernel example")
+    
     initicons()
     menu.kernel.initicons()
     with open("program.nsm") as f:
@@ -765,20 +781,8 @@ def test():
     programs[0].addresses['_WINX'] = 400
     #opo = Program(code)
     #opo.run()
-
-    while not rl.window_should_close():
-        for opo in programs:
-            if opo.loops["_DRAWLOOP"]:
-               opo.call(opo.loops["_DRAWLOOP"], ["e"])
-            
-        rl.begin_drawing()
-        rl.clear_background(rl.RAYWHITE) # type: ignore
-        for opo in programs:
-            draw_window(opo)
-        menu.draw_menu(255, 0, 0)
-        rl.end_drawing()
-    rl.close_audio_device()
-    rl.close_window()
+    renderer.draw_event = draw
+    renderer.run()
 
 class Gen:
     def __setattr__(self, name: str, value) -> None:
@@ -825,4 +829,4 @@ if nsm_getvar("eax") == 5:
     print(o.output)
 
 if __name__ == "__main__":
-    test2()
+    test()
