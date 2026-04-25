@@ -6,6 +6,10 @@ import copy
 import load
 import ctypes
 loadfont = False
+
+def pygtoreg(x,y):
+    return x, pyglet_window.height - y
+
 class Point:
     def __init__(self, x:int, y:int) -> None:
         self.x = x
@@ -26,6 +30,30 @@ class Rect:
             point.y <= self.y + self.height):
             return True
         return False
+
+class Image:
+    def __init__(self, path:str) -> None:
+        self.path = path
+        self.rlimage = None
+        self.pyimage = None
+        self.pygimage = None
+        if config.backend == 0: # raylib
+            self.rlimage = rl.load_texture(path)
+        if config.backend == 1: # pygame
+            self.pyimage = pygame.image.load(path)
+        if config.backend == 2: # pyglet
+            self.pygimage = pyglet.image.load(path)
+    
+    def draw(self, x, y, r,g,b,a):
+        if config.backend == 0: # raylib
+            if self.rlimage:
+                rl.draw_texture(self.rlimage, x, y, rl.make_color(r, g, b, a))
+        if config.backend == 1: # pygame
+            if self.pyimage:
+                pygame_screen.blit(self.pyimage, (x,y))
+        if config.backend == 2: # pyglet
+            if self.pygimage:
+                self.pygimage.blit(*pygtoreg(x,y))
 
 if config.backend == 0:
     import ultimateraylib as rl
@@ -50,7 +78,8 @@ left_pressed = False
 #    if config.backend == 0: # raylib
 #    if config.backend == 1: # pygame
 #    if config.backend == 2: # pyglet
-font: rl.Font
+
+#font: rl.Font
 def init(title="NebulaOS Comet"):
     global font
     if config.backend == 0:
@@ -443,15 +472,18 @@ def test_draw():
     e = get_mouse_pos()
     draw_text(f"{e[0], e[1]}", int(e[0] + 100), int(e[1] + 100), 20, 255, 0, 0, usefont=True)
 
-    woe = gui_multitextbox(woe, 10, 10, 20, 0, 255, 0, 255, True)
+    #woe = gui_multitextbox(woe, 10, 10, 20, 0, 255, 0, 255, True)
+    test_img.draw(200, 200, 255,255,255,255)
     end_drawing()
 
 def test():
-    global draw_event, woe, loadfont
+    global draw_event, woe, loadfont,test_img
     woe = "o"
     draw_event = test_draw
     loadfont = True
     init(title="Renderer Test")
+    test_img = Image("assets/cursor/arrow.png")
+    
     run()
 
 if __name__ == "__main__":

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+PY=python
+
+$PY -m build
+$PY -m twine upload dist/*

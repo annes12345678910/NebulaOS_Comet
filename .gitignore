@@ -13,3 +13,7 @@ dist/*
 *.so
 *.dll
 *.zip
+
+token.txt
+nebulaos.egg-info/*
+nebdist/*
