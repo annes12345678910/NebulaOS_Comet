@@ -2,11 +2,12 @@ import sys
 import time
 import config
 import style
-import copy
 import load
 import ctypes
+
 loadfont = False
 current_render = None
+
 def pygtoreg(x,y):
     return x, pyglet_window.height - y
 
@@ -64,6 +65,14 @@ class Image:
                 self.pygsprite = pyglet.sprite.Sprite(self.pygimage, *pygtoreg(x,y))
                 self.pygsprite.scale = size
                 self.pygsprite.draw()
+    
+    def unload(self):
+        #if config.backend == 0: # raylib
+            
+        if config.backend == 1: # pygame
+            self.pyimage = None
+        if config.backend == 2: # pyglet
+            self.pygimage = None
 
 class FrameBuffer:
     def __init__(self, w, h) -> None:
@@ -82,7 +91,7 @@ class FrameBuffer:
             self.pygtex = pyglet.image.Texture.create(w, h)
             self.pygrender = pyglet.image.buffer.Framebuffer()
             self.pygrender.attach_texture(self.pygtex)
-    
+
     def begin_drawing(self):
         global current_render
         if config.backend == 0: # raylib
@@ -133,6 +142,15 @@ class FrameBuffer:
         if config.backend == 2: # pyglet
             if self.pygtex:
                 self.pygtex.blit(*pygtoreg(x,y))
+    
+    def unload(self):
+        if config.backend == 0: # raylib
+            if self.rlrender:
+                rl.unload_render_texture(self.rlrender)
+        if config.backend == 1: # pygame
+            self.pyrender = None
+        if config.backend == 2: # pyglet
+            self.pygrender = None
 
 class Sound:
     def __init__(self, path:str) -> None:
@@ -292,7 +310,7 @@ def draw_circle(x: int, y: int, radius: int, r: int, g: int, b: int, a: int = 25
     if config.backend == 0: # raylib
         rl.draw_circle(x, y, radius, rl.make_color(r, g, b, a))
     if config.backend == 1: # pygame
-        pygame.draw.circle(pygame_screen, (r, g, b, a), (x, y), radius)
+        pygame.draw.circle(get_surface_target(), (r, g, b, a), (x, y), radius)
     if config.backend == 2: # pyglet
         pyglet.shapes.Circle(x, pyglet_window.height - y, radius, color=(r, g, b, a)).draw()
 
@@ -317,7 +335,7 @@ def draw_text(text: str, x: int, y: int, size: int, r: int, g: int, b: int, a: i
         
         for i in pyrenders:
             offsety += size
-            pygame_screen.blit(i, (x, y + offsety))
+            get_surface_target().blit(i, (x, y + offsety))
 
     if config.backend == 2: # pyglet
         for i in splits:

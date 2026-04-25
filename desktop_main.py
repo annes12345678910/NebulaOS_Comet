@@ -105,7 +105,8 @@ def draw():
                             apin += dock_size - 10
         for prog in programs:
             if kernel.draw_window(prog):
-                rl.unload_render_texture(prog.buffer) # type: ignore
+                #rl.unload_render_texture(prog.buffer) # type: ignore
+                prog.buffer.unload()
                 programs.remove(prog)
 
             if prog.loops["_DRAWLOOP"]:

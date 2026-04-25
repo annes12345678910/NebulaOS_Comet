@@ -449,7 +449,7 @@ class Program:
             rl.update_camera(self._getvar(args[0]), self._getvar(args[1]))
 
         elif func == "_drawgrid":
-            rl.begin_texture_mode(self.buffer) # type: ignore
+            self.buffer.begin_drawing()
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_grid(self._getvar(args[0]), self._getvar(args[1]))
             rl.end_mode_3d()
@@ -459,7 +459,7 @@ class Program:
             if len(args) < 8:
                 logger.error("Too few arguments for _drawcube, need 8 arguments")
                 return
-            rl.begin_texture_mode(self.buffer) # type: ignore
+            self.buffer.begin_drawing()
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_cube(
                 rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]), # type: ignore
@@ -481,7 +481,7 @@ class Program:
                 logger.error("Too few arguments for _drawsphere, need 6 arguments")
                 return
             
-            rl.begin_texture_mode(self.buffer) # type: ignore
+            self.buffer.begin_drawing()
             rl.begin_mode_3d(self.addresses['cam'])
             
             rl.draw_sphere(
@@ -506,7 +506,7 @@ class Program:
                 print(self.addresses['eax'])
 
         elif func == "_drawmodel":
-            rl.begin_texture_mode(self.buffer) # type: ignore
+            self.buffer.begin_drawing()
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_model(
                 self._getvar(args[0]),
