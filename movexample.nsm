@@ -1,0 +1,12 @@
+{
+    "data": {
+        "EXE_TYPE":"standalone"
+    },
+    "text": {
+        "main": [
+            {"mov": ["eax", 1]},
+            {"cal": ["_print", "EAX value:"]},
+            {"cal": ["_print", "eax"]}
+        ]
+    }
+}
