@@ -1,6 +1,9 @@
 #!/bin/bash
 
 PY=python
+PIP=pip
 
 $PY -m build
 $PY -m twine upload dist/*
+
+$PIP install --upgrade nebulaos
