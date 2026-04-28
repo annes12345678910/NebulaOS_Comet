@@ -1,3 +1,0 @@
-0 = Success
-40 = System corruption
-600 = Invalid Rendering Backend
