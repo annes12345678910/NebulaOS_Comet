@@ -8,4 +8,6 @@ PIP=pip
 $PY -m build
 $PY -m twine upload dist/*
 
+sleep 2
+
 $PIP install --upgrade nebulaos
