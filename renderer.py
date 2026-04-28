@@ -1,8 +1,13 @@
 import sys
 import time
-import config
-import style
-import load
+try:
+    import config
+    import style
+    import load
+except:
+    from . import load
+    from . import style
+    from . import config
 import ctypes
 
 loadfont = False

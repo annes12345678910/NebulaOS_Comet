@@ -7,10 +7,10 @@ import config
 import ast
 
 from typing import TYPE_CHECKING
-import types
 
 if TYPE_CHECKING:
     import ultimateraylib as rl
+    from savesys import *
 
 if not config.terminal_mode:
     import ultimateraylib as rl
@@ -25,12 +25,17 @@ else:
 
     rl = _RL()
 
-import load
-import ctypes
+try:
+    import load
+    import logger
+    from savesys import *
+except:
+    from .savesys import *
+    from . import load
+    from . import logger
+
 import json
-from savesys import *
 import pytz
-import logger
 
 icons:dict[str, renderer.Image] = {} # type: ignore
 sounds:dict[str, renderer.Sound] = {}
@@ -423,8 +428,7 @@ class Program:
 
             self.addresses['eax'] = renderer.gui_textbox(self._getvar(args[0]), self._getvar(args[1]), 
                                                          self.addresses["_WINX"] + self._getvar(args[2]), self.addresses["_WINY"] + self._getvar(args[3]), 
-                                                        self._getvar(args[4]), self._getvar(args[5]))
-
+                                                        self._getvar(args[4]), self._getvar(args[5]), 255,255,255,255)
         
         elif func == "_guimultitextbox":
             if len(args) < 6:
@@ -690,7 +694,7 @@ class User:
 curpass = ''
 def draw_usr_password_box(pos: tuple[int, int], user: User, r: int, g: int, b: int, a=255):
     global curpass
-    curpass = renderer.gui_textbox(curpass, 64, int(pos[0]) - 100, int(pos[1]), 200, 60)
+    curpass = renderer.gui_textbox(curpass, 64, int(pos[0]) - 100, int(pos[1]), 200, 60, 255,255,255,255)
     renderer.draw_text(f"{user.name} ({user.codename})", int(pos[0]) - 100, int(pos[1]) - 40, 40, r, g, b, a, False) 
 
 def draw_window(prog: Program) -> bool:

@@ -1,7 +1,11 @@
 import pickle
 import os
-import lang
-import kernel
+try:
+    import lang
+    import kernel
+except:
+    from . import lang
+    from . import kernel
 
 users: list = []
 folders: list = []

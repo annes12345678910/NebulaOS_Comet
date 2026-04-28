@@ -1,3 +1,6 @@
+from typing import TYPE_CHECKING
+
+
 text = ""
 inpt = ""
 width = 400
@@ -7,14 +10,27 @@ opened = False
 history = [""]
 hisdex = 0
 
-import config
+try:
+    import config
+    import kernel
+    import style
+    from savesys import *
+except:
+    from . import config
+    from . import kernel
+    from . import style
+    from .savesys import *
+    
+if TYPE_CHECKING:
+    from savesys import *
 
-import kernel
 if not config.terminal_mode:
-    import renderer
+    try:
+        import renderer
+    except:
+        from . import renderer
     import ultimateraylib as rl
-import style
-from savesys import *
+
 import filedialogs
 import textwrap
 import json
@@ -31,7 +47,7 @@ currentprogram = None
 # command functions
 
 def meow(*args):
-    rl.play_sound(kernel.sounds['meow'])
+    kernel.sounds['meow'].play()
     return "Meow!"
 
 def write(*args):
@@ -295,7 +311,7 @@ def draw_terminal():
 
     rl.draw_texture_rec(rtex.texture, rl.Rectangle(0, 0, width, -height), rl.Vector2(x,y), rl.WHITE)
 
-    inpt = renderer.gui_textbox(inpt, 1024, x + 10, y + 10, width - 70, 50)
+    inpt = renderer.gui_textbox(inpt, 1024, x + 10, y + 10, width - 70, 50, *style.BRIGHTBRIGHT)
     prs = renderer.gui_button("Run", x + width - 55, y + 10, 50, 50)
 
     # resizer
@@ -319,7 +335,7 @@ def draw_terminal():
     if renderer.gui_button("x", x + width - 50, y - 50, 50, 50):
         opened = False
         if currentprogram and currentprogram.buffer:
-            rl.unload_render_texture(currentprogram.buffer)
+            currentprogram.buffer.unload()
             currentprogram = None
         return
 
@@ -332,7 +348,8 @@ def draw_terminal():
             currentprogram.call(currentprogram.loops["_DRAWLOOP"], [])
 
         if currentprogram.buffer:
-            rl.draw_texture_rec(currentprogram.buffer.texture, rl.make_rect(0,0,width, -height), rl.Vector2(x,y), rl.WHITE)
+            #rl.draw_texture_rec(currentprogram.buffer.texture, rl.make_rect(0,0,width, -height), rl.Vector2(x,y), rl.WHITE)
+            currentprogram.buffer.draw(x,y)
 
     rl.end_texture_mode()
 
