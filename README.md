@@ -14,3 +14,4 @@ There is now a custom JSON-based language for writing games and applications. It
 
 ### Documentation
 
+Documentation is at [Nsm Docs](https://annes12345678910.github.io/NebulaOS_Comet/nsm.html)
