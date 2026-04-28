@@ -808,9 +808,6 @@ class fstream:
     
     def seek(self, cookie:int, whence=0):
         pass
-    
-
-f = open("README.md")
 
 win = Gen()
 win.poop = rl.lib.poop
