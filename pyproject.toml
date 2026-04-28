@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nebulaos"
-version = "0.2.0a2.post3"
+version = "0.2.0a2.post4"
 description = "another dist method of NebulaOS"
 readme = "README.md"
 requires-python = ">=3.8"

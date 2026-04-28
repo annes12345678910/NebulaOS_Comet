@@ -1,7 +1,10 @@
 import pathlib,platform
 import ctypes
 from typing import TYPE_CHECKING
-import logger
+try:
+    import logger
+except:
+    from . import logger
 
 libex = ''
 if platform.system() == "Darwin": # macos

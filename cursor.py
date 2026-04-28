@@ -1,6 +1,11 @@
 import os
-import load,logger
-import renderer,ultimateraylib as rl
+try:
+    import load,logger
+    import renderer
+except:
+    from . import load,logger,renderer
+    
+import ultimateraylib as rl
 
 cursors:list[renderer.Image] = []
 current = 0

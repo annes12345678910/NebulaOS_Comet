@@ -51,7 +51,7 @@ class Image:
         self.pygsprite = None
         
         if config.backend == 0: # raylib
-            self.rlimage = load.load_texture(path)
+            self.rlimage = rl.load_texture(str(load.fold / path))
         if config.backend == 1: # pygame
             self.pyimage = pygame.image.load(load.fold / path)
         if config.backend == 2: # pyglet
@@ -165,7 +165,7 @@ class Sound:
         self.pygsound = None
         
         if config.backend == 0: # raylib
-            self.rlsound = load.load_sound(path)
+            self.rlsound = rl.load_sound(str(load.fold / path))
         if config.backend == 1: # pygame
             self.pysound = pygame.mixer.Sound(load.fold / path)
         if config.backend == 2: # pyglet
@@ -189,7 +189,7 @@ class Font:
         self.pygfont = None
         self.size = size
         if config.backend == 0: # raylib
-            self.rlfont = load.load_font(path)
+            self.rlfont = rl.load_font(str(load.fold / path))
         if config.backend == 1: # pygame
             self.pyfont = pygame.font.Font(load.fold / path, size)
         if config.backend == 2: # pyglet
@@ -406,7 +406,7 @@ def gui_button(text: str, x: int, y: int, width: int, height: int, text_size = 2
         draw_text(text, x, y, text_size, *style.DARK)
         return Rect(x, y, width, height).collidepoint(Point(*get_mouse_pos())) and is_mouse_left_pressed()
 
-def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: int, r,g,b,a, textsize=20, usefont=False) -> str:
+def gui_textbox(text: str, max_length: int, x: int, y: int, width: int, height: int, r=255,g=255,b=255,a=255, textsize=20, usefont=False) -> str:
     newtext = text
     if config.backend == 0: # raylib
         e = rl.make_rect(x, y, width, height)

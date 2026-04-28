@@ -3,14 +3,25 @@ import os
 import random
 import sys
 
-import config
 import ast
 
 from typing import TYPE_CHECKING
 
+try:
+    import load
+    import logger
+    from savesys import *
+    import config
+except ImportError:
+    from .savesys import *
+    from . import load
+    from . import logger
+    from . import config
+
 if TYPE_CHECKING:
     import ultimateraylib as rl
     from savesys import *
+    import config
 
 if not config.terminal_mode:
     import ultimateraylib as rl
@@ -24,15 +35,6 @@ else:
             return dummy
 
     rl = _RL()
-
-try:
-    import load
-    import logger
-    from savesys import *
-except:
-    from .savesys import *
-    from . import load
-    from . import logger
 
 import json
 import pytz

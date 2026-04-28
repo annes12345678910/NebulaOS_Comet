@@ -1,21 +1,26 @@
+'WARNING: this is deprecated and may be removed'
+
 from __future__ import annotations
 
 from pathlib import Path
-import kernel
+try:
+    import kernel
+    import renderer
+except:
+    from . import kernel
+    from . import renderer
 
 fold = Path(__file__).parent
 
-rl = kernel.rl
+def load_texture(file: str) -> renderer.Image: # type: ignore
+    return renderer.Image(file)
 
-def load_texture(file: str) -> rl.Texture2D: # type: ignore
-    return rl.load_texture(str(fold / file))
+def load_sound(file: str) -> renderer.Sound: # type: ignore
+    return renderer.Sound(file)
 
-def load_sound(file: str) -> rl.Sound: # type: ignore
-    return rl.load_sound(str(fold / file))
-
-def load_font(file: str) -> rl.Font: # type: ignore
-    return rl.load_font(str(fold / file))
-
+def load_font(file: str) -> renderer.Font: # type: ignore
+    return renderer.Font(file, 20)
+"""
 class DynamicFont:
     MODE_NORMAL = 'normal'
     MODE_ITALIC = 'italic'
@@ -70,3 +75,4 @@ def test():
     rl.close_window()
 if __name__ == "__main__":
     test()
+"""

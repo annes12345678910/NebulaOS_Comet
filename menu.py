@@ -1,8 +1,14 @@
-import kernel
+
 import ultimateraylib as rl
-import renderer
+try:
+    import renderer
+    import lang
+    import kernel
+except:
+    from . import renderer
+    from . import lang
+    from . import kernel
 import time
-import lang
 
 menu_pos = rl.Vector2(0, 0)
 is_dragging = False
