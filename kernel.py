@@ -25,7 +25,10 @@ if TYPE_CHECKING:
 
 if not config.terminal_mode:
     import ultimateraylib as rl
-    import renderer
+    try:
+        import renderer
+    except ImportError:
+        from . import renderer
     
 else:
     class _RL:

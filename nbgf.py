@@ -1,4 +1,7 @@
-import renderer
+try:
+    import renderer
+except ImportError:
+    from . import renderer
 
 def draw_nbgf(data: list, x: int, y: int):
     ln = 1

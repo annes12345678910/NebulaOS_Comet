@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 try:
-    import kernel
+    #import kernel
     import renderer
 except:
-    from . import kernel
+    #from . import kernel
     from . import renderer
 
 fold = Path(__file__).parent

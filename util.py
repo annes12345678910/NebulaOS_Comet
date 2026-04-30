@@ -1,5 +1,8 @@
 import ultimateraylib as rl
-import kernel,style
+try:
+    import kernel,style
+except:
+    from . import kernel,style
 
 def censor(string: str, char = '*'):
     "Censor an entire string, can be used to hide passwords"
