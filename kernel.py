@@ -408,6 +408,20 @@ class Program:
                 ) # type: ignore
 
             self.buffer.end_drawing()
+        
+        elif func == "_createbuffer":
+            #_createbuffer w h
+            self.addresses['eax'] = renderer.FrameBuffer(self._getvar(args[0]), self._getvar(args[1]))
+        
+        elif func == "_bindbuffer":
+            e = self._getvar(args[0])
+            if isinstance(e, renderer.FrameBuffer):
+                e.begin_drawing()
+
+        elif func == "_unbindbuffer":
+            e = self._getvar(args[0])
+            if isinstance(e, renderer.FrameBuffer):
+                e.end_drawing()
 
         elif func == "_guibutton":
             if len(args) < 5:
