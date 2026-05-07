@@ -158,6 +158,12 @@ class File:
 
     def __repr__(self) -> str:
         return f"File( Address: {hex(id(self))} Path: {self.get_absolute()} )"
+
+class Alias(File):
+    def __init__(self, parent: Folder, name, ext, alias:File):
+        super().__init__(parent, name, ext)
+        self.alias = alias
+
 root = Folder(None, "root")
 
 def getfilebyname(name:str, parent: Folder) -> File | None:
@@ -184,6 +190,15 @@ def writetofile(path: str, contents: bytes, parent=root):
         files.append(
             e # this e is too lonely so im here
         )
+
+def getfilecontents(path:str, parent):
+    e = getfilebyname(path, parent)
+    if e:
+        if type(e) is File:
+            return e.contents
+        elif type(e) is Alias:
+            return e.alias.contents
+    return b""
 
 # example program
 """
