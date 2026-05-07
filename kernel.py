@@ -41,6 +41,7 @@ else:
 
 import json
 import pytz
+from datetime import datetime
 
 icons:dict[str, renderer.Image] = {} # type: ignore
 sounds:dict[str, renderer.Sound] = {}
@@ -123,6 +124,8 @@ class File:
         self.ext = ext
         self.parent = parent
         self.contents = b""
+        self.date_created = datetime.now()
+        self.last_modifed = self.date_created
 
         self.protected = False # enter the protector's password to modify
         self.protector = ""

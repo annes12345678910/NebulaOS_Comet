@@ -160,6 +160,55 @@ def delete(*args): # del is reserved bruh
 
     return "Path deleted"
 
+def filedate(*args):
+    if len(args) < 1:
+        return "Usage: date <path> "
+    e = kernel.getfilebyname(args[0], currentfolder)
+    if e:
+        try:
+            if args[1] == "-setcy":
+                e.date_created = e.date_created.replace(year=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setcm":
+                e.date_created = e.date_created.replace(month=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setcd":
+                e.date_created = e.date_created.replace(day=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setch":
+                e.date_created = e.date_created.replace(hour=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setcmi":
+                e.date_created = e.date_created.replace(minute=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setcs":
+                e.date_created = e.date_created.replace(second=int(args[2]))
+                return f"year set to {args[2]}"
+
+            if args[1] == "-setmy":
+                e.date_created = e.last_modifed.replace(year=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setmm":
+                e.date_created = e.last_modifed.replace(month=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setmd":
+                e.date_created = e.last_modifed.replace(day=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setmh":
+                e.date_created = e.last_modifed.replace(hour=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setmmi":
+                e.date_created = e.last_modifed.replace(minute=int(args[2]))
+                return f"year set to {args[2]}"
+            if args[1] == "-setms":
+                e.date_created = e.last_modifed.replace(second=int(args[2]))
+                return f"year set to {args[2]}"
+
+        except:
+            pass
+        return f"Date created: {e.date_created.strftime("%d/%m/%Y, %H:%M:%S")}\nDate last modified: {e.last_modifed.strftime("%d/%m/%Y, %H:%M:%S")}"
+    return "File doesn't exist"
+
 def rename(*args):
     if len(args) < 2:
         return "Usage: rename <path> <newname>"
@@ -207,6 +256,8 @@ cat (or type) <filepath> - print out the contents of the filepath provided
 clear (or cls) - clear all output
 
 del (or rm) <path> - delete a file or folder
+date <path> Optional: -set{c/m}{y/m/d /h/mi/s} <date>
+
 rename <path> <newname> - rename a file
 
 nsm <path> - run a NebAssembly program
@@ -253,6 +304,7 @@ cmds = {
 
     "del":delete,
     "rm":delete,
+    "date":filedate,
     "rename":rename,
 
     "nsm":nsm,
@@ -361,8 +413,9 @@ def draw_terminal():
         printtxt(f"{currentfolder.get_absolute()}> {inpt}")
         try:
             printtxt(computecmd(inpt))
-        except:
+        except Exception as e:
             printtxt("The command broke")
+            print(e)
         history.append(inpt)
         history[0] = ""
         inpt = ""
