@@ -246,7 +246,7 @@ def init(title="NebulaOS Comet"):
     global font
     if config.backend == 0:
         rl.set_config_flags(rl.FLAG_WINDOW_RESIZABLE)
-        rl.init_window(title=f"{title} (raylib)")
+        rl.init_window(800, 600, title=f"{title} (raylib)")
         rl.init_audio_device()
         if loadfont:
             glyphs = (ctypes.c_int * (0x3400 - 0x0000 + 1))()
