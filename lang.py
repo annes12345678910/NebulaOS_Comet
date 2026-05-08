@@ -26,12 +26,12 @@ langs = {
         "hover-pls": "Hover the mouse over this",
 
         # file info
-        "file-ukn": "Unknown", # No Extension or Unknown Extension
+        "file-": "Unknown", # No Extension or Unknown Extension
 
         # assembly
         "file-nsm": "NebAssembly Code", #.nsm
 
-        "file-gnuasm": "GNU Assembly", #.s
+        "file-s": "GNU Assembly", #.s
         "file-asm": "Generic Assembly", #.asm
 
         # text files
@@ -40,14 +40,14 @@ langs = {
         # binaries
         "file-bin": "Generic Binary", #.bin
 
-        "file-win-exe": "MS-DOS/NT Executable", #.exe
-        "file-win-dll": "MS-DOS/NT Dynamic Library", #.dll
-        "file-win-lib": "MS-DOS/NT Static Library", #.lib
+        "file-exe": "MS-DOS/NT Executable", #.exe
+        "file-dll": "MS-DOS/NT Dynamic Library", #.dll
+        "file-lib": "MS-DOS/NT Static Library", #.lib
 
-        "file-ar": "Ar Archive", #.a
-        "file-unix-so": "Unix Dynamic Library", #.so
+        "file-a": "Ar Archive", #.a
+        "file-so": "Unix Dynamic Library", #.so
 
-        "file-apl-dylib": "Apple Dynamic Library", #.dylib
+        "file-dylib": "Apple Dynamic Library", #.dylib
 
         "file-n64": "Nintendo 64 Little Endian ROM", #.n64
         "file-v64": "Nintendo 64 Byte Swapped ROM", #.v64
@@ -61,7 +61,7 @@ langs = {
         "file-java": "Java Code", #.java
         "file-js": "JavaScript Script", #.js
 
-        "file-jclass": "Java Class File", #.class
+        "file-class": "Java Class File", #.class
         "file-jar": "Java JAR File", #.jar
 
         # These weirdos
@@ -91,7 +91,7 @@ langs = {
         "file-xml": "XML Data", #.xml
 
         # audio 🎵
-        "file-aac-m4a": "Advanced Audio Encoding file",  #.aac or .m4a for Apple
+        "file-m4a": "Advanced Audio Encoding file",  #.aac or .m4a for Apple
         "file-aiff": "Apple AIFF Audio", #.aif or .aiff
         "file-wav": "WAVE Audio", #.wav
         "file-mp3": "MPEG-3 Compressed Audio", #.mp3
@@ -112,7 +112,7 @@ langs = {
         "file-heic": "HEIC Image", #.heif or .heic
 
         # documents
-        "file-msdoc": "Old Microsoft-Word Document", #.doc
+        "file-doc": "Old Microsoft-Word Document", #.doc
         "file-docx": "New Microsoft-Word Document", #.docx
 
         "file-pdf": "PDF Document", #.pdf

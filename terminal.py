@@ -129,10 +129,10 @@ def cat(*args):
     e = kernel.getfilebyname(args[0], currentfolder)
     if e:
         try:
-            return e.contents.decode()
+            return kernel.getfilecontents(args[0], currentfolder).decode()
         except UnicodeDecodeError:
             if '-force' in args:
-                return textwrap.fill(str(e.contents), width)
+                return textwrap.fill(str(kernel.getfilecontents(args[0], currentfolder)), width)
             return "File not unicode. Use catraw or provide argument -force"
     return "Invalid File"
 
@@ -159,6 +159,14 @@ def delete(*args): # del is reserved bruh
         return "Invalid path"
 
     return "Path deleted"
+
+def link(*args):
+    e = kernel.getfilebyname(args[0], currentfolder)
+    if e:
+        files.append(kernel.Alias(currentfolder, args[1], args[2], e))
+        
+        return "Alias made!"
+    return "File not found"
 
 def filedate(*args):
     if len(args) < 1:
@@ -209,6 +217,13 @@ def filedate(*args):
         return f"Date created: {e.date_created.strftime("%d/%m/%Y, %H:%M:%S")}\nDate last modified: {e.last_modifed.strftime("%d/%m/%Y, %H:%M:%S")}"
     return "File doesn't exist"
 
+def file(*args):
+    if len(args) < 1:
+        return "Usage: file <path> "
+    e = kernel.getfilebyname(args[0], currentfolder)
+    if e:
+        return lang.langkey(f"file-{e.ext}")
+
 def rename(*args):
     if len(args) < 2:
         return "Usage: rename <path> <newname>"
@@ -256,7 +271,9 @@ cat (or type) <filepath> - print out the contents of the filepath provided
 clear (or cls) - clear all output
 
 del (or rm) <path> - delete a file or folder
-date <path> Optional: -set{c/m}{y/m/d /h/mi/s} <date>
+date <path> Optional: -set{c/m}{y/m/d /h/mi/s} <date> - get or set file dates
+file <path> - get a file's description
+link <path> <name> <ext> - create an alias
 
 rename <path> <newname> - rename a file
 
@@ -303,8 +320,10 @@ cmds = {
     "cls":clear,
 
     "del":delete,
+    "link":link,
     "rm":delete,
     "date":filedate,
+    "file":file,
     "rename":rename,
 
     "nsm":nsm,
