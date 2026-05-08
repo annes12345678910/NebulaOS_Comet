@@ -440,6 +440,12 @@ class Program:
             e = self._getvar(args[0])
             if isinstance(e, renderer.FrameBuffer):
                 e.end_drawing()
+        
+        elif func == "_createcolor":
+            if len(args) < 5:
+                logger.error("Too few arguments for _createcolor, need 5 arguments")
+                return
+            return rl.make_color(self._getvar(args[0]),self._getvar(args[1]),self._getvar(args[2]),self._getvar(args[3]))
 
         elif func == "_guibutton":
             if len(args) < 5:
@@ -449,6 +455,15 @@ class Program:
             self.addresses['eax'] = renderer.gui_button(self._getvar(args[0]), 
                                                         self.addresses["_WINX"] + self._getvar(args[1]), self.addresses["_WINY"] + self._getvar(args[2]), 
                                                         self._getvar(args[3]), self._getvar(args[4]))
+        
+        elif func == "_guicolorpicker":
+            if len(args) < 6:
+                logger.error("Too few arguments for _guicolorpicker, need 6 arguments")
+                return
+            rl.gui_color_picker(
+                rl.make_rect(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3])), # type: ignore
+                self._getvar(args[4]),self._getvar(args[5])
+            )
 
         elif func == "_drawtext":
             if len(args) < 8:
