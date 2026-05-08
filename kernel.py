@@ -442,10 +442,11 @@ class Program:
                 e.end_drawing()
         
         elif func == "_createcolor":
-            if len(args) < 5:
-                logger.error("Too few arguments for _createcolor, need 5 arguments")
+            if len(args) < 4:
+                logger.error("Too few arguments for _createcolor, need 4 arguments")
                 return
-            return rl.make_color(self._getvar(args[0]),self._getvar(args[1]),self._getvar(args[2]),self._getvar(args[3]))
+            self.addresses['eax'] = rl.make_color(self._getvar(args[0]),self._getvar(args[1]),self._getvar(args[2]),self._getvar(args[3]))
+            
 
         elif func == "_guibutton":
             if len(args) < 5:
@@ -461,7 +462,7 @@ class Program:
                 logger.error("Too few arguments for _guicolorpicker, need 6 arguments")
                 return
             rl.gui_color_picker(
-                rl.make_rect(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3])), # type: ignore
+                rl.make_rect(self._getvar(args[0]) + self.addresses["_WINX"], self._getvar(args[1]) + self.addresses["_WINY"], self._getvar(args[2]), self._getvar(args[3])), # type: ignore
                 self._getvar(args[4]),self._getvar(args[5])
             )
 

@@ -2,7 +2,8 @@ import os
 try:
     import load,logger
     import renderer
-except:
+except ImportError as e:
+    print(e)
     from . import load,logger,renderer
     
 import ultimateraylib as rl
