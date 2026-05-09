@@ -7,8 +7,11 @@
 
     "text": {
         "draw": [
-            {"cal": ["_clearbg", 0, 0, 0, 255]},
-            {"cal": ["_guicolorpicker", 0, 0, 100, 100, "Color", "pencolor"]}
+            {"cal": ["_clearbg", 255, 255, 255, 255]},
+            {"cal": ["_guicolorpicker", 0, 0, 100, 100, "Color", "pencolor"]},
+            {"cal": ["_guislider", 150, 0, 100, 50, "1", "300", "brushsize", 1, 300]},
+            {"mov": ["brushsize", "eax"]},
+            {"cal": ["_drawcircle", [400, 0], "brushsize", [255,0,0,255]]}
         ],
 
         "main": [
@@ -18,7 +21,9 @@
             {"mov": ["_WINTITLE", "Paint"]},
 
             {"cal": ["_createcolor", 0,0,0,255]},
-            {"mov": ["pencolor", "eax"]}
+
+            {"mov": ["pencolor", "eax"]},
+            {"mov": ["brushsize", 20]}
         ]
     }
 }

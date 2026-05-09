@@ -294,6 +294,9 @@ class Program:
             self.loops[args[0]] = args[1]
         
         elif func == "_drawcircle":
+            if len(args) < 1:
+                logger.error("Too few arguments for _drawcircle, need 3 argumenst")
+                return
             self.buffer.begin_drawing()
             renderer.draw_circle(self._getvar(args[0][0]), 
                            self._getvar(args[0][1]), 
@@ -309,6 +312,9 @@ class Program:
             self.buffer.end_drawing()
 
         elif func == "_drawrect":
+            if len(args) < 1:
+                logger.error("Too few arguments for _drawrect, need 3 arguments")
+                return
             self.buffer.begin_drawing()
             renderer.draw_rectangle(
                 self._getvar(args[0][0]), 
@@ -465,6 +471,17 @@ class Program:
                 rl.make_rect(self._getvar(args[0]) + self.addresses["_WINX"], self._getvar(args[1]) + self.addresses["_WINY"], self._getvar(args[2]), self._getvar(args[3])), # type: ignore
                 self._getvar(args[4]),self._getvar(args[5])
             )
+            
+        elif func == "_guislider":
+            if len(args) < 9:
+                logger.error("Too few arguments for _guislider, need 9 arguments")
+                return
+            self.addresses['eax'] = rl.gui_slider(
+                rl.make_rect(self._getvar(args[0]) + self.addresses["_WINX"], self._getvar(args[1]) + self.addresses["_WINY"], self._getvar(args[2]), self._getvar(args[3])), # type: ignore
+                self._getvar(args[4]),self._getvar(args[5]),
+                self._getvar(args[6]),
+                self._getvar(args[7]),self._getvar(args[8])
+            )[0]
 
         elif func == "_drawtext":
             if len(args) < 8:
