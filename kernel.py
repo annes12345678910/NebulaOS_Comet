@@ -418,6 +418,15 @@ class Program:
                 e.contents = self._getvar(args[2]).encode()
                 files.append(e)
 
+        elif func == "_exportimage":
+            e = self._getvar(args[0])
+            if isinstance(e, rl.Image): # type: ignore
+                re = f"nbc_cache/{self._getvar(args[1]).replace('/', '-')}"
+                rl.export_image(e, re) # pyright: ignore[reportArgumentType]
+
+                with open(re, "rb") as f:
+                    writetofile(self._getvar(args[1]), f.read())
+
         elif func == "_loadtexture":
             # loadtexture 'dad.png'
             fad = getfilebyname(args[0], self.currentfolder)

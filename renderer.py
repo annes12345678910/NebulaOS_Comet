@@ -160,6 +160,10 @@ class FrameBuffer:
             self.pyrender = None
         if config.backend == 2: # pyglet
             self.pygrender = None
+    
+    def to_image(self):
+        if self.rlrender:
+            return rl.load_image_from_texture(self.rlrender.texture)
 
 class Sound:
     def __init__(self, path:str) -> None:
