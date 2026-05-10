@@ -226,6 +226,8 @@ class Program:
         self.exetype = self.code["data"]["EXE_TYPE"]
         self.text:dict = self.code["text"]
         self.buffer = renderer.FrameBuffer(0,0)
+        self.currentbuffer = self.buffer
+        
         self.currentfolder = root
         self.ind = 0
         self.addresses = {
@@ -284,9 +286,18 @@ class Program:
             return self.consts[str(e)]
         return string
     
+    def _getwinrect(self):
+        return renderer.Rect(
+            self.addresses["_WINX"], self.addresses['_WINY'], self.buffer.w,self.buffer.h
+        )
+
+    def is_mouse_in_win(self):
+        return self._getwinrect().collidepoint(renderer.get_mouse_point())
+
     def call(self, func, args):
         if func == "_setupdrawbuffer":
             self.buffer = renderer.FrameBuffer(self._getvar(args[0]), self._getvar(args[1]))
+            self.currentbuffer = self.buffer
             print(f"Init Buffer [{self._getvar(args[0])}, {self._getvar(args[1])}]")
         
         elif func == "_setloop":
@@ -294,28 +305,28 @@ class Program:
             self.loops[args[0]] = args[1]
         
         elif func == "_drawcircle":
-            if len(args) < 1:
-                logger.error("Too few arguments for _drawcircle, need 3 argumenst")
+            if len(args) < 3:
+                logger.error("Too few arguments for _drawcircle, need 3 arguments")
                 return
-            self.buffer.begin_drawing()
-            renderer.draw_circle(self._getvar(args[0][0]), 
-                           self._getvar(args[0][1]), 
-                           self._getvar(args[1]), 
+            self.currentbuffer.begin_drawing()
+            renderer.draw_circle(int(self._getvar(self._getvar(args[0])[0])), 
+                           int(self._getvar(self._getvar(args[0])[1])), 
+                           int(self._getvar(args[1])), 
                            
-                               self._getvar(args[2][0]), 
-                               self._getvar(args[2][1]), 
-                               self._getvar(args[2][2]), 
-                               self._getvar(args[2][3])
+                               int(self._getvar(self._getvar(args[2])[0])), 
+                               int(self._getvar(self._getvar(args[2])[1])), 
+                               int(self._getvar(self._getvar(args[2])[2])), 
+                               int(self._getvar(self._getvar(args[2])[3]))
                             
                         )
             
-            self.buffer.end_drawing()
+            self.currentbuffer.end_drawing()
 
         elif func == "_drawrect":
             if len(args) < 1:
                 logger.error("Too few arguments for _drawrect, need 3 arguments")
                 return
-            self.buffer.begin_drawing()
+            self.currentbuffer.begin_drawing()
             renderer.draw_rectangle(
                 self._getvar(args[0][0]), 
                 self._getvar(args[0][1]), 
@@ -328,10 +339,10 @@ class Program:
                     self._getvar(args[2][3])
                 
             )
-            self.buffer.end_drawing()
+            self.currentbuffer.end_drawing()
 
         elif func == "_clearbg":
-            self.buffer.begin_drawing()
+            self.currentbuffer.begin_drawing()
             renderer.fill_bg_color(
                 
                     self._getvar(args[0]),
@@ -340,7 +351,7 @@ class Program:
                     self._getvar(args[3])
                 
             )
-            self.buffer.end_drawing()
+            self.currentbuffer.end_drawing()
         
         elif func == "_startloop":
             if self.loops[args[0]]:
@@ -420,7 +431,7 @@ class Program:
 
         elif func == "_drawtexture":
             #drawtexture tex[Texture] x y tint[r g b]
-            self.buffer.begin_drawing()
+            self.currentbuffer.begin_drawing()
             e = self._getvar(args[0])
             if isinstance(e, renderer.Image):
                     e.draw(self._getvar(args[1]), self._getvar(args[2]), 
@@ -431,7 +442,7 @@ class Program:
                     self._getvar(args[3][3])
                 ) # type: ignore
 
-            self.buffer.end_drawing()
+            self.currentbuffer.end_drawing()
         
         elif func == "_createbuffer":
             #_createbuffer w h
@@ -440,12 +451,22 @@ class Program:
         elif func == "_bindbuffer":
             e = self._getvar(args[0])
             if isinstance(e, renderer.FrameBuffer):
-                e.begin_drawing()
-
+                self.currentbuffer = e
+            else:
+                logger.warn(f"Incorrect buffer {e}")
+                
         elif func == "_unbindbuffer":
+            self.currentbuffer = self.buffer
+        
+        elif func == "_drawbuffer":
+            if len(args) < 3:
+                logger.error("Too few arguments for _drawbuffer, need 3 arguments")
+                return
             e = self._getvar(args[0])
             if isinstance(e, renderer.FrameBuffer):
-                e.end_drawing()
+                self.currentbuffer.begin_drawing()
+                e.draw(self._getvar(args[1]), self._getvar(args[2]))
+                self.currentbuffer.end_drawing()
         
         elif func == "_createcolor":
             if len(args) < 4:
@@ -453,6 +474,15 @@ class Program:
                 return
             self.addresses['eax'] = rl.make_color(self._getvar(args[0]),self._getvar(args[1]),self._getvar(args[2]),self._getvar(args[3]))
             
+        elif func == "_listcolor":
+            if len(args) < 1:
+                logger.error("Too few arguments for _listcolor, need 1 argument")
+                return
+            e = self._getvar(args[0])
+            if isinstance(e, rl.Color): # pyright: ignore[reportArgumentType]
+                self.addresses['eax'] = [e.r, e.g, e.b, e.a]
+            else:
+                self.addresses['eax'] = [0,0,0,255]
 
         elif func == "_guibutton":
             if len(args) < 5:
@@ -487,9 +517,9 @@ class Program:
             if len(args) < 8:
                 logger.error("Too few arguments for _drawtext, need 8 arguments")
                 return
-            self.buffer.begin_drawing()
+            self.currentbuffer.begin_drawing()
             renderer.draw_text(self._getvar(args[0]), self._getvar(args[1]), self._getvar(args[2]), self._getvar(args[3]), self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7]))
-            self.buffer.end_drawing()
+            self.currentbuffer.end_drawing()
 
         elif func == "_guitextbox":
             if len(args) < 6:
@@ -523,17 +553,17 @@ class Program:
             rl.update_camera(self._getvar(args[0]), self._getvar(args[1]))
 
         elif func == "_drawgrid":
-            self.buffer.begin_drawing()
+            self.currentbuffer.begin_drawing()
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_grid(self._getvar(args[0]), self._getvar(args[1]))
             rl.end_mode_3d()
-            rl.end_texture_mode()
+            self.currentbuffer.end_drawing()
 
         elif func == "_drawcube":
             if len(args) < 8:
                 logger.error("Too few arguments for _drawcube, need 8 arguments")
                 return
-            self.buffer.begin_drawing()
+            self.currentbuffer.begin_drawing()
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_cube(
                 rl.Vector3(self._getvar(args[0])[0], self._getvar(args[0])[1], self._getvar(args[0])[2]), # type: ignore
@@ -543,7 +573,7 @@ class Program:
                 rl.make_color(self._getvar(args[4]), self._getvar(args[5]), self._getvar(args[6]), self._getvar(args[7])) # type: ignore
             )
             rl.end_mode_3d()
-            rl.end_texture_mode()
+            self.currentbuffer.end_drawing()
 
             #rl.begin_texture_mode(self.buffer)
             #rl.begin_mode_3d(self.addresses['cam'])
@@ -555,7 +585,7 @@ class Program:
                 logger.error("Too few arguments for _drawsphere, need 6 arguments")
                 return
             
-            self.buffer.begin_drawing()
+            self.currentbuffer.begin_drawing()
             rl.begin_mode_3d(self.addresses['cam'])
             
             rl.draw_sphere(
@@ -580,7 +610,7 @@ class Program:
                 print(self.addresses['eax'])
 
         elif func == "_drawmodel":
-            self.buffer.begin_drawing()
+            self.currentbuffer.begin_drawing()
             rl.begin_mode_3d(self.addresses['cam'])
             rl.draw_model(
                 self._getvar(args[0]),
@@ -605,13 +635,28 @@ class Program:
         elif func == "_println":
             self.output += str(self._getvar(args[0])) + "\n"
         
+
+        elif func == "_equals":
+            if len(args) < 2:
+                logger.error("Too few arguments for _equals, need 2 arguments")
+                return
+            self.addresses['eax'] = self._getvar(args[0]) == self._getvar(args[1])
+
+        
         # input
         elif func == "_iskeypressed":
-            self.addresses['eax'] = rl.is_key_pressed(self._getvar(args[0]))
+            self.addresses['eax'] = rl.is_key_pressed(self._getvar(args[0])) if self.is_mouse_in_win() else rl.KEY_NULL
+        
+        elif func == "_iskeydown":
+            self.addresses['eax'] = rl.is_key_down(self._getvar(args[0])) if self.is_mouse_in_win() else rl.KEY_NULL
+        
+        elif func == "_getmousepos":
+            e = renderer.get_mouse_pos()
+            self.addresses['eax'] = [e[0] - self.addresses['_WINX'], e[1] - self.addresses['_WINY']]
         
         elif func == "_geticon":
             self.addresses['eax'] = icons[args[0]] if icons.__contains__(args[0]) else icons['null']
-        
+
         elif func == "_py":
             try:
                 o:dict = {}
@@ -700,6 +745,12 @@ class Program:
                 if self._getvar(opo[0]):
                     for line in opo[1]:
                         self.computeline(line)
+                else:
+                    try:
+                        for line in opo[2]:
+                            self.computeline(line) 
+                    except IndexError:
+                        pass
             
             elif key == "whl":
                 while self._getvar(opo[0]):

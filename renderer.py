@@ -4,10 +4,12 @@ try:
     import config
     import style
     import load
+    import logger
 except:
     from . import load
     from . import style
     from . import config
+    from . import logger
 import ctypes
 
 loadfont = False
@@ -90,6 +92,8 @@ class FrameBuffer:
 
         if config.backend == 0: # raylib
             self.rlrender = rl.load_render_texture(w,h)
+            if not rl.is_render_texture_valid(self.rlrender):
+                logger.warn(f"Corrupted Buffer: {self.rlrender}")
         if config.backend == 1: # pygame
             self.pyrender = pygame.Surface((w,h))
         if config.backend == 2: # pyglet

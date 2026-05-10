@@ -8,14 +8,34 @@
     "text": {
         "draw": [
             {"cal": ["_clearbg", 255, 255, 255, 255]},
+            {"cal": ["_drawbuffer", "layer0", 0, 0]},
             {"cal": ["_guicolorpicker", 0, 0, 100, 100, "Color", "pencolor"]},
             {"cal": ["_guislider", 150, 0, 100, 50, "1", "300", "brushsize", 1, 300]},
             {"mov": ["brushsize", "eax"]},
-            {"cal": ["_drawcircle", [400, 0], "brushsize", [255,0,0,255]]}
+            {"cal": ["_drawcircle", "mousepos", "brushsize", [0,0,0,100]]},
+            {"cal": ["_getmousepos"]},
+            {"mov": ["mousepos", "eax"]},
+
+            {"cal": ["_iskeydown", 32]},
+            {"if": ["eax", [
+                {"cal": ["_bindbuffer", "layer0"]},
+                
+                {"cal": ["_equals", "brushmode", 0]},
+                { "if": ["eax", [
+                    {"cal": ["_listcolor", "pencolor"]},
+                    {"cal": ["_drawcircle", "mousepos", "brushsize", "eax"]}
+                ],
+                [
+                    {"cal": ["_drawcircle", "mousepos", "brushsize", [0,0,0,0]]}
+                ]]},
+                {"cal": ["_unbindbuffer"]}
+            ]]}
+
+
         ],
 
         "main": [
-            {"cal": ["_setupdrawbuffer", 400, 300]},
+            {"cal": ["_setupdrawbuffer", 600, 600]},
             {"cal": ["_setloop", "_DRAWLOOP", "draw"]},
             {"mov": ["_NEBWIN", true]},
             {"mov": ["_WINTITLE", "Paint"]},
@@ -23,7 +43,16 @@
             {"cal": ["_createcolor", 0,0,0,255]},
 
             {"mov": ["pencolor", "eax"]},
-            {"mov": ["brushsize", 20]}
+            {"mov": ["brushsize", 20]},
+            {"cal": ["_createbuffer", 600, 600]},
+            {"mov": ["layer0", "eax"]},
+            {"mov": ["mousepos", [0,0]]},
+            {"mov": ["brushmode", 0]},
+
+            {"comment": [
+                "0 = paint",
+                "1 = erase"
+            ]}
         ]
     }
 }
