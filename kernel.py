@@ -309,6 +309,7 @@ class Program:
                 logger.error("Too few arguments for _drawcircle, need 3 arguments")
                 return
             self.currentbuffer.begin_drawing()
+            
             renderer.draw_circle(int(self._getvar(self._getvar(args[0])[0])), 
                            int(self._getvar(self._getvar(args[0])[1])), 
                            int(self._getvar(args[1])), 
