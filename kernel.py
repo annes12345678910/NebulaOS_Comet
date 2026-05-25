@@ -438,6 +438,9 @@ class Program:
                     f.write(iop)
                 self.addresses['eax'] = renderer.Image(f"nbc_cache/{args[0]}")
                 #print(self.addresses['eax'])
+                
+        elif func == "_geticon":
+            self.addresses['eax'] = icons[self._getvar(args[0])] if icons.__contains__(self._getvar(args[0])) else icons['null']
 
         elif func == "_drawtexture":
             #drawtexture tex[Texture] x y tint[r g b]
@@ -541,7 +544,7 @@ class Program:
                                                         self._getvar(args[4]), self._getvar(args[5]), 255,255,255,255)
         
         elif func == "_guimultitextbox":
-            if len(args) < 6:
+            if len(args) < 8:
                 logger.error("Too few arguments for _guimultitextbox, need 8 arguments")
                 return
 
@@ -652,7 +655,38 @@ class Program:
                 return
             self.addresses['eax'] = self._getvar(args[0]) == self._getvar(args[1])
 
+        elif func == "_listappend":
+            if len(args) < 2:
+                logger.error("Too few arguments for _listappend, need 2 arguments")
+                return
+            e = self._getvar(args[0])
+            if isinstance(e, list):
+                e.append(self._getvar(args[1]))
         
+        elif func == "_listpopback":
+            if len(args) < 1:
+                logger.error("Too few arguments for _listpopback, need 1 argument")
+                return
+            e = self._getvar(args[0])
+            if isinstance(e, list):
+                e.pop(len(e) - 1)
+            
+        elif func == "_listpop":
+            if len(args) < 2:
+                logger.error("Too few arguments for _listpop, need 2 arguments")
+                return
+            e = self._getvar(args[0])
+            if isinstance(e, list):
+                e.pop(self._getvar(args[1]))
+
+        elif func == "_listremove":
+            if len(args) < 2:
+                logger.error("Too few arguments for _listremove, need 2 arguments")
+                return
+            e = self._getvar(args[0])
+            if isinstance(e, list):
+                e.remove(self._getvar(args[1]))
+
         # input
         elif func == "_iskeypressed":
             self.addresses['eax'] = rl.is_key_pressed(self._getvar(args[0])) if self.is_mouse_in_win() else rl.KEY_NULL
@@ -664,9 +698,6 @@ class Program:
             e = renderer.get_mouse_pos()
             self.addresses['eax'] = [e[0] - self.addresses['_WINX'], e[1] - self.addresses['_WINY']]
         
-        elif func == "_geticon":
-            self.addresses['eax'] = icons[args[0]] if icons.__contains__(args[0]) else icons['null']
-
         elif func == "_py":
             try:
                 o:dict = {}

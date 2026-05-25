@@ -20,25 +20,12 @@
             {"if": ["eax", [
                 {"cal": ["_bindbuffer", "layer0"]},
                 
-                {"cal": ["_equals", "brushmode", 0]},
-                { "if": ["eax", [
-                    {"cal": ["_listcolor", "pencolor"]},
-                    {"cal": ["_drawcircle", "mousepos", "brushsize", "eax"]}
-                ],
-                [
-                    {"cal": ["_drawcircle", "mousepos", "brushsize", [0,0,0,0]]}
-                ]]},
+                {"cal": ["_listcolor", "pencolor"]},
+                {"cal": ["_drawcircle", "mousepos", "brushsize", "eax"]},
+                
                 {"cal": ["_unbindbuffer"]}
-            ]]},
-
-            {"cal": ["_guibutton", "Brush", 0, 500, 100, 50]},
-            {"if": ["eax", [
-                {"mov": ["brushmode", 0]}
-            ]]},
-            {"cal": ["_guibutton", "Erase", 0, 550, 100, 50]},
-            {"if": ["eax", [
-                {"mov": ["brushmode", 1]}
             ]]}
+
         ],
 
         "main": [
@@ -53,6 +40,7 @@
             {"mov": ["brushsize", 20]},
             {"cal": ["_createbuffer", 600, 600]},
             {"mov": ["layer0", "eax"]},
+            {"mov": ["layers", []]},
             {"mov": ["mousepos", [0,0]]},
             {"mov": ["brushmode", 0]},
 
