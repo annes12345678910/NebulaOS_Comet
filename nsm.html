@@ -165,27 +165,130 @@
     <h2 class="code">_createfile [NAME, EXT, CONTENTS]</h2>
 
     <br>
+    <h2 class="code">_exportimage [rlIMG, PATH]</h2>
+
+    <br>
     <h2 class="code">_loadtexture [PATH] -> (Image in eax)</h2>
+
+    <br>
+    <h2 class="code">_geticon [ICON] -> Image</h2>
 
     <br>
     <h2 class="code">_drawtexture [TEXTURE, X, Y, [R, G, B, A]]</h2>
 
     <br>
-    <h2 class="code">_createbuffer [WIDTH, HEIGHT]</h2>
+    <h2 class="code">_createbuffer [WIDTH, HEIGHT] -> FrameBuffer</h2>
 
     <br>
     <h2 class="code">_bindbuffer [BUFFER]</h2>
 
     <br>
-    <h2 class="code">_unbindbuffer [BUFFER]</h2>
+    <h2 class="code">_unbindbuffer</h2>
+
+    <br>
+    <h2 class="code">_drawbuffer [BUFFER]</h2>
+
+    <br>
+    <h2 class="code">_createcolor [R,G,B,A] -> Color</h2>
+
+    <br>
+    <h2 class="code">_listcolor [COLOR] -> [R,G,B,A]</h2>
 
     <br>
     <h2 class="code">_guibutton [TEXT, X, Y, WIDTH, HEIGHT]</h2>
 
     <br>
+    <h2 class="code">_guicolorpicker [X,Y,W,H, TEXT, COLOR]</h2>
+
+    <br>
+    <h2 class="code">_guislider [X,Y,W,H, TEXTLEFT, TEXTRIGHT, VALUE, MINVALUE, MAXVALUE]</h2>
+
+    <br>
     <h2 class="code">_drawtext [TEXT, X, Y, SIZE, R,G,B,A]</h2>
 
     <br>
-    <h2 class="code">_guitextbox []</h2>
+    <h2 class="code">_guitextbox [TEXT, LENGTH, X,Y,W,H]</h2>
+
+    <br>
+    <h2 class="code">_guimultitextbox [TEXT, X,Y, LENGTH, R,G,B,A]</h2>
+
+
+    <h2 class="reg">3D drawing</h2>
+
+    <br>
+    <h2 class="code">_make3dcam [[X,Y,Z], [TX,TY,TZ], [UX, UY, UZ], FOV, PROJ] -> Camera3D</h2>
+    <h3>NOTE: for camera to be shown it needs to be moved to address "cam"</h3>
+
+    <br>
+    <h2 class="code">_update3dcam [CAM, MODE]</h2>
+
+    <br>
+    <h2 class="code">_drawgrid [SLC, SPC]</h2>
+
+    <br>
+    <h2 class="code">_drawcube [[X,Y,Z], W, H, L, R,G,B,A]</h2>
+
+    <br>
+    <h2 class="code">_drawsphere [[X,Y,Z], RAD, R,G,B,A]</h2>
+
+    <br>
+    <h2 class="code">_loadmodel [PATH] -> Model</h2>
+
+    <br>
+    <h2 class="code">_drawmodel [MOD, [X,Y,Z], SIZE, CLR]</h2>
+
+    <h2 class="reg">Generic functions</h2>
+
+    <br>
+    <h2 class="code">_getattr [OBJ, VAL] -> Any</h2>
+
+    <br>
+    <h2 class="code">_setattr [OBJ, VAL]</h2>
+
+
+    <br>
+    <h2 class="code">_print [OBJ]</h2>
+
+    <br>
+    <h2 class="code">_println [OBJ]</h2>
+
+
+    <br>
+    <h2 class="code">_equals [VAL1, VAL2] -> bool</h2>
+
+    <br>
+    <h2 class="code">_listappend [LST, OBJ]</h2>
+
+    <br>
+    <h2 class="code">_listpopback [LST]</h2>
+
+    <br>
+    <h2 class="code">_listpop [LST, IND]</h2>
+
+    <br>
+    <h2 class="code">_listremove [LST, OBJ]</h2>
+
+    <h2 class="reg">Input Functions</h2>
+
+    <br>
+    <h2 class="code">_iskeypressed [KEY] -> bool</h2>
+
+    <br>
+    <h2 class="code">_iskeydown [KEY] -> bool</h2>
+
+    <br>
+    <h2 class="code">_getmousepos -> [X,Y]</h2>
+
+    <h2 class="reg">Python functions</h2>
+
+    <br>
+    <h2 class="code">_py [CODE]</h2>
+
+    <br>
+    <h2 class="code">_pytype [CODE] -> Any</h2>
+
+    <br>
+    <h2 class="code">_pyeval [CODE] -> Any</h2>
+
 </body>
 </html>
