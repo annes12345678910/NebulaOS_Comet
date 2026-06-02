@@ -3,3 +3,5 @@ requests
 colorama
 pytz
 filedialogs
+psutil
+beautifulsoup4

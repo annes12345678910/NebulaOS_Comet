@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-
 text = ""
 inpt = ""
 width = 400
@@ -34,6 +33,9 @@ if not config.terminal_mode:
 import filedialogs
 import textwrap
 import json
+import psutil
+from bs4 import BeautifulSoup
+import requests
 
 x = 10
 y = 70
@@ -160,6 +162,21 @@ def delete(*args): # del is reserved bruh
 
     return "Path deleted"
 
+def disk(*args):
+    if len(args) < 2:
+        try:
+            o = args[0] != "-po" # pyright: ignore[reportGeneralTypeIssues]
+        except IndexError:
+            o = False
+        par = psutil.disk_partitions(o)
+        for p in par:
+            printtxt(f"Drive {p.device}")
+            printtxt(f"  Mountpoint: {p.mountpoint}")
+            printtxt(f"  File System: {p.fstype}")
+            printtxt(f"  Options: {p.opts}\n")
+        
+        return "ALL DISKS"
+
 def link(*args):
     e = kernel.getfilebyname(args[0], currentfolder)
     if e:
@@ -272,6 +289,8 @@ clear (or cls) - clear all output
 
 del (or rm) <path> - delete a file or folder
 date <path> Optional: -set{c/m}{y/m/d /h/mi/s} <date> - get or set file dates
+disk {-po} - disk operations
+
 file <path> - get a file's description
 link <path> <name> <ext> - create an alias
 
@@ -296,8 +315,28 @@ def pwd(*args):
 def version(*args):
     return """
 Copyright © Annes Widow and contributors
-NebulaOS Comet (0.2.0)
+NebulaOS Comet (0.2.0a2)
 """
+
+def wget(*args):
+    #wget <link> -o <name> <ext>
+    if len(args) < 1:
+        return "Usage: wget <link> {-o <name> <ext>}"
+    
+    try: site = requests.get(args[0]) 
+    except Exception as e: print(e); return f"Site {args[0]} not found"
+
+    try:
+        try:
+            name = args[2] if args[1] == "-o" else args[0] # pyright: ignore[reportGeneralTypeIssues]
+        except:
+            soup = BeautifulSoup(site.content, "html.parser")
+            name:str = soup.title.string # pyright: ignore[reportAssignmentType, reportOptionalMemberAccess]
+    except:
+        name = args[0]
+
+    kernel.writetofile(f"{name}", site.content, currentfolder)
+    return f"Site contents written to {name}.\n{site.content[:10]}"
 
 # follow list_of_cmd.txt and maybee more!
 cmds = {
@@ -320,6 +359,7 @@ cmds = {
     "cls":clear,
 
     "del":delete,
+    "disk":disk,
     "link":link,
     "rm":delete,
     "date":filedate,
@@ -335,7 +375,10 @@ cmds = {
 
     "pwd":pwd,
 
-    "version":version
+    "version":version,
+
+    "wget":wget,
+    "webget":wget
 }
 
 def printtxt(*args, sep=" ", endl="\n"):
