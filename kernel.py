@@ -249,6 +249,7 @@ class Program:
             "_WINTITLE": "Program",
             "_WINX": 0,
             "_WINY": 0,
+            "_ENVARS": [],
             "cam": rl.Camera3D()
         }
         self.consts: dict = {
