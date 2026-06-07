@@ -8,6 +8,7 @@ opened = False
 
 history = [""]
 hisdex = 0
+varlist = {}
 
 try:
     import config
@@ -304,13 +305,51 @@ help - Display this message
 
 pwd - Print current directory
 
+setvar VAR VAL - set an environment variable that can then be read
+
+readvar VAR - read an environment variable
+
+tree - Directory tree
+
 version - Version and copyright stuff
+
+wget (or webget) <link> -o <name> <ext> - put a website contents into a file
 
 -- If you want to report any bugs, visit https://forms.gle/1N9vyiRtAMXobLFA9 .
 """
 
 def pwd(*args):
     return currentfolder.get_absolute()
+
+def setvar(*args):
+    # setvar VAR VAL
+    if len(args) < 2:
+        return "Usage: setvar VAR VAL"
+    varlist[args[0]] = args[1]
+    return f"variable {args[0]} set"
+
+def readvar(*args):
+    return str(varlist[args[0]])
+
+def tree(*args):
+    indent = "  "
+    def _printdir(dir, nestlevel=0):
+        printtxt(indent * nestlevel, dir.name)
+        for i in files:
+            if i.parent == dir:
+                printtxt(indent * (nestlevel + 1), f"{i.name}.{i.ext}")
+
+        for i in folders:
+            if i.parent == dir:
+                _printdir(i, nestlevel + 1)
+
+    e = currentfolder
+    if len(args) > 0:
+        e = args[0]
+    
+    _printdir(e)
+
+    return ""
 
 def version(*args):
     return """
@@ -374,6 +413,11 @@ cmds = {
     "help":help,
 
     "pwd":pwd,
+
+    "setvar":setvar,
+    "readvar":readvar,
+
+    "tree":tree,
 
     "version":version,
 

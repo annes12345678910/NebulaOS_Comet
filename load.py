@@ -6,7 +6,7 @@ from pathlib import Path
 try:
     #import kernel
     import renderer
-except:
+except ImportError:
     #from . import kernel
     from . import renderer
 
