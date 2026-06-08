@@ -1,5 +1,6 @@
 from __future__ import annotations
 import os
+import pathlib
 import random
 import sys
 
@@ -916,6 +917,14 @@ def draw_window(prog: Program) -> bool:
             prog.addresses['_NEBWIN'] = False
             return True
     return False
+
+def import_folder(path:str):
+    def _glob(path:str):
+        for pa in pathlib.Path(path).glob('*'):
+            if pa.is_file():
+                o =open(pa, "rb")
+                writetofile(str(pa), o.read(), kernel.getfolderbyname(path, kernel.root)) # pyright: ignore[reportArgumentType]
+                o.close()
 
 def test():
     import menu
