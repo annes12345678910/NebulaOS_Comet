@@ -356,7 +356,7 @@ def tree(*args):
 
 def version(*args):
     return """
-Copyright © Annes Widow and contributors
+Copyright © Annes Widow and contributors - 2025-2026
 NebulaOS Comet (0.2.0a2)
 """
 
