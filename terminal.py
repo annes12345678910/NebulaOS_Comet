@@ -261,6 +261,7 @@ def nsm(*args):
         code = f.contents.decode()
         dic = json.loads(code)
         opo = kernel.Program(dic)
+        opo.addresses["_ENVARS"] = varlist
         currentprogram = opo
         opo.run()
         return opo.output
