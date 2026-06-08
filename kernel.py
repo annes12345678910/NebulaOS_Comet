@@ -980,7 +980,7 @@ class fstream:
         pass
 
 win = Gen()
-win.poop = rl.lib.poop
+#win.poop = rl.lib.poop
 
 def test2():
     o = Program({

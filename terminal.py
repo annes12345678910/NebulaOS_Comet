@@ -254,6 +254,8 @@ def rename(*args):
 
 def nsm(*args):
     global currentprogram
+    if len(args) < 1:
+        return "Usage: nsm <path>"
     # nsm <file>
     # nsm -c <line>
     f = kernel.getfilebyname(args[0], currentfolder)
