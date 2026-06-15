@@ -184,6 +184,7 @@ class Alias(File):
         self.alias = alias
 
 root = Folder(None, "root")
+folders.append(root)
 
 def getfilebyname(name:str, parent: Folder) -> File | None:
     for file in files:

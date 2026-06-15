@@ -9,21 +9,13 @@ w=500
 h=300
 isopen = False
 currentfolder=kernel.root
-
-tex = None
+scroll = 0
 
 def draw():
-    global tex,w,h,isopen,x,y,currentfolder
+    global w,h,isopen,x,y,currentfolder,scroll
 
     if not isopen:
         return
-    
-    if (not tex):
-        tex = renderer.FrameBuffer(w,h)
-
-    if tex.w != w or tex.h != h:
-        tex.unload()
-        tex = renderer.FrameBuffer(w,h)
 
     renderer.draw_rectangle(x,y,w- 50,50,*style.BRIGHT)
     # close
@@ -43,11 +35,15 @@ def draw():
         x+=int(rl.get_mouse_delta().x)
         y+=int(rl.get_mouse_delta().y)
 
-    tex.begin_drawing()
-    renderer.fill_bg_color(0,0,0,0)
-    tex.end_drawing()
-
-    tex.draw(x, y + 50)
+    # items
+    scroll += renderer.get_mouse_scroll()
+    ind = 0
+    for i in currentfolder.glob():
+        if renderer.gui_button("", x, y + 100 + (30 * ind) + int(scroll), w, 20):
+            if type(i) is kernel.Folder:
+                currentfolder = i
+        renderer.draw_text(i.name if type(i) is kernel.Folder else f"{i.name}.{i.ext}", x, y + 100 + (30 * ind) + int(scroll), 20, *style.DARKEST) # pyright: ignore[reportAttributeAccessIssue]
+        ind += 1
 
     # extra widgets
     # up button
@@ -55,6 +51,7 @@ def draw():
         if currentfolder.parent:
             currentfolder = currentfolder.parent
 
+    #current path
     renderer.draw_text(currentfolder.get_absolute(), x + 60, y + 60, 20, *style.DARKEST)
 
 def test_draw():
@@ -66,7 +63,10 @@ def test_draw():
 def main():
     global isopen,currentfolder
     isopen = True
-    currentfolder = kernel.Folder(kernel.root, "test")
+    pop = kernel.Folder(kernel.root, "test")
+    kernel.folders.append(pop)
+    kernel.writetofile("./file.txt", b"Hello!")
+    currentfolder = kernel.root
     print(kernel.folders)
     print(kernel.root.glob())
     renderer.init("File Explorer Test")

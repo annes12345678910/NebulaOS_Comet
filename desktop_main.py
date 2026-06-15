@@ -13,6 +13,7 @@ import cbinds
 import pathlib
 import json
 import terminal
+import fileexplorer
 import logger
 
 import nbgf
@@ -85,6 +86,9 @@ def draw():
                     if renderer.gui_button("Terminal", 10, winh - (dock_size * 3), dock_size - 20, dock_size - 20):
                         terminal.opened = True
 
+                    if renderer.gui_button("Files", 70, winh - (dock_size * 3), dock_size - 20, dock_size - 20):
+                        fileexplorer.isopen = True
+
                     for fl in savesys.files:
                         if fl.parent == sysprogs:
                             if renderer.gui_button(fl.name, apin, winh - (dock_size * 2), dock_size - 20, dock_size - 20):
@@ -114,6 +118,8 @@ def draw():
                 
         if terminal.opened:
             terminal.draw_terminal()
+        
+        fileexplorer.draw()
 
         menu.draw_menu(*style.DARKEST)
     cursor.draw()
