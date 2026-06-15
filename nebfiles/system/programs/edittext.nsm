@@ -2,7 +2,7 @@
     "data": {
         "EXE_TYPE": "standalone",
         "nbgf": [],
-        "copyright": "© Annes Widow & Contributors - 2026 - Calculator"
+        "copyright": "© Annes Widow & Contributors - 2026 - EditText"
     },
 
     "text": {
@@ -34,7 +34,19 @@
 
             {"mov": ["para", ""]},
             {"mov": ["fnm", "filename"]},
-            {"mov": ["fex", "txt"]}
+            {"mov": ["fex", "txt"]},
+
+            {"cal": ["_len", "_ENVARS"]},
+            
+            {"cal": ["_equals", "eax", 1]},
+            {"cal":["_println", "eax"]},
+            {"if": ["eax", [
+                {"cal":["_index", "_ENVARS", 0]},
+                {"cal":["_getfilecontents", "eax"]},
+                {"cal":["_println", "eax"]},
+                
+                {"mov":["para", "eax"]}
+            ]]}
         ]
     }
 }

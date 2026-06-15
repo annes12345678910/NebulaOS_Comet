@@ -675,6 +675,10 @@ class Program:
                 logger.error("Too few arguments for _equals, need 2 arguments")
                 return
             self.addresses['eax'] = self._getvar(args[0]) == self._getvar(args[1])
+        
+        elif func == "_index":
+            #_index LIST INDEX -> VALUE
+            self.addresses['eax'] = args[0][args[1]]
 
         elif func == "_listappend":
             if len(args) < 2:
@@ -847,6 +851,8 @@ class Program:
             self.computeline(line)
             if self.errored:
                 break
+        print(self.output)
+        print(self.addresses)
         self.errored = False
 
 class User:
