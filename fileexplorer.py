@@ -2,6 +2,7 @@ import kernel
 import renderer
 import ultimateraylib as rl
 import style
+import typeentries
 
 x=0
 y=0
@@ -15,7 +16,7 @@ def draw():
     global w,h,isopen,x,y,currentfolder,scroll
 
     if not isopen:
-        return
+        return None,None
 
     renderer.draw_rectangle(x,y,w- 50,50,*style.BRIGHT)
     # close
@@ -42,6 +43,9 @@ def draw():
         if renderer.gui_button("", x, y + 100 + (30 * ind) + int(scroll), w, 20):
             if type(i) is kernel.Folder:
                 currentfolder = i
+            if type(i) is kernel.File:
+                return typeentries.entries[typeentries.getextgroup(i.ext)], i
+            
         renderer.draw_text(i.name if type(i) is kernel.Folder else f"{i.name}.{i.ext}", x, y + 100 + (30 * ind) + int(scroll), 20, *style.DARKEST) # pyright: ignore[reportAttributeAccessIssue]
         ind += 1
 
@@ -53,6 +57,7 @@ def draw():
 
     #current path
     renderer.draw_text(currentfolder.get_absolute(), x + 60, y + 60, 20, *style.DARKEST)
+    return (None,None)
 
 def test_draw():
     renderer.begin_drawing()

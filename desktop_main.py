@@ -119,7 +119,17 @@ def draw():
         if terminal.opened:
             terminal.draw_terminal()
         
-        fileexplorer.draw()
+        o,e = fileexplorer.draw()
+        if o and e:
+            print(o, e)
+            dat = json.loads(kernel.getfilebyname(o, kernel.root).contents) # pyright: ignore[reportOptionalMemberAccess]
+            op = kernel.Program(dat)
+            op.addresses['_WINX'] = winw // 2
+            op.addresses['_WINY'] = winh // 2
+            if type(op.addresses['_ENVARS']) is list and e:
+                op.addresses['_ENVARS'].append(e.getvisual(kernel.root))
+            op.run()
+            programs.append(op)
 
         menu.draw_menu(*style.DARKEST)
     cursor.draw()

@@ -17,12 +17,21 @@ types = {
         "qoa",
         "xm",
         "mod"
+    ],
+    "TEXT": [
+        "txt",
+        "nsm",
+        "py",
+        "json",
+        "csv"
     ]
 }
 
 entries = {
-    "IMAGE":["./system/programs/viewer.nsm"],
-    "AUDIO":["./system/programs/player.nsm"]
+    "IMAGE":"./system/programs/viewer.nsm",
+    "AUDIO":"./system/programs/player.nsm",
+    "":"./system/programs/template.nsm",
+    "TEXT":"./system/programs/edittext.nsm"
 }
 
 def getextgroup(ext):
