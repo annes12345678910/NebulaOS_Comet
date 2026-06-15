@@ -465,7 +465,7 @@ def draw_terminal():
     global text, inpt, rtex, scrolly,width,height, opened, x , y, hisdex, currentprogram
 
     if rtex.texture.width != width or rtex.texture.height != height:
-        rl.lib.UnloadRenderTexture(rtex)
+        rl.unload_render_texture(rtex)
         rtex = rl.load_render_texture(width, height)
 
     renderer.draw_rectangle(x, y, width, height, *style.BRIGHT)

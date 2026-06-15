@@ -93,6 +93,24 @@ class Folder:
             return f"{self.parent.get_absolute()}/{self.name}"
         return f"/{self.name}"
 
+    def glob(self, ext="*"):
+        opo = []
+        if ext != "*":
+            for i in files:
+                if i.ext == ext and i.parent is self:
+                    opo.append(i)
+            return opo
+        
+        for i in files:
+            if i.parent is self:
+                opo.append(i)
+        
+        for i in folders:
+            if i.parent is self:
+                opo.append(i)
+        
+        return opo
+
     def tojson(self) -> dict:
         return {
             "parent": self.parent.name,

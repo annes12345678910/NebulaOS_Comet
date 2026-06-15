@@ -1,0 +1,77 @@
+import kernel
+import renderer
+import ultimateraylib as rl
+import style
+
+x=0
+y=0
+w=500
+h=300
+isopen = False
+currentfolder=kernel.root
+
+tex = None
+
+def draw():
+    global tex,w,h,isopen,x,y,currentfolder
+
+    if not isopen:
+        return
+    
+    if (not tex):
+        tex = renderer.FrameBuffer(w,h)
+
+    if tex.w != w or tex.h != h:
+        tex.unload()
+        tex = renderer.FrameBuffer(w,h)
+
+    renderer.draw_rectangle(x,y,w- 50,50,*style.BRIGHT)
+    # close
+    if renderer.gui_button("x", x + w - 50, y, 50, 50):
+        isopen = False
+
+    renderer.draw_rectangle(x,y+50,w,h,*style.BRIGHTBRIGHT)
+
+    # resizing
+    #renderer.draw_circle(x + w, y + 50 + h, 20, 255,0,0)
+
+    if rl.check_collision_point_circle(rl.get_mouse_position(), rl.Vector2(x + w, y + 50 + h), 20) and renderer.is_mouse_left_down():
+        w += int(rl.get_mouse_delta().x)
+        h += int(rl.get_mouse_delta().y)
+    
+    if renderer.Rect(x,y,w-50,50).collidepoint(renderer.get_mouse_point()) and renderer.is_mouse_left_down():
+        x+=int(rl.get_mouse_delta().x)
+        y+=int(rl.get_mouse_delta().y)
+
+    tex.begin_drawing()
+    renderer.fill_bg_color(0,0,0,0)
+    tex.end_drawing()
+
+    tex.draw(x, y + 50)
+
+    # extra widgets
+    # up button
+    if renderer.gui_button("^", x,y + 50,50,50):
+        if currentfolder.parent:
+            currentfolder = currentfolder.parent
+
+    renderer.draw_text(currentfolder.get_absolute(), x + 60, y + 60, 20, *style.DARKEST)
+
+def test_draw():
+    renderer.begin_drawing()
+    renderer.fill_bg_color(*style.BRIGHTEST)
+    draw()
+    renderer.end_drawing()
+
+def main():
+    global isopen,currentfolder
+    isopen = True
+    currentfolder = kernel.Folder(kernel.root, "test")
+    print(kernel.folders)
+    print(kernel.root.glob())
+    renderer.init("File Explorer Test")
+    renderer.draw_event = test_draw
+    renderer.run()
+
+if __name__ == "__main__":
+    main()
