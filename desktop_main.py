@@ -14,6 +14,7 @@ import pathlib
 import json
 import terminal
 import fileexplorer
+import debugger
 import logger
 
 import nbgf
@@ -88,6 +89,9 @@ def draw():
 
                     if renderer.gui_button("Files", 70, winh - (dock_size * 3), dock_size - 20, dock_size - 20):
                         fileexplorer.isopen = True
+                    
+                    if renderer.gui_button("Debugger", 130, winh - (dock_size * 3), dock_size - 20, dock_size - 20):
+                        debugger.isopen = True
 
                     for fl in savesys.files:
                         if fl.parent == sysprogs:
@@ -130,6 +134,8 @@ def draw():
                 op.addresses['_ENVARS'].append(e.getvisual(kernel.root))
             op.run()
             programs.append(op)
+        
+        debugger.draw()
 
         menu.draw_menu(*style.DARKEST)
     cursor.draw()
