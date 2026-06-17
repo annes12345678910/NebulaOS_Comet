@@ -1,8 +1,12 @@
 "NebAssembly Debugger"
 
+import json
+
+import kernel
 import renderer
 import ultimateraylib as rl
 import style
+import fileexplorer
 
 x=0
 y=0
@@ -49,11 +53,25 @@ def draw():
     if renderer.gui_button("Pause" if isrunning else "Resume", x + 30, y + 50, 50, 20):
         isrunning = not isrunning
     
+    if renderer.gui_button("Select NSM File", x, y + 70, 100, 20):
+        fileexplorer.isopen = True
+    
     renderer.draw_text(f"Instruction {currentin[1]} in {currentin[0]}", x + 80, y+50, 20, *style.DARKEST)
 
     # Addresses GUI
 
     renderer.draw_rectangle(x + w, y + 50, 200, h, *style.BRIGHT)
+
+
+
+
+
+
+    f=fileexplorer.draw()[1]
+    if isinstance(f, kernel.File):
+        er = json.loads(f.contents)
+        currentprogram = kernel.Program(er)
+        
 
 def test_draw():
     renderer.begin_drawing()

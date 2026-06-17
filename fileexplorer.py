@@ -42,8 +42,10 @@ def draw():
     for i in currentfolder.glob():
         if renderer.gui_button("", x, y + 100 + (30 * ind) + int(scroll), w, 20):
             if type(i) is kernel.Folder:
+                # Go folder
                 currentfolder = i
             if type(i) is kernel.File:
+                # return file type and file
                 return typeentries.entries[typeentries.getextgroup(i.ext)], i
             
         renderer.draw_text(i.name if type(i) is kernel.Folder else f"{i.name}.{i.ext}", x, y + 100 + (30 * ind) + int(scroll), 20, *style.DARKEST) # pyright: ignore[reportAttributeAccessIssue]
