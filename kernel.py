@@ -463,14 +463,10 @@ class Program:
             # loadsound 'dad.mp3'
             er = self._getvar(args[0])
             fad = getfilebyname(er, self.currentfolder)
-            if isinstance(fad, File):
-                print(f"loading {fad.getvisual(self.currentfolder)}")
-                iop = fad.contents
-                #print(iop)
-                with open(f"nbc_cache/{er.replace('/', '-')}", 'wb') as f:
-                    f.write(iop)
-                self.addresses['eax'] = renderer.Image(f"nbc_cache/{er}")
-                #print(self.addresses['eax'])
+            music = renderer.Image(write_cache_from_file(fad, self.currentfolder))
+            print(music, type(music))
+            self.addresses["eax"] = music
+            #print(self.addresses['eax'])
         
         elif func == "_loadmusic":
             # loadsound 'dad.mp3'
@@ -485,14 +481,10 @@ class Program:
             # loadsound 'dad.mp3'
             er = self._getvar(args[0])
             fad = getfilebyname(er, self.currentfolder)
-            if isinstance(fad, File):
-                print(f"loading {fad.getvisual(self.currentfolder)}")
-                iop = fad.contents
-                #print(iop)
-                with open(f"nbc_cache/{er.replace('/', '-')}", 'wb') as f:
-                    f.write(iop)
-                self.addresses['eax'] = renderer.Sound(f"nbc_cache/{er}")
-                #print(self.addresses['eax'])
+            music = renderer.Sound(write_cache_from_file(fad, self.currentfolder))
+            print(music, type(music))
+            self.addresses["eax"] = music
+            #print(self.addresses['eax'])
 
         elif func == "_geticon":
             self.addresses['eax'] = icons[self._getvar(args[0])] if icons.__contains__(self._getvar(args[0])) else icons['null']
@@ -682,15 +674,12 @@ class Program:
 
         elif func == "_loadmodel":
             # loadmodel 'e.glb'
-            fad = getfilebyname(args[0], self.currentfolder)
-            if isinstance(fad, File):
-                logger.info(f"Nebasm is loading {fad.getvisual(self.currentfolder)}")
-                iop = fad.contents
-                #print(iop)
-                with open(f"nbc_cache/{args[0].replace('/', '-')}", 'wb') as f:
-                    f.write(iop)
-                self.addresses['eax'] = rl.load_model(f"nbc_cache/{args[0]}")
-                print(self.addresses['eax'])
+            er = self._getvar(args[0])
+            fad = getfilebyname(er, self.currentfolder)
+            music = rl.load_model(write_cache_from_file(fad, self.currentfolder))
+            print(music, type(music))
+            self.addresses["eax"] = music
+            #print(self.addresses['eax'])
 
         elif func == "_drawmodel":
             self.currentbuffer.begin_drawing()
