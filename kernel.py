@@ -449,17 +449,46 @@ class Program:
                     writetofile(self._getvar(args[1]), f.read())
 
         elif func == "_loadtexture":
-            # loadtexture 'dad.png'
-            fad = getfilebyname(args[0], self.currentfolder)
+            # loadsound 'dad.mp3'
+            er = self._getvar(args[0])
+            fad = getfilebyname(er, self.currentfolder)
             if isinstance(fad, File):
                 print(f"loading {fad.getvisual(self.currentfolder)}")
                 iop = fad.contents
                 #print(iop)
-                with open(f"nbc_cache/{args[0].replace('/', '-')}", 'wb') as f:
+                with open(f"nbc_cache/{er.replace('/', '-')}", 'wb') as f:
                     f.write(iop)
-                self.addresses['eax'] = renderer.Image(f"nbc_cache/{args[0]}")
+                self.addresses['eax'] = renderer.Image(f"nbc_cache/{er}")
                 #print(self.addresses['eax'])
-                
+        
+        elif func == "_loadmusic":
+            # loadsound 'dad.mp3'
+            er = self._getvar(args[0])
+            fad = getfilebyname(er, self.currentfolder)
+            if isinstance(fad, File):
+                print(f"loading {fad.getvisual(self.currentfolder)}")
+                iop = fad.contents
+                #print(iop)
+                with open(f"nbc_cache/{er.replace('/', '-')}", 'wb') as f:
+                    f.write(iop)
+                music = rl.load_music_stream(f"nbc_cache/{er}")
+                print(music, type(music))
+                self.addresses["eax"] = music
+                #print(self.addresses['eax'])
+        
+        elif func == "_loadsound":
+            # loadsound 'dad.mp3'
+            er = self._getvar(args[0])
+            fad = getfilebyname(er, self.currentfolder)
+            if isinstance(fad, File):
+                print(f"loading {fad.getvisual(self.currentfolder)}")
+                iop = fad.contents
+                #print(iop)
+                with open(f"nbc_cache/{er.replace('/', '-')}", 'wb') as f:
+                    f.write(iop)
+                self.addresses['eax'] = renderer.Sound(f"nbc_cache/{er}")
+                #print(self.addresses['eax'])
+
         elif func == "_geticon":
             self.addresses['eax'] = icons[self._getvar(args[0])] if icons.__contains__(self._getvar(args[0])) else icons['null']
 
@@ -478,6 +507,15 @@ class Program:
 
             self.currentbuffer.end_drawing()
         
+        elif func == "_playmusic":
+            #playmusic MUSIC
+            rl.play_music_stream(self._getvar(args[0]))
+        
+        elif func == "_playsound":
+            er= self._getvar(args[0])
+            if isinstance(er,renderer.Sound):
+                er.play()
+                
         elif func == "_createbuffer":
             #_createbuffer w h
             self.addresses['eax'] = renderer.FrameBuffer(self._getvar(args[0]), self._getvar(args[1]))
@@ -805,7 +843,11 @@ class Program:
 
             elif key == "cal":
                 #print(f"Calling {opo[0]}, with args {opo[1:]}")
-                self.call(opo[0], opo[1:])
+                try:
+                    self.call(opo[0], opo[1:])
+                except Exception as e:
+                    print(self.addresses)
+                    print(e)
             
             elif key == "if":
                 if self._getvar(opo[0]):
