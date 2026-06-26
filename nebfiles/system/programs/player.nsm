@@ -7,6 +7,9 @@
 
     "text": {
         "draw": [
+            {"if": ["track", [
+                {"cal": ["_updatemusic", "track"]}
+            ]]},
             {"cal": ["_clearbg", 255,255,255, 255]},
             {"cal": ["_guitextbox", "path", 128, 0, 0, 100, 50]},
             {"mov": ["path", "eax"]},
@@ -22,6 +25,13 @@
                     {"cal": ["_playmusic", "track"]}
                 ]]}
             ]
+            ]},
+            {"cal": ["_guibutton", "Pause", 200, 0, 50, 50]},
+            {"if": [ "eax", [
+                {"if": ["track", [
+                    {"cal": ["_pausemusic", "track"]}
+                ]]}
+            ]
             ]}
         ],
 
@@ -31,7 +41,7 @@
             {"mov": ["_NEBWIN", true]},
             {"mov": ["_WINTITLE", "Music Player"]},
 
-            {"mov": ["path", "file.mp3"]},
+            {"mov": ["path", "./file.mp3"]},
             {"mov": ["track", null]}
         ]
     }

@@ -240,6 +240,17 @@ def getfilecontents(path:str, parent):
 }
 """
 
+def write_cache_from_file(fad,parent):
+            if isinstance(fad, File):
+                er = fad.getvisual(parent).replace('/', '-')
+                print(f"loading {er}")
+                iop = fad.contents
+                #print(iop)
+                with open(f"nbc_cache/{er}", 'wb') as f:
+                    f.write(iop)
+                return f"nbc_cache/{er}"
+            return ""
+
 class Program:
     def __init__(self, code:dict={}) -> None:
         self.code:dict = code
@@ -465,16 +476,10 @@ class Program:
             # loadsound 'dad.mp3'
             er = self._getvar(args[0])
             fad = getfilebyname(er, self.currentfolder)
-            if isinstance(fad, File):
-                print(f"loading {fad.getvisual(self.currentfolder)}")
-                iop = fad.contents
-                #print(iop)
-                with open(f"nbc_cache/{er.replace('/', '-')}", 'wb') as f:
-                    f.write(iop)
-                music = rl.load_music_stream(f"nbc_cache/{er}")
-                print(music, type(music))
-                self.addresses["eax"] = music
-                #print(self.addresses['eax'])
+            music = rl.load_music_stream(write_cache_from_file(fad, self.currentfolder))
+            print(music, type(music))
+            self.addresses["eax"] = music
+            #print(self.addresses['eax'])
         
         elif func == "_loadsound":
             # loadsound 'dad.mp3'
@@ -511,6 +516,12 @@ class Program:
             #playmusic MUSIC
             rl.play_music_stream(self._getvar(args[0]))
         
+        elif func == "_updatemusic":
+            rl.update_music_stream(self._getvar(args[0]))
+
+        elif func == "_pausemusic":
+            rl.pause_music_stream(self._getvar(args[0]))
+
         elif func == "_playsound":
             er= self._getvar(args[0])
             if isinstance(er,renderer.Sound):
