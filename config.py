@@ -9,6 +9,8 @@ backend = 0
 2 = pyglet
 """
 
+wallpaper = "./assets/img/wallpapers/wall2.png" #file path to wallpaper, can put in a custom one as well
+
 use_unicode_font = False # Use all 13000 glyphs of the Arial font (Useful for working with languages like Greek)
 
 ### SECURITY

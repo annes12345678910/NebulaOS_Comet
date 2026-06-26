@@ -42,12 +42,17 @@ kernel.folders = savesys.folders
 terminal.folders = savesys.folders
 terminal.files = savesys.files
 
+wallpaper = None
+
 def draw():
     global scene, show_sysdock, show_insdock
     renderer.begin_drawing()
     renderer.fill_bg_color(*style.BRIGHTEST)
 
     winw, winh = renderer.get_window_size()
+
+    if isinstance(wallpaper, rl.Texture2D) and rl.is_texture_valid(wallpaper):
+        rl.draw_texture_pro(wallpaper, rl.make_rect(0,0,wallpaper.width, wallpaper.height), rl.make_rect(0,0,winw, winh), rl.Vector2(0,0), 0, rl.WHITE)
 
     if scene == 0: # welcome
         welcome.draw_welcome()
@@ -167,7 +172,7 @@ systemf = kernel.Folder(kernel.root, "system")
 sysprogs = kernel.Folder(systemf, "programs")
 
 def main():
-    global scene
+    global scene,wallpaper
 
     savesys.loadsys()
     if len(savesys.users) > 0:
@@ -202,8 +207,8 @@ def main():
         renderer.init()
         renderer.hide_cursor()
         cursor.init()
-        if not config.terminal_mode:
-            kernel.initicons()
+        wallpaper = rl.load_texture(config.wallpaper)
+        kernel.initicons()
         renderer.run()
 
 if __name__ == "__main__":
